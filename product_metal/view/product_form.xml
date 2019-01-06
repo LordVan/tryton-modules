@@ -3,9 +3,29 @@
   <xpath expr="/form/notebook" position="inside">
     <page string="Metal" col="2" id="metal">
       <label name="folder" />
-      <field name="folder" xexpand="0" yexpand="0" />
+      <field name="folder" />
+      <label name="proj_1" />
+      <field name="proj_1" />
+      <label name="proj_2" />
+      <field name="proj_2" />
+      <label name="proj_3" />
+      <field name="proj_3" />
+      <label name="proj_4" />
+      <field name="proj_4" />
+
+      <separator string="Material" colspan="2" id="material" />
+      <label name="material" />
+      <field name="material" />
+      <label name="material_surface" />
+      <field name="material_surface" />
       <label name="material_thickness" />
       <field name="material_thickness" />
+
+      <separator string="Production" colspan="2" id="production" />
+      <label name="lvd_prog" />
+      <field name="lvd_prog" />
+      <label name="production_notes" />
+      <field name="production_notes" />
     </page>
   </xpath>
 </data>

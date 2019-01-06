@@ -8,5 +8,7 @@ from . import product
 def register():
     Pool.register(
 #        product.Template,
+        product.ProductMaterial,
+        product.ProductMaterialSurface,
         product.Product,
         module='product_metal', type_='model')
