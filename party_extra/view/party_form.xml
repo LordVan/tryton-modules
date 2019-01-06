@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/notebook" position="inside">
+    <page string="Extra" col="2" id="extra">
+      <label name="customer_no" />
+      <field name="customer_no" />
+      <label name="supplier_no" />
+      <field name="supplier_no" />
+      <label name="pn_name" />
+      <field name="pn_name" />
+<!--      <label name="place_of_jurisdiction" />
+      <field name="place_of_jurisdiction" />-->
+    </page>
+  </xpath>
+</data>
+
