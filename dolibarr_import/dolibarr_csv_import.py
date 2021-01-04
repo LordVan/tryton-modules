@@ -19,12 +19,25 @@ Note = Model.get('ir.note')
 Lang = Model.get('ir.lang')
 Categ = Model.get('party.category')
 Country = Model.get('country.country')
+SubD = Model.get('country.subdivision')
 Cont = Model.get('party.contact_mechanism')
+Ident = Model.get('party.identifier')
 
 lang_de, = Lang.find([('code', '=', 'de')]) # default language
-categ = Category()
-categ.name = 'Import 2020-01-03' # TODO don't hardcode this but for now .. whatever
-categ.save()
+
+def get_or_create_category(cname):
+    pass
+
+categname = 'Import 2020-01-04'
+categs = Categ.find([('name','=', categname)])
+categ = None
+if categs:
+    categ = categs[0]
+else:
+    categ = Categ()
+    categ.name =  categname
+    categ.save()
+#print (f'{categ=}')
 country_at, = Country.find([('code', '=', 'AT')])
 
 def add_note(res, text, e=None):
@@ -33,7 +46,7 @@ def add_note(res, text, e=None):
     note.resource = res
     note.message = text
     if e:
-        ner.message += f'\nException:\n[e]'
+        note.message += f'\nException:\n{e}'
     note.save()
 
 
@@ -106,23 +119,30 @@ with codecs.open(party_fname, 'r', ENCODING) as fp:
     headers = next(reader)
     print(f'{headers=}')
 
-    # TODO: check dolibarr_id (which is not added yet) if it exists..
-
     for row in reader:
         np = Party()
-        #np.dolibarr_id = row[0]
-        np.name = row[1]
-        np.lang = lang_de
-        np.categories.append(categ)
+        np.name = row[1].strip()
+        np.lang = lang_de # since row[20] is empty ..
         np.save() # save here so we got basic stuff that shouldn't fail and can attach notes,..
+#        np.categories.append(categ)
         # Address
-        addr = np.addresses.new()
+        addr = np.addresses[0] # seems like every contact comes witha t least one address
         if row[5] and row[5].strip():
-            addr.zip = row[5].strip()
+            try:
+                addr.zip = row[5].strip()
+            except Exception as e:
+                add_note(np, f'Error adding ZIP with <<{row[5]}>>', e)
         if row[4] and row[4].strip():
-            addr.street = row[4].strip():
+            try:
+                addr.street = row[4].strip()
+            except Exception as e:
+                add_note(np, f'Error adding street with <<{row[4]}>>', e)                   
         if row[6] and row[6].strip():
-            addr.city = row[6].strip()
+            try:
+                addr.city = row[6].strip()
+            except Exception as e:
+                add_note(np, f'Error adding city with <<{row[6]}>>', e)                   
+
         if row[9] and row[9].strip():
             try:
                 addr.country, = Country.find([('code', '=', row[9].strip())])
@@ -130,62 +150,101 @@ with codecs.open(party_fname, 'r', ENCODING) as fp:
                 add_note(np, f'Error adding country with code <<{row[9]}>>', e)
         else:
             addr.country = country_at
-        addr.save()
+        if row[7] and row[7].strip():
+            try:
+                sd, = SubD.find([('name', '=', row[7].strip())])
+                addr.subdivision = sd
+            except Exception as e:
+                add_note(np, f'Error adding country subdivision <<{row[7]}>>', e)
+        # address done .. save
+        try:
+            addr.save()
+        except Exception as e:
+            add_note(np, 'Error saving address', e)
 
         # Contact Mechanisms
+        # save after every one to make sure validation triggers
         if row[10] and row[10].strip():
             try:
-                cm = prm.contact_mechanisms.new(type='phone')
+                cm = np.contact_mechanisms.new(type='phone')
+                cm.value = row[10].strip()
+                cm.save()
             except Exception as e:
                 add_note(np, f'Error adding phone number <<{row[10]}>>', e)
-        if row[11] and row[110].strip():
+        if row[11] and row[11].strip():
             try:
-                cm = prm.contact_mechanisms.new(type='fax')
+                cm = np.contact_mechanisms.new(type='fax')
+                cm.value = row[11].strip()
+                cm.save()
             except Exception as e:
                 add_note(np, f'Error adding fax number <<{row[11]}>>', e)
         if row[13] and row[13].strip():
             try:
-                cm = prm.contact_mechanisms.new(type='email')
+                cm = np.contact_mechanisms.new(type='email')
+                cm.value = row[13].strip()
+                cm.save()
             except Exception as e:
-                add_note(np, f'Error adding email <<{row[14]}>>', e)
+                add_note(np, f'Error adding email <<{row[13]}>>', e)
         if row[14] and row[14].strip():
             try:
-                cm = prm.contact_mechanisms.new(type='website')
+                cm = np.contact_mechanisms.new(type='website')
+                cm.value = row[14].strip()
+                cm.save()
             except Exception as e:
                 add_note(np, f'Error adding website <<{row[14]}>>', e)
 
         # misc
+        try:
+            exists = Party.find([('dolibarr_id', '=', int(row[0]))])
+            if not exists:
+                # no need to check this needs to be present or the export is bogus
+                np.dolibarr_id = int(row[0])
+            else:
+                add_note(np, f'Dolibarr ID <<{row[0]}>> already exists !!')
+        except Exception as e:
+            add_note(np, f'Error adding dolibarr_id <<{row[0]}>>', e)
         if row[2] and row[2].strip():
             try:
                 np.customer_no = row[2].strip()
             except Exception as e:
                 add_note(np, f'Error adding customer number <<{row[2]}>>', e)
         # skipping row[3] Lieferanten-Code as tehre is no data in the whole DataSet
+        # save after every line for validation purposes
         if row[12] and row[12].strip():
             try:
-                euvat=prm.identifiers.new(type='eu_vat')
-                euvat.code= row[12].strip()
+                euvat = Ident(type='eu_vat')
+                euvat.code = row[12].strip()
+                euvat.party = np # party is required to save
+                euvat.save()
             except Exception as e:
                 add_note(np, f'Error adding EU VAT <<{row[12]}>>', e)
         if row[23] and row[23].strip():
             try:
-                atbus=prm.identifiers.new(type='at_businessid')
+                atbus=Ident(type='at_businessid')
                 atbus.code= row[23].strip()
+                atbus.party = np # party is required to save
+                atbus.save()
             except Exception as e:
                 add_note(np, f'Error adding EU VAT <<{row[23]}>>', e)
         # ignoring 25 (Rechtsform) and 17 (Typ des Partners)
         if row[26] and row[26].strip():
             try:
-                prm.pn_name = row[26].strip()
-            except Exception ad 3:
+                np.pn_name = row[26].strip()
+            except Exception as e:
                 add_note(np, f'Error adding PN Name <<{row[26]}>>', e)
         # notes from Dolibarr
         if row[15] and row[15].strip() and strip_tags(row[15]).strip():
             add_note(np, 'Notiz (privat):\n\n' + strip_tags(row[15]).strip())
-        if row[165] and row[16].strip() and strip_tags(row[16]).strip():
+        if row[16] and row[16].strip() and strip_tags(row[16]).strip():
             add_note(np, 'Notiz (öffentlich):\n\n' + strip_tags(row[16]).strip())
 
         # save everything
-        np.save()
-        
+        #sys.stdout.write('.')
+        print('.', end='', flush = True)
+        try:
+            np.save()
+        except Exception as e:
+            add_note(np, 'Error saving party', e)
+
+print('Import complete')
         
