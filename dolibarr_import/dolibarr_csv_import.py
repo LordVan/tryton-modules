@@ -28,6 +28,7 @@ Prel = Model.get('party.relation.all')
 PrelTyp = Model.get('party.relation.type')
 
 PREL_EMPLOYEE = 'Mitarbeiter'
+PREL_EMPLOYER = 'Arbeitgeber'
 
 lang_de, = Lang.find([('code', '=', 'de')]) # default language
 
@@ -50,11 +51,72 @@ def add_note(res, text, e=None):
     note = Note()
     note.resource = res
     note.message = text
+    note.unread = True
     if e:
         note.message += f'\nException:\n{e}'
     note.save()
 
+def party_complete_print(p):
+    ret = f'''
 
+############################
+{p.code=}
+{p.name=}
+{p.legal_name=}
+{p.salutation=}
+{p.pn_name=}
+{p.dolibarr_pid=}
+{p.dolibarr_cid=}
+{p.customer_no=}
+{p.supplier_no=}'''
+    if p.addresses:
+        for ad in p.addresses:
+            ret += f'''
+Address:
+  {ad.street=}
+  {ad.city=}
+  {ad.zip=}
+'''
+            if ad.subdivision:
+                ret += f'  {ad.subdivision.name=}'
+            if ad.country:
+                ret += f'  {ad.country.name=}'
+    if p.contact_mechanisms:
+        for cm in p.contact_mechanisms:
+            ret += f'''
+Contact Mechanism:
+  {cm.value=}
+  {cm.type=}'''
+    notes=Note.find([('resource', '=', p)])
+    if notes:
+        for n in notes:
+            ret += f'''
+Note:
+#####
+{note.message=}
+#####
+'''
+    return ret + '''
+############################
+
+'''
+
+def copy_address_data(from_, to):
+    '''
+    copies relevant (for this import) fields
+    '''
+    try:
+        to.street = from_.street
+        to.city = from_.city
+        to.zip = from_.zip
+        to.subdivision = from_.subdivision
+        to.country = from_.country
+        to.save()
+    except:
+        return False
+    return True
+
+    
 #########################
 # misc helper functions #
 #########################
@@ -198,9 +260,11 @@ def party_import():
                 if addr.city or addr.street or addr.country or addr.subdivision or addr.zip:
                     if not addr.country:
                         # if we have an address but no country we set the default
+                        print(f'adding default country to address {np.code=} {np.name=} {addr.full_address=}')
                         addr.country = country_at
                     addr.save()
                 else:
+                    # tested in proteus that this removes it from the party
                     addr.delete() # remove address
             except Exception as e:
                 add_note(np, 'Error saving address', e)
@@ -295,8 +359,8 @@ def party_import():
             print_progress(ncount)
 
 all_parties=Party.find()
-answer= input(f'Found {len(all_parties)} parties. Type "start" to start the party import')
-if answer == 'start':
+answer= input(f'Found {len(all_parties)} parties. Type "start" to start the party import (or "all" to run everything): ')
+if answer == 'start' or answer == 'all':
     party_import()
     print('\nParty import done')
             
@@ -410,6 +474,8 @@ def contact_import():
                 if addr.city or addr.street or addr.country or addr.subdivision or addr.zip:
                     if not addr.country:
                         # if we have an address but no country we set the default
+                        print(f'adding default country to address {np.code=} {np.name=} {addr.full_address=}')
+
                         addr.country = country_at
                     addr.save()
                 else:
@@ -489,8 +555,9 @@ def contact_import():
             print_progress(ncount)
 
 all_parties=Party.find()
-answer= input(f'Found {len(all_parties)} parties. Type "start" to start the contact import')
-if answer == 'start':
+if answer != 'all':
+    answer= input(f'Found {len(all_parties)} parties. Type "start" to start the contact import: ')
+if answer == 'start' or answer == 'all':
     contact_import()
     print('\nContact import complete')
 
@@ -498,14 +565,151 @@ if answer == 'start':
 # Party/Contact cleanup #
 #########################
 
+# IMPORTANT: These functions *only* compare what is imported above. Run at a later stage
+# at your own risk !
+
+def compare_contact_mechanism_data(c1, c2, ignoreType = False):
+    '''
+    returns True if they are the same, False otherwise
+    ignoreType = True just compares values
+    '''
+    if c1.value == c2.value:
+        if ignoreType:
+            return True
+        else:
+            if c1.type == c2.type:
+                return True
+    return False
+
+def compare_address_data(a1, a2, acceptSubset=False, ignoreSubdivision=False):
+    '''
+    returns True if they are the same, False otherwise
+
+    when acceptSubset is set consider them the same if a2 is a subset of a1 as well
+    (does NOT consider them equal if a1 is a subset of a2 (would need to update a1
+    in this case..)
+    
+    it is up to the caller to - if needed - also call this function with a1 and a2
+    swapped .. and then deal with it
+    '''
+    if not acceptSubset:
+        if a1.zip != a2.zip:
+            return False
+        if a1.street != a2.street:
+            return False
+        if a1.city != a2.city:
+            return False
+        if not ignoreSubdivision:
+            if a1.subdivision and a2.subdivision and a1.subdivision.id != a2.subdivision.id:
+                print('Subdivision differs')
+                return False
+        if a1.country and a2.country and a1.country.id != a2.country.id:
+            return False
+    else:
+        if a2.zip and a1.zip != a2.zip:
+            return False
+        if a2.street and a1.street != a2.street:
+            return False
+        if a2.city and a1.city != a2.city:
+            return False
+        if not ignoreSubdivision:
+            if a1.subdivision and a2.subdivision and a1.subdivision.id != a2.subdivision.id:
+                print('Subdivision differs')
+                return False
+        if a2.country and a1.country.id != a2.country.id:
+            return False
+    return True
+
 def party_cleanup():
     ppar = Party.find([('dolibarr_pid', '>', '-1')])
+    prelt, = PrelTyp.find([('name', '=', PREL_EMPLOYER)])
+    print(f'Employer relationship: {prelt.id=}, {prelt.name}')
+    ndupcnt = 0
     for p in ppar:
-        prel = p.relations
+        try:
+            r, = p.relations
+            # first a check nothing went .. weird .. in which case abbort
+            if r.type.id != prelt.id:
+                print(f'Something is not right with {p.name=} {p.code=}')
+                return
+            # assume p1 is always the dolibarr party and p2 is the contact
+            # otherwise would have to maybe consider legal_name
+            if r.from_.name != r.to.name:
+                # name is already different. move on to the next one
+                continue
+            # purposely ignore fields only present in the dolibarr party by definition:
+            # pn_name, identities, customer_no
+            
+            # Address
+            # compare address (there is only one possible address from the import
+            # so can ignore more
+            a1 = r.from_.addresses[0] if r.from_.addresses else None
+            a2 = r.to.addresses[0] if r.to.addresses else None
 
+            if not compare_address_data(a1, a2, True, True):
+                # not the same or a2 being a subset of a1
+                if not compare_address_data(a2, a1, True, True):
+                    # not matching either way eve if it is a subset the other way around
+                    print(f'Addresses are different {r.from_.code} {r.to.code} .. adding 2nd address.. ')
+                    #print(party_complete_print(r.from_))
+                    #print(party_complete_print(r.to))
+                    # no match .. let's just add a 2nd address
+                    adn = r.from_.addresses.new()
+                    copy_address_data(a2, adn) 
+                else:
+                    print(f'a1 is a subset of a2 {r.from_.code} {r.to.code} .. updating a1..')
+                    #print(party_complete_print(r.from_))
+                    #print(party_complete_print(r.to))
+                    copy_address_data(a2, a1)
+            # Addresses match, or a2 is a subset of a1 (in which case we ignore a2)
+            r.from_.save() # save after checking and/or copying addrsss
+            
+            # Contact Mechanisms
+            # if we got here .. merge the contact_mechanisms from a2 into a1, while
+            # avoiding duplicates
 
-answer = input('Do you want to run the party cleanup? Type "start" to start cleanup')
-if answer == 'start':
+            pcm = r.from_.contact_mechanisms
+            ccm = r.to.contact_mechanisms
+
+            if ccm:
+                # get a quick to search list of original contact_mechanisms
+                pcm_orig = []
+                if pcm:
+                    for cm in pcm:
+                        pcm_orig.append(f'{cm.type} {cm.value_compact}')
+                for cm in ccm:
+                    if f'{cm.type} {cm.value_compact}' not in pcm_orig:
+                        r.from_.contact_mechanisms.new(type = cm.type, value = cm.value)
+                    else:
+                        #print(f'skipping duplicate {r.from_.code=} {cm.type=} {cm.value=}')
+                        pass
+                r.from_.save() # save after adding contact mechanisms
+                        
+            # Notes
+
+            cnotes = Note.find([('resource', '=', r.to)])
+            if cnotes:
+                for cn in cnotes:
+                    add_note(r.from_, f'NOTE from contact {r.to.dolibarr_cid=}:\n\n {cn.message}')
+            # notes are saved in add_note so no need to save here
+            # delete the unneeded party
+            print('Deleting party:\n')
+            print(party_complete_print(r.to))
+            r.to.delete()
+            ndupcnt += 1
+
+        except:
+            # No interest in any parties without relation
+            # (there should be none, but to be sure..
+            # also not interested in parties with more than one relation as those
+            # cannot be merged automatically in any case
+            pass
+    print(f'{ndupcnt} duplicates found. Data merged if needed and duplicates deleted')
+                
+
+if answer != 'all':
+    answer = input('Do you want to run the party cleanup? Type "start" to start cleanup: ')
+if answer == 'start' or answer == 'all':
     party_cleanup()
     print('\nParty cleanup done')
 #
