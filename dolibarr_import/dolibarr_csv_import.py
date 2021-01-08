@@ -9,6 +9,7 @@ pcfg = config.set_trytond(database='tryton', config_file='/etc/tryton/trytond.co
 ENCODING = 'iso-8859-15'
 
 DEBUG = True
+LOG_STDOUT = False
 
 #################
 # Generic stuff #
@@ -120,7 +121,21 @@ def copy_address_data(from_, to):
 #########################
 # misc helper functions #
 #########################
+
+flog = None
+if not LOG_STDOUT:
+    flog = open('dolibarr_import.log', 'w')
     
+def log(message, print_anyway = False):
+    if LOG_STDOUT:
+        print(message)
+    else:
+        flog.write(message + '\n')
+        flog.flush()
+        if print_anyway:
+            print(message)
+        
+
 from io import StringIO
 from html.parser import HTMLParser
 
@@ -198,7 +213,7 @@ def party_import():
         reader = csv.reader(fp)
 
         headers = next(reader)
-        print(f'{headers=}')
+        log(f'{headers=}')
 
         ncount = 0
         for row in reader:
@@ -209,7 +224,8 @@ def party_import():
                 np.dolibarr_pid = int(row[0])
                 np.save() # save here so we got basic stuff that shouldn't fail and can attach notes,..
             except Exception as e:
-                print(f'\nError adding dolibar_pid {row[0]}.\n\n{e}')
+                log(f'\nError adding dolibarr_pid {row[0]}.\n\n{e}')
+                print('E', end = '', flush = True)
                 continue
 
             # try:
@@ -260,7 +276,7 @@ def party_import():
                 if addr.city or addr.street or addr.country or addr.subdivision or addr.zip:
                     if not addr.country:
                         # if we have an address but no country we set the default
-                        print(f'adding default country to address {np.code=} {np.name=} {addr.full_address=}')
+                        log(f'adding default country to address {np.code=} {np.name=} {addr.full_address=}')
                         addr.country = country_at
                     addr.save()
                 else:
@@ -336,7 +352,7 @@ def party_import():
             # ignoring 25 (Rechtsform) and 17 (Typ des Partners)
             if row[26] and row[26].strip():
                 try:
-                    np.pn_name = row[26].strip()
+                    np.pn_name = row[26].strip().upper()
                 except Exception as e:
                     add_note(np, f'Error adding PN Name <<{row[26]=}>>', e)
             # notes from Dolibarr
@@ -362,7 +378,7 @@ all_parties=Party.find()
 answer= input(f'Found {len(all_parties)} parties. Type "start" to start the party import (or "all" to run everything): ')
 if answer == 'start' or answer == 'all':
     party_import()
-    print('\nParty import done')
+    log('\nParty import done', True)
             
 ######################
 # dolibarr contacts  #
@@ -403,7 +419,7 @@ def contact_import():
         reader = csv.reader(fp)
 
         headers = next(reader)
-        print(f'{headers=}')
+        log(f'{headers=}')
 
         ncount = 0
         for row in reader:
@@ -421,7 +437,8 @@ def contact_import():
                 np.dolibarr_cid = int(row[0])
                 np.save()
             except Exception as e:
-                print(f'\nError adding dolibarr_cid {row[0]}.\n\n{e}')
+                log(f'\nError adding dolibarr_cid {row[0]}.\n\n{e}', True)
+                print('E', end = '', flush = True)
                 continue
             np.categories.append(get_or_create_category('Import 2020-01-05'))
 
@@ -434,7 +451,7 @@ def contact_import():
                 nr.to = pemp
                 nr.save()
             except Exception as e:
-                print(f'Error getting employee party relation type . aborting!\n{e}')
+                log(f'Error getting employee party relation type . aborting!\n{e}', True)
                 return False
 
             # Address
@@ -474,7 +491,7 @@ def contact_import():
                 if addr.city or addr.street or addr.country or addr.subdivision or addr.zip:
                     if not addr.country:
                         # if we have an address but no country we set the default
-                        print(f'adding default country to address {np.code=} {np.name=} {addr.full_address=}')
+                        log(f'adding default country to address {np.code=} {np.name=} {addr.full_address=}')
 
                         addr.country = country_at
                     addr.save()
@@ -559,7 +576,7 @@ if answer != 'all':
     answer= input(f'Found {len(all_parties)} parties. Type "start" to start the contact import: ')
 if answer == 'start' or answer == 'all':
     contact_import()
-    print('\nContact import complete')
+    log('\nContact import complete', True)
 
 #########################
 # Party/Contact cleanup #
@@ -601,7 +618,7 @@ def compare_address_data(a1, a2, acceptSubset=False, ignoreSubdivision=False):
             return False
         if not ignoreSubdivision:
             if a1.subdivision and a2.subdivision and a1.subdivision.id != a2.subdivision.id:
-                print('Subdivision differs')
+                log('Subdivision differs')
                 return False
         if a1.country and a2.country and a1.country.id != a2.country.id:
             return False
@@ -614,7 +631,7 @@ def compare_address_data(a1, a2, acceptSubset=False, ignoreSubdivision=False):
             return False
         if not ignoreSubdivision:
             if a1.subdivision and a2.subdivision and a1.subdivision.id != a2.subdivision.id:
-                print('Subdivision differs')
+                log('Subdivision differs')
                 return False
         if a2.country and a1.country.id != a2.country.id:
             return False
@@ -623,14 +640,14 @@ def compare_address_data(a1, a2, acceptSubset=False, ignoreSubdivision=False):
 def party_cleanup():
     ppar = Party.find([('dolibarr_pid', '>', '-1')])
     prelt, = PrelTyp.find([('name', '=', PREL_EMPLOYER)])
-    print(f'Employer relationship: {prelt.id=}, {prelt.name}')
+    log(f'Employer relationship: {prelt.id=}, {prelt.name}')
     ndupcnt = 0
     for p in ppar:
         try:
             r, = p.relations
             # first a check nothing went .. weird .. in which case abbort
             if r.type.id != prelt.id:
-                print(f'Something is not right with {p.name=} {p.code=}')
+                log(f'Something is not right with {p.name=} {p.code=}', True)
                 return
             # assume p1 is always the dolibarr party and p2 is the contact
             # otherwise would have to maybe consider legal_name
@@ -650,16 +667,16 @@ def party_cleanup():
                 # not the same or a2 being a subset of a1
                 if not compare_address_data(a2, a1, True, True):
                     # not matching either way eve if it is a subset the other way around
-                    print(f'Addresses are different {r.from_.code} {r.to.code} .. adding 2nd address.. ')
-                    #print(party_complete_print(r.from_))
-                    #print(party_complete_print(r.to))
+                    log(f'Addresses are different {r.from_.code} {r.to.code} .. adding 2nd address.. ', True)
+                    log(party_complete_print(r.from_))
+                    log(party_complete_print(r.to))
                     # no match .. let's just add a 2nd address
                     adn = r.from_.addresses.new()
                     copy_address_data(a2, adn) 
                 else:
-                    print(f'a1 is a subset of a2 {r.from_.code} {r.to.code} .. updating a1..')
-                    #print(party_complete_print(r.from_))
-                    #print(party_complete_print(r.to))
+                    log(f'a1 is a subset of a2 {r.from_.code} {r.to.code} .. updating a1..', True)
+                    log(party_complete_print(r.from_))
+                    log(party_complete_print(r.to))
                     copy_address_data(a2, a1)
             # Addresses match, or a2 is a subset of a1 (in which case we ignore a2)
             r.from_.save() # save after checking and/or copying addrsss
@@ -681,7 +698,7 @@ def party_cleanup():
                     if f'{cm.type} {cm.value_compact}' not in pcm_orig:
                         r.from_.contact_mechanisms.new(type = cm.type, value = cm.value)
                     else:
-                        #print(f'skipping duplicate {r.from_.code=} {cm.type=} {cm.value=}')
+                        log(f'skipping duplicate {r.from_.code=} {cm.type=} {cm.value=}')
                         pass
                 r.from_.save() # save after adding contact mechanisms
                         
@@ -690,12 +707,19 @@ def party_cleanup():
             cnotes = Note.find([('resource', '=', r.to)])
             if cnotes:
                 for cn in cnotes:
+                    log(f'Adding NOTE to {r.to.dolibarr_cid=}')
                     add_note(r.from_, f'NOTE from contact {r.to.dolibarr_cid=}:\n\n {cn.message}')
             # notes are saved in add_note so no need to save here
             # delete the unneeded party
-            print('Deleting party:\n')
-            print(party_complete_print(r.to))
+            cid = r.to.dolibarr_cid
+            log('Deleting party:')
+            log(party_complete_print(r.to))
             r.to.delete()
+            try:
+                r.from_.dolibarr_cid = cid
+                r.from_.save()
+            except:
+                log(f'Error saving {cid=} to {r.from_.code=}', True)
             ndupcnt += 1
 
         except:
@@ -704,14 +728,15 @@ def party_cleanup():
             # also not interested in parties with more than one relation as those
             # cannot be merged automatically in any case
             pass
-    print(f'{ndupcnt} duplicates found. Data merged if needed and duplicates deleted')
+    log(f'{ndupcnt} duplicates found. Data merged if needed and duplicates deleted', True)
                 
 
 if answer != 'all':
     answer = input('Do you want to run the party cleanup? Type "start" to start cleanup: ')
 if answer == 'start' or answer == 'all':
     party_cleanup()
-    print('\nParty cleanup done')
+    log('\nParty cleanup done', True)
 #
-print('Import complete')
-        
+log('Import complete', True)
+if flog:
+    flog.close()
