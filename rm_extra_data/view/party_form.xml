@@ -2,16 +2,20 @@
 <data>
   <xpath expr="/form/notebook" position="inside">
     <page string="Extra" col="2" id="extra">
-      <label name="internal_name" />
-      <field name="internal_name" />
+      <label name="salutation" />
+      <field name="salutation" />
+      <label name="legal_name" />
+      <field name="legal_name" />
       <label name="customer_no" />
       <field name="customer_no" />
       <label name="supplier_no" />
       <field name="supplier_no" />
       <label name="pn_name" />
       <field name="pn_name" />
-      <label name="dolibarr_id" />
-      <field name="dolibarr_id" />
+      <label name="dolibarr_pid" />
+      <field name="dolibarr_pid" />
+      <label name="dolibarr_cid" />
+      <field name="dolibarr_cid" />
       <!--      <label name="place_of_jurisdiction" />
 	   <field name="place_of_jurisdiction" />-->
     </page>

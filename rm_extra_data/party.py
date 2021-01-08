@@ -16,6 +16,7 @@ class Party(metaclass=PoolMeta):
                               size = 9)
     pn_name = fields.Char('PN name',
                           size = 50)
+    # TODO: automatically capitalize this here or through view?
     legal_name = fields.Char('Legal name',
                              help = 'Legally correct name')
     salutation = fields.Char('Salutation',
