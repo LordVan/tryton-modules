@@ -12,7 +12,20 @@ class Sale(metaclass=PoolMeta):
     __name__ = 'sale.sale'
 
     # extra fields:
+
+    reference_com = fields.Char('Commission', select = True)
     
+    dolibarr_pid = fields.Integer('Dolibarr project id',
+                                  #readonly = True,
+                                  help = 'project id from dolibarr (for import purposes only)')
+
+
+    # extra_contacts = fields.Many2Many('sale.sale-party.party',
+    #                                   'party',
+    #                                   'party',
+    #                                   'Extra contacts')
+
+
     @classmethod
     @ModelView.button
     @Workflow.transition('confirmed')
@@ -21,3 +34,14 @@ class Sale(metaclass=PoolMeta):
         # do not process automagically
         pass
     
+
+class SaleLine(metaclass=PoolMeta):
+    __name__ = 'sale.line'
+
+    # extra fields
+    folder_no = fields.Integer('Folder number',
+                               required = True,
+                               help = 'Folder number')
+    folder_subcount = fields.Integer('Folder sub count',
+                                     required = True,
+                                     help = 'subfolder count')
