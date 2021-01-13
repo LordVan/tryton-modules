@@ -13,11 +13,13 @@ class Sale(metaclass=PoolMeta):
 
     # extra fields:
 
-    reference_com = fields.Char('Commission', select = True)
-    
     dolibarr_pid = fields.Integer('Dolibarr project id',
                                   #readonly = True,
                                   help = 'project id from dolibarr (for import purposes only)')
+    sale_date_extra = fields.Char('Sale date extra',
+                                  help = 'sale date extra text')
+    shipping_date_extra = fields.Char('Shipping date extra',
+                                      help ='shipping date extra text')
 
 
     # extra_contacts = fields.Many2Many('sale.sale-party.party',

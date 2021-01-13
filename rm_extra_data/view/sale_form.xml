@@ -4,8 +4,10 @@
     <page string="Extra" col="2" id="extra">
       <label name="dolibarr_pid" />
       <field name="dolibarr_pid" />
-<!--      <label name="reference_com" />
-      <field name="reference_com" />-->
+      <label name="sale_date_extra" />
+      <field name="sale_date_extra" />
+      <label name="shipping_date_extra" />
+      <field name="shipping_date_extra" />
     </page>
   </xpath>
 </data>
