@@ -49,3 +49,26 @@ class SaleLine(metaclass=PoolMeta):
     folder_subcount = fields.Integer('Folder sub count',
                                      required = True,
                                      help = 'subfolder count')
+
+    proj_line1 = fields.Char('Project sheet line 1',
+                             required = True,
+                             help = 'first line on the project sheets generated for this sale line')
+    proj_line2 = fields.Char('Project sheet line 2',
+                             help = 'second line on the project sheets generated for this sale line')
+    # material
+    material_extra = fields.Char('Material extra text',
+                                 help = 'extra text to be appended to material')
+    material_surface = fields.Char('Material surface',
+                                   help = 'surface treatment for material (paint,..) ')
+    sheet_thickness = fields.Float('Sheet metal thickness',
+                                   digits = (2, 2),
+                                   help = 'sheet metal thickness')
+
+    @classmethod
+    def default_folder_no(cls):
+        # TODO: maybe use highet existing as default ?
+        return 1
+
+    @classmethod
+    def default_folder_subcount(cls):
+        return 1
