@@ -4,10 +4,30 @@
     <page string="Extra" col="2" id="extra">
       <label name="dolibarr_pid" />
       <field name="dolibarr_pid" />
-      <label name="sale_date_extra" />
-      <field name="sale_date_extra" />
-      <label name="shipping_date_extra" />
-      <field name="shipping_date_extra" />
     </page>
+  </xpath>
+  <xpath expr="/form/notebook/page/field[@name='warehouse']"
+	 position="replace" />
+  <xpath expr="/form/notebook/page/label[@name='warehouse']"
+	 position="replace" />
+  <xpath expr="/form/notebook/page/field[@name='shipping_date']"
+	 position="after">
+    <label name="warehouse" />
+    <field name="warehouse" />
+  </xpath>
+  <xpath expr="/form/notebook/page/field[@name='shipping_date']"
+	 position="replace" />
+  <xpath expr="/form/notebook/page/label[@name='shipping_date']"
+	 position="replace" />
+  <xpath expr="/form/notebook/page/field[@name='sale_date']"
+	 position="after">
+    <label name="sale_date_extra" />
+    <field name="sale_date_extra" />
+    <label name="shipping_date" />
+    <field name="shipping_date" />
+    <label name="shipping_date_extra" />
+    <field name="shipping_date_extra" />
+    <label name="sale_folder_postfix" />
+    <field name="sale_folder_postfix" />
   </xpath>
 </data>

@@ -5,7 +5,7 @@ from trytond.model import Workflow, Model, ModelView, ModelSQL, fields, sequence
 from trytond.modules.company.model import (
         employee_field, set_employee, reset_employee)
 
-__all__ = ['Sale']
+__all__ = ['Sale', 'SaleLine']
 
 
 class Sale(metaclass=PoolMeta):
@@ -18,6 +18,8 @@ class Sale(metaclass=PoolMeta):
                                   help = 'project id from dolibarr (for import purposes only)')
     sale_date_extra = fields.Char('Sale date extra',
                                   help = 'sale date extra text')
+    sale_folder_postfix = fields.Char('Sale folder postfix',
+                                      help = 'this will be appended to the folder name')
     shipping_date_extra = fields.Char('Shipping date extra',
                                       help ='shipping date extra text')
 

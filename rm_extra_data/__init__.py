@@ -9,4 +9,8 @@ def register():
     Pool.register(
         sale.Sale,
         module='rm_extra_data', type_='model')
+    Pool.register(
+        sale.SaleLine,
+        module='rm_extra_data', type_='model')
+    
     
