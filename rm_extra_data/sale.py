@@ -54,10 +54,15 @@ class SaleLine(metaclass=PoolMeta):
     folder_no = fields.Integer('Folder number',
                                required = True,
                                help = 'Folder number')
-    folder_subcount = fields.Integer('Folder sub count',
-                                     required = True,
-                                     help = 'subfolder count')
+#    folder_subcount = fields.Integer('Folder sub count',
+#                                     required = True,
+#                                     help = 'subfolder count')
 
+    folder_subno = fields.Char('Subfolder',
+                               help = 'Subfolder number (letter)')
+    folder_submax = fields.Char('Subfolder maximum',
+                                help = 'Subfolder maximum')
+    
     proj_line1 = fields.Char('Project sheet line 1',
                              required = True,
                              help = 'first line on the project sheets generated for this sale line')
