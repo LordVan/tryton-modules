@@ -1,3 +1,7 @@
 __pycache__
 *.pyc
 dolibarr_import/dolibarr_import.log
+*.py~
+*.py#
+*.xml~
+*.tar.bz2
