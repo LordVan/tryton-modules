@@ -29,7 +29,15 @@ class Sale(metaclass=PoolMeta):
     #                                   'party',
     #                                   'Extra contacts')
 
+    folder_total = fields.Integer('Total folder number',
+                                  required = True,
+                                  help = 'total number of folders (not counting subfolders)')
+    
 
+    @classmethod
+    def default_folder_total(cls):    
+        return 1
+    
     @classmethod
     @ModelView.button
     @Workflow.transition('confirmed')

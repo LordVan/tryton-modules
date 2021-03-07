@@ -29,5 +29,7 @@
     <field name="shipping_date_extra" />
     <label name="sale_folder_postfix" />
     <field name="sale_folder_postfix" />
+    <label name="folder_total" />
+    <field name="folder_total" />
   </xpath>
 </data>
