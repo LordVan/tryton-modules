@@ -15,12 +15,19 @@ class Sale(metaclass=PoolMeta):
 
     dolibarr_pid = fields.Integer('Dolibarr project id',
                                   #readonly = True,
+                                  states = {
+                                      'readonly': Eval('sale_state') != 'draft',
+                                      'invisible': True,
+                                  },
                                   help = 'project id from dolibarr (for import purposes only)')
     sale_date_extra = fields.Char('Sale date extra',
+                                  states = { 'readonly': Eval('sale_state') != 'draft', },
                                   help = 'sale date extra text')
     sale_folder_postfix = fields.Char('Sale folder postfix',
+                                      states = { 'readonly': Eval('sale_state') != 'draft', },
                                       help = 'this will be appended to the folder name')
     shipping_date_extra = fields.Char('Shipping date extra',
+                                      states = { 'readonly': Eval('sale_state') != 'draft', },
                                       help ='shipping date extra text')
 
 
@@ -31,6 +38,7 @@ class Sale(metaclass=PoolMeta):
 
     folder_total = fields.Integer('Total folder number',
                                   required = True,
+                                  states = { 'readonly': Eval('sale_state') != 'draft', },
                                   help = 'total number of folders (not counting subfolders)')
     
 
@@ -53,27 +61,35 @@ class SaleLine(metaclass=PoolMeta):
     # extra fields
     folder_no = fields.Integer('Folder number',
                                required = True,
+                               states = { 'readonly': Eval('sale_state') != 'draft', },
                                help = 'Folder number')
 #    folder_subcount = fields.Integer('Folder sub count',
 #                                     required = True,
 #                                     help = 'subfolder count')
 
     folder_subno = fields.Char('Subfolder',
+                               states = { 'readonly': Eval('sale_state') != 'draft', },
                                help = 'Subfolder number (letter)')
     folder_submax = fields.Char('Subfolder maximum',
+                                states = { 'readonly': Eval('sale_state') != 'draft', },
                                 help = 'Subfolder maximum')
     
     proj_line1 = fields.Char('Project sheet line 1',
                              required = True,
+                             states = { 'readonly': Eval('sale_state') != 'draft', },
                              help = 'first line on the project sheets generated for this sale line')
     proj_line2 = fields.Char('Project sheet line 2',
+                             states = { 'readonly': Eval('sale_state') != 'draft', },
                              help = 'second line on the project sheets generated for this sale line')
     # material
     material_extra = fields.Char('Material extra text',
+                                 states = { 'readonly': Eval('sale_state') != 'draft', },
                                  help = 'extra text to be appended to material')
     material_surface = fields.Char('Material surface',
+                                   states = { 'readonly': Eval('sale_state') != 'draft', },
                                    help = 'surface treatment for material (paint,..) ')
     sheet_thickness = fields.Float('Sheet metal thickness',
+                                   states = { 'readonly': Eval('sale_state') != 'draft', },
                                    digits = (2, 2),
                                    help = 'sheet metal thickness')
 
