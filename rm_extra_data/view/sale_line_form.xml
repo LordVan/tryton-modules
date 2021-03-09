@@ -2,14 +2,19 @@
 <data>
   <xpath expr="/form/notebook/page/field[@name='amount']"
 	 position="after">
+    <label name="due_date" />
+    <field name="due_date" />
+    <label name="due_date_postfix" />
+    <field name="due_date_postfix" />
     <label name="folder_no" />
     <field name="folder_no" />
-<!--    <label name="folder_subcount" />
-    <field name="folder_subcount" />-->
+    <newline />
     <label name="folder_subno" />
     <field name="folder_subno" />
     <label name="folder_submax" />
     <field name="folder_submax" />
+    <label name="proj_line0" />
+    <field name="proj_line0" />
     <label name="proj_line1" />
     <field name="proj_line1" />
     <label name="proj_line2" />
