@@ -76,11 +76,11 @@ class SaleLine(metaclass=PoolMeta):
 
     due_date = fields.Date('Due date',
                            states = { 'readonly': Eval('sale_state') != 'draft', },
-                           help = 'Due date for this sale line')
+                           help = 'Due date for this sale line (replaces due date from project sheet)')
 
     due_date_postfix = fields.Char('Due date extra',
                                    states = { 'readonly': Eval('sale_state') != 'draft', },
-                                   help = 'Extra text for due date for this sale line')
+                                   help = 'Extra text for due date for this sale line (replaces due date extra from project sheet ')
     
     proj_line0 = fields.Char('Project sheet line 0',
                              states = { 'readonly': Eval('sale_state') != 'draft', },
