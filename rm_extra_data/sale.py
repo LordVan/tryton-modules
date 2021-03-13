@@ -12,22 +12,21 @@ class Sale(metaclass=PoolMeta):
     __name__ = 'sale.sale'
 
     # extra fields:
-
     dolibarr_pid = fields.Integer('Dolibarr project id',
                                   #readonly = True,
                                   states = {
-                                      'readonly': Eval('sale_state') != 'draft',
+                                      'readonly': Eval('state') != 'draft',
                                       'invisible': True,
                                   },
                                   help = 'project id from dolibarr (for import purposes only)')
     sale_date_extra = fields.Char('Sale date extra',
-#                                  states = { 'readonly': Eval('sale_state') != 'draft', },
+                                  states = { 'readonly': Eval('state') != 'draft', },
                                   help = 'sale date extra text')
     sale_folder_postfix = fields.Char('Sale folder postfix',
-#                                      states = { 'readonly': Eval('sale_state') != 'draft', },
+                                      states = { 'readonly': Eval('state') != 'draft', },
                                       help = 'this will be appended to the folder name')
     shipping_date_extra = fields.Char('Shipping date extra',
-#                                      states = { 'readonly': Eval('sale_state') != 'draft', },
+                                      states = { 'readonly': Eval('state') != 'draft', },
                                       help ='shipping date extra text')
 
 
@@ -38,7 +37,7 @@ class Sale(metaclass=PoolMeta):
 
     folder_total = fields.Integer('Total folder number',
                                   required = True,
-#                                  states = { 'readonly': Eval('sale_state') != 'draft', },
+                                  states = { 'readonly': Eval('state') != 'draft', },
                                   help = 'total number of folders (not counting subfolders)')
     
 
