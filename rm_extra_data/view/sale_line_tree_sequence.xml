@@ -8,6 +8,7 @@
     <field name="folder_submax" />
     <field name="proj_line1" />
     <field name="proj_line2" />
+    <field name="material" />
     <field name="material_extra" />
     <field name="sheet_thickness" />
   </xpath>

@@ -92,7 +92,9 @@ class SaleLine(metaclass=PoolMeta):
     proj_line2 = fields.Char('Project sheet line 2',
                              states = { 'readonly': Eval('sale_state') != 'draft', },
                              help = 'second line on the project sheets generated for this sale line')
-    # material
+    material = fields.Char('Material',
+                           states = {'readonly': Eval('sale_state') != 'draft', },
+                           help = 'Material name (auto-filled from product)')
     material_extra = fields.Char('Material extra text',
                                  states = { 'readonly': Eval('sale_state') != 'draft', },
                                  help = 'extra text to be appended to material')

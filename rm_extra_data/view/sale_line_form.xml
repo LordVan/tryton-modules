@@ -19,14 +19,15 @@
     <field name="proj_line1" />
     <label name="proj_line2" />
     <field name="proj_line2" />
-<!--    <label name="material" />
-    <label name="material" />-->
+    <newline />
+    <label name="material" />
+    <field name="material" />
     <label name="material_extra" />
     <field name="material_extra" />
-    <label name="material_surface" />
-    <field name="material_surface" />   
     <label name="sheet_thickness" />
     <field name="sheet_thickness" />
+    <label name="material_surface" />
+    <field name="material_surface" />   
   </xpath>
   <xpath expr="/form/notebook/page/field[@name='shipping_date']"
 	 position="replace" />
