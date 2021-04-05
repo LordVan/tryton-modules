@@ -14,6 +14,8 @@ Cont = Model.get('party.contact_mechanism')
 Ident = Model.get('party.identifier')
 Prel = Model.get('party.relation.all')
 PrelTyp = Model.get('party.relation.type')
+Prod = Model.get('product.product')
+ProdTpl = Model.get('product.template')
 
 try:
     prm, = Party.find([('code', '=', '1')])
