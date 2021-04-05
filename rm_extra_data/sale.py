@@ -101,10 +101,11 @@ class SaleLine(metaclass=PoolMeta):
     material_surface = fields.Char('Material surface',
                                    states = { 'readonly': Eval('sale_state') != 'draft', },
                                    help = 'surface treatment for material (paint,..) ')
-    sheet_thickness = fields.Float('Sheet metal thickness',
+    # this is actually also used for non sheet metal thickness, but not going to rename the field, just changing the description
+    sheet_thickness = fields.Float('Material thickness',
                                    states = { 'readonly': Eval('sale_state') != 'draft', },
                                    digits = (2, 2),
-                                   help = 'sheet metal thickness')
+                                   help = 'material thickness')
 
     @classmethod
     def default_folder_no(cls):
