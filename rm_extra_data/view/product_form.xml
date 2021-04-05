@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<data>
+  <xpath expr="/form/notebook/page/label[@name='list_price']" position="before">
+    <label name="material" />
+    <field name="material" />
+    <label name="sheet_thickness" />
+    <field name="sheet_thickness" />
+    <label name="material_extra" />
+    <field name="material_extra" />
+    <label name="material_surface" />
+    <field name="material_surface" />
+    <newline />
+  </xpath>
+</data>
