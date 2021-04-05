@@ -22,10 +22,10 @@
     <newline />
     <label name="material" />
     <field name="material" />
-    <label name="material_extra" />
-    <field name="material_extra" />
     <label name="sheet_thickness" />
     <field name="sheet_thickness" />
+    <label name="material_extra" />
+    <field name="material_extra" />
     <label name="material_surface" />
     <field name="material_surface" />   
   </xpath>

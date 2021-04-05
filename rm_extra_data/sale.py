@@ -115,3 +115,21 @@ class SaleLine(metaclass=PoolMeta):
     @classmethod
     def default_folder_subcount(cls):
         return 1
+
+    @fields.depends('material', 'material_extra', 'sheet_thickness', 'material_surface')
+    def on_change_product(self):
+        # TODO: set material and sheet_thickness as readonly normally and only allow overwriting if no product is set?
+        if not self.product:
+            return
+
+        super(SaleLine, self).on_change_product()
+
+        # TODO: evaluate if we want to also overwrite with empty values or not
+        self.material = self.product.material
+        self.sheet_thickness = self.product.sheet_thickness
+        # those two won't usually be set so do not overwrite with empty values FIXME: good or not?
+        if self.product.material_extra:
+            self.material_extra = self.product.material_extra
+        if self.product.material_surface:
+            self.material_surface = self.product.material_surface
+            
