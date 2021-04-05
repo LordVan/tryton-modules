@@ -93,17 +93,21 @@ class SaleLine(metaclass=PoolMeta):
                              states = { 'readonly': Eval('sale_state') != 'draft', },
                              help = 'second line on the project sheets generated for this sale line')
     material = fields.Char('Material',
-                           states = {'readonly': Eval('sale_state') != 'draft', },
+                           states = {'readonly': (Eval('sale_state') != 'draft') | Eval('product'), },
                            help = 'Material name (auto-filled from product)')
+    # those 2 are not usually set on the product (at least not for now so leave them read-write
+    # TODO: maybe make them readonly only if values were set from the product
     material_extra = fields.Char('Material extra text',
                                  states = { 'readonly': Eval('sale_state') != 'draft', },
+                                 #states = {'readonly': (Eval('sale_state') != 'draft') | Eval('product'), },
                                  help = 'extra text to be appended to material')
     material_surface = fields.Char('Material surface',
                                    states = { 'readonly': Eval('sale_state') != 'draft', },
+                                   #states = {'readonly': (Eval('sale_state') != 'draft') | Eval('product'), },
                                    help = 'surface treatment for material (paint,..) ')
     # this is actually also used for non sheet metal thickness, but not going to rename the field, just changing the description
     sheet_thickness = fields.Float('Material thickness',
-                                   states = { 'readonly': Eval('sale_state') != 'draft', },
+                                   states = {'readonly': (Eval('sale_state') != 'draft') | Eval('product'), },
                                    digits = (2, 2),
                                    help = 'material thickness')
 
