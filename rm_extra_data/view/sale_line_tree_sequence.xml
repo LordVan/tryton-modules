@@ -10,6 +10,7 @@
     <field name="proj_line2" />
     <field name="material" />
     <field name="material_extra" />
+    <field name="material_surface" />
     <field name="sheet_thickness" />
   </xpath>
 </data>
