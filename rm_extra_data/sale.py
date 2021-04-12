@@ -4,6 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import Workflow, Model, ModelView, ModelSQL, fields, sequence_ordered
 from trytond.modules.company.model import (
         employee_field, set_employee, reset_employee)
+from trytond.exceptions import UserWarning
 
 __all__ = ['Sale', 'SaleLine']
 
@@ -50,8 +51,20 @@ class Sale(metaclass=PoolMeta):
     @Workflow.transition('confirmed')
     @set_employee('confirmed_by')
     def confirm(cls, sales):
-        # do not process automagically
-        pass
+        # skip original logic, so we do not process automagically
+        Warning = Pool().get('res.user.warning')
+        warning_name = 'saleline_noproduct,%s' % cls
+        need_fixing = []
+        for sale in sales:
+            for line in sale.lines:
+                if not line.product:
+                    need_fixing.append(line.rec_name)
+        if Warning.check(warning_name):
+            if need_fixing:
+                msg = 'Position ohne Produkt gefunden!!'
+                #msg += '\n'.join(need_fixing)
+                raise UserWarning(warning_name, msg)
+
     
 
 class SaleLine(metaclass=PoolMeta):
