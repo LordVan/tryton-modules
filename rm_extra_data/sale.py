@@ -31,10 +31,8 @@ class Sale(metaclass=PoolMeta):
                                       help ='shipping date extra text')
 
 
-    # extra_contacts = fields.Many2Many('sale.sale-party.party',
-    #                                   'party',
-    #                                   'party',
-    #                                   'Extra contacts')
+    extra_contacts = fields.Many2Many('party.party-sale.sale', 'sale', 'party', 'Extra Contacts',
+                                      states = { 'readonly': Eval('state') != 'draft', })
 
     folder_total = fields.Integer('Total folder number',
                                   required = True,
@@ -65,7 +63,14 @@ class Sale(metaclass=PoolMeta):
                 #msg += '\n'.join(need_fixing)
                 raise UserWarning(warning_name, msg)
 
-    
+
+class SaleContact(ModelSQL):
+    "Sale - Contact"
+    __name__ = 'party.party-sale.sale'
+    sale = fields.Many2One('sale.sale', "Sale", ondelete='CASCADE', select=True, required=True)
+    party = fields.Many2One('party.party', "Contact", ondelete='CASCADE', required=True)
+                    
+            
 
 class SaleLine(metaclass=PoolMeta):
     __name__ = 'sale.line'

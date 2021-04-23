@@ -6,6 +6,12 @@
       <field name="dolibarr_pid" />
     </page>
   </xpath>
+  <xpath expr="/form/notebook" position="inside">
+    <page string="Contacts" col="2" id="extra_contacts">
+      <label name="extra_contacts" />
+      <field name="extra_contacts" />
+    </page>
+  </xpath>
   <xpath expr="/form/notebook/page/field[@name='warehouse']"
 	 position="replace" />
   <xpath expr="/form/notebook/page/label[@name='warehouse']"
