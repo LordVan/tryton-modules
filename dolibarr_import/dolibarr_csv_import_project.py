@@ -83,6 +83,8 @@ def log(message, print_anyway = False):
 #     ORDER BY p.rowid DESC
 #     ) TO 'dolibarr_projects_contacts_2021-04-25.csv' WITH csv HEADER;
 
+# somehow 4 projects were missing (I suspect there were no extra fields on those as they were earlier ones.. added those manually
+
 # ignoring if the 2 potential extra digits for month are valid or not to simplify regex
 pat_num = re.compile('^(\d{4})\d{0,2}/(\d{4})$')
 
@@ -157,8 +159,33 @@ def import_projects(pool, transaction):
 def import_project_contacts(pool, transaction):
     Sale = pool.get('sale.sale')
     Party = pool.get('party.party')
+    PartySale = pool.get('party.party-sale.sale')
 
-    #with codecs.open('dolibarr
+    with codecs.open('dolibarr_projects_contacts_2021-04-25.csv', 'r', 'utf-8') as fp:
+        reader = csv.reader(fp)
+
+        headers= next(reader)
+        log(f'{headers}')
+
+        #       0,     1,         2,           3
+        # proj_id,number,contact_id,contact_name
+
+        # filtered out AR-Email contacts as they are removed in tryton already!
+        
+        for row in reader:
+            try:
+                # search for dolibarr project id ANd number matching otherwise bail
+                s, = Sale.search([('dolibarr_pid', '=', row[0]), ('number', '=', fix_number(row[1]))])
+                p, = Party.search([('dolibarr_cid', '=', row[2])])
+                psn = PartySale()
+                psn.sale = s
+                psn.party = p
+                psn.save()
+            except Exception as e:
+                log(f'\nError adding project {row}.\n\n{e}')
+                log(f'{p.name}')
+                log(f'{s.number}')
+
     
 # if __name__ == '__main__':
 #     print('''Do not run this directly. This is to be imported and called from trytond_console,
