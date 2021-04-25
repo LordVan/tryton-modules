@@ -135,15 +135,15 @@ def import_projects(pool, transaction):
                     s.description = row[7]
                 # no need for .strip() as the SQL output was trimmed already
                 if row[8]:
-                    s_comment += f'description: row[8]\n'
+                    s_comment += f'description: {row[8]}\n'
                 if row[9]:
                     # use this to determine if confiremd or done
-                    s_comment += f'date_close: row[9]\n'
+                    s_comment += f'date_close: {row[9]}\n'
                     s.state = 'done'
                 else:
                     s.state = 'confirmed'
                 if row[10]:
-                    s_comment += f'note: row[10]\n'
+                    s_comment += f'note: {row[10]}\n'
                 s.comment = s_comment.strip() # get rid of extra linebreak here is easier
                 p, = Party.search([('dolibarr_pid', '=', row[11])]) 
                 s.party = p
@@ -153,7 +153,12 @@ def import_projects(pool, transaction):
                 s.save()
             except Exception as e:
                 log(f'\nError adding project {row[1]}.\n\n{e}')
-                
+
+def import_project_contacts(pool, transaction):
+    Sale = pool.get('sale.sale')
+    Party = pool.get('party.party')
+
+    #with codecs.open('dolibarr
     
 # if __name__ == '__main__':
 #     print('''Do not run this directly. This is to be imported and called from trytond_console,
