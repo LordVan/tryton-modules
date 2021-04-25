@@ -187,7 +187,19 @@ def import_project_contacts(pool, transaction):
                 log(f'{s.number}')
 
     
-# if __name__ == '__main__':
-#     print('''Do not run this directly. This is to be imported and called from trytond_console,
-# since when using proteus we cannot ignore automatic sequences,...''')
-#     sys.exit(1)
+if __name__ == '__main__':
+    print('''Do not run this directly. This is to be imported and called from trytond_console,
+since when using proteus we cannot ignore automatic sequences,...
+basic usage from trytond-console is like this:
+
+from dolibarr_csv_import_project import import_project_contacts as ipc
+from dolibarr_csv_import_project import import_projects as ip
+ip(pool, transaction)
+# let it run and if there are no errors
+#transaction.commit()
+
+ipc(pool, transaction)
+# let it run and if there are no errors
+#transaction.commit()
+''')
+    sys.exit(1)
