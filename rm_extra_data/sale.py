@@ -6,7 +6,7 @@ from trytond.modules.company.model import (
         employee_field, set_employee, reset_employee)
 from trytond.exceptions import UserWarning
 
-__all__ = ['Sale', 'SaleLine']
+__all__ = ['Sale', 'SaleLine', 'SaleContact']
 
 
 class Sale(metaclass=PoolMeta):
