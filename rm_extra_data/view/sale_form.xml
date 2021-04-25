@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <data>
-  <xpath expr="/form/notebook" position="inside">
+<!--  <xpath expr="/form/notebook" position="inside">
     <page string="Extra" col="2" id="extra">
       <label name="dolibarr_pid" />
       <field name="dolibarr_pid" />
     </page>
-  </xpath>
+  </xpath>-->
   <xpath expr="/form/notebook" position="inside">
     <page string="Contacts" col="2" id="extra_contacts">
       <label name="extra_contacts" />

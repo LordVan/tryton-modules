@@ -22,11 +22,13 @@ class Party(metaclass=PoolMeta):
     salutation = fields.Char('Salutation',
                              size = 50) # limiting length since more seems useless
     dolibarr_pid = fields.Integer('Dolibarr party id',
-#                                  readonly = True,
+                                  states = { 'invisible': True, },
+                                  readonly = True,
                                   help = 'party id from dolibarr (for import purposes only)')
     dolibarr_cid = fields.Integer('Dolibarr contact id',
-#                                 readonly = True,
-                                 help = 'contact id from dolibarr (for import purposes only)')
+                                  states = { 'invisible': True, },
+                                  readonly = True,
+                                  help = 'contact id from dolibarr (for import purposes only)')
     # general stuff
     #place_of_jurisdiction = fields.Char('Place of jurisdiction', size=100)
     
