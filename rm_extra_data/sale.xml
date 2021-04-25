@@ -16,6 +16,11 @@
       <field name="inherit" ref="sale.sale_line_view_form" />
       <field name="name">sale_line_form</field>
     </record>
+<!--    <record model="ir.ui.view" id="sale_view_tree">
+      <field name="model">sale.sale</field>
+      <field name="type">tree</field>
+      <field name="name">sale_tree</field>
+    </record>-->
   </data>
 </tryton>
 
