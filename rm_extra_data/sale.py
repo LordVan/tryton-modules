@@ -39,7 +39,6 @@ class Sale(metaclass=PoolMeta):
                                   states = { 'readonly': Eval('state') != 'draft', },
                                   help = 'total number of folders (not counting subfolders)')
     
-
     @classmethod
     def default_folder_total(cls):    
         return 1
@@ -128,7 +127,45 @@ class SaleLine(metaclass=PoolMeta):
                                    states = {'readonly': (Eval('sale_state') != 'draft') | Eval('product'), },
                                    digits = (2, 2),
                                    help = 'material thickness')
+    
+    # extra fields for delivery notes / invoices (where it does not match the normal lines)
+    # line(s)
 
+    inv_skip = fields.Boolean('Skip this whole sale line for invoice / delivery note',
+                              help = 'if selected this sale line will not show on invoices or delivery notes')
+    
+    inv_line0 = fields.Char('Invoice / delivery note line 0',
+                             states = {
+                                 'readonly': ((Eval('sale_state') != 'draft')
+                                              | Eval('inv_line0_skip')
+                                              | Eval('inv_skip')
+                                 ),
+                             },
+                             help = 'above first line on the invoice / delivery note generated for this sale line.')
+    inv_line0_skip = fields.Boolean('Skip invoice / delivery note line 0',
+                                    states = {'readonly': ((Eval('sale_state') != 'draft')
+                                                           | Eval('inv_skip')),
+                                    },
+                                    help = 'if selected invoice line 0 will be ignored')
+    inv_line1 = fields.Char('Invoice / delivery note line 1',
+                             states = {
+                                 'readonly': ((Eval('sale_state') != 'draft')
+                                              | Eval('inv_skip')),
+                             },
+                             help = 'first line on the invoice / delivery note generated for this sale line')
+    inv_line2 = fields.Char('Invoice / delivery note line 2',
+                             states = {
+                                 'readonly': ((Eval('sale_state') != 'draft')
+                                              | Eval('inv_line2_skip')
+                                              | Eval('inv_skip')),
+                             },
+                             help = 'second line on the invoice / delivery note generated for this sale line')
+    inv_line2_skip = fields.Boolean('Skip invoice / delivery note line 2',
+                                    states = {'readonly': ((Eval('sale_state') != 'draft')
+                                                           | Eval('inv_skip')),
+                                              },
+                                    help = 'if selected invoice line 2 will be ignored')
+ 
     @classmethod
     def default_folder_no(cls):
         # TODO: maybe use highet existing as default ?
