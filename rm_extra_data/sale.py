@@ -70,7 +70,43 @@ class SaleReport(metaclass=PoolMeta):
     def get_context(cls, records, data):
         context = super(SaleReport, cls).get_context(records, data)
         def get_project_lines(sale):
-            return sale.lines
+            sorted_lines = list(sale.lines)
+            # for project sheets we sort lines by folder number, then subfolder number
+            # also makes it a lot easier to combine lines for project sheets
+            sorted_lines.sort(key=lambda x: (x.folder_no, x.folder_subno, x.proj_line1))
+            merged_lines = []
+            # the next line to be added (after potential merging)
+            next_line = sorted_lines[0]
+            next_line0_text = next_line.proj_line0.strip()
+            next_line1 = [next_line,]
+            next_line2_text = next_line.proj_line2.strip()
+            for line in sorted_lines[1:]:
+                if (line.folder_no == next_line.folder_no and
+                    line.folder_subno == next_line.folder_subno and
+                    line.material == next_line.material and
+                    line.material_extra == next_line.material_extra and
+                    line.material_surface == next_line.material_surface and
+                    line.sheet_thickness == next_line.sheet_thickness and
+                    line.due_date == next_line.due_date and
+                    line.due_date_postfix == next_line.due_date_postfix):
+                    # this line matches the next line to be added so append data
+                    if line.proj_line0.strip():
+                        next_line0_text += ' ' + line.proj_line0.strip()
+                    next_line1.append(line)
+                    if line.proj_line2.strip():
+                        next_line2_text += ' ' + line.proj_line2.strip()
+                    # do not merge anything else at this point
+                else:
+                    # we need a new sheet ..
+                    merged_lines.append((next_line, next_line0_text, next_line1, next_line2_text)) # append the last line
+                    next_line = line # the current line is now the next one
+                    # assign initial values
+                    next_line0_text = next_line.proj_line0.strip()
+                    next_line1 = [next_line,]
+                    next_line2_text = next_line.proj_line2.strip()
+            # Important: append the last line
+            merged_lines.append((next_line, next_line0_text, next_line1, next_line2_text)) # append the last line
+            return merged_lines
         context['get_project_lines'] = get_project_lines
         return context
             
@@ -108,11 +144,9 @@ class SaleLine(metaclass=PoolMeta):
     due_date_postfix = fields.Char('Due date extra',
                                    states = { 'readonly': Eval('sale_state') != 'draft', },
                                    help = 'Extra text for due date for this sale line (replaces due date extra from project sheet ')
-    
     proj_line0 = fields.Char('Project sheet line 0',
                              states = { 'readonly': Eval('sale_state') != 'draft', },
                              help = 'above first line on the project sheets generated for this sale line')
-    
     proj_line1 = fields.Char('Project sheet line 1',
                              required = True,
                              states = { 'readonly': Eval('sale_state') != 'draft', },
