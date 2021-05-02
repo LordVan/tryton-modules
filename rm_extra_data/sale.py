@@ -6,7 +6,7 @@ from trytond.modules.company.model import (
         employee_field, set_employee, reset_employee)
 from trytond.exceptions import UserWarning
 
-__all__ = ['Sale', 'SaleLine', 'SaleContact']
+__all__ = ['Sale', 'SaleLine', 'SaleContact', 'SaleReport']
 
 
 class Sale(metaclass=PoolMeta):
@@ -63,6 +63,17 @@ class Sale(metaclass=PoolMeta):
                 raise UserWarning(warning_name, msg)
 
 
+class SaleReport(metaclass=PoolMeta):
+    __name__ = 'sale.sale.project'
+
+    @classmethod
+    def get_context(cls, records, data):
+        context = super(SaleReport, cls).get_context(records, data)
+        def get_project_lines(sale):
+            return sale.lines
+        context['get_project_lines'] = get_project_lines
+        return context
+            
 class SaleContact(ModelSQL):
     "Sale - Contact"
     __name__ = 'party.party-sale.sale'
@@ -165,7 +176,7 @@ class SaleLine(metaclass=PoolMeta):
                                                            | Eval('inv_skip')),
                                               },
                                     help = 'if selected invoice line 2 will be ignored')
- 
+   
     @classmethod
     def default_folder_no(cls):
         # TODO: maybe use highet existing as default ?
@@ -178,10 +189,10 @@ class SaleLine(metaclass=PoolMeta):
     @fields.depends('material', 'material_extra', 'sheet_thickness', 'material_surface')
     def on_change_product(self):
         # TODO: set material and sheet_thickness as readonly normally and only allow overwriting if no product is set?
+        super(SaleLine, self).on_change_product()
         if not self.product:
             return
 
-        super(SaleLine, self).on_change_product()
 
         # TODO: evaluate if we want to also overwrite with empty values or not
         self.material = self.product.material
