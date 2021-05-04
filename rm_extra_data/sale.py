@@ -73,7 +73,7 @@ class SaleReport(metaclass=PoolMeta):
             sorted_lines = list(sale.lines)
             # for project sheets we sort lines by folder number, then subfolder number
             # also makes it a lot easier to combine lines for project sheets
-            sorted_lines.sort(key=lambda x: (x.folder_no, x.folder_subno, x.proj_line1))
+            sorted_lines.sort(key=lambda x: (x.folder_no, x.folder_subno))
             merged_lines = []
             # the next line to be added (after potential merging)
             next_line = sorted_lines[0]
@@ -91,10 +91,10 @@ class SaleReport(metaclass=PoolMeta):
                     line.due_date_postfix == next_line.due_date_postfix):
                     # this line matches the next line to be added so append data
                     if line.proj_line0.strip():
-                        next_line0_text += ' ' + line.proj_line0.strip()
+                        next_line0_text += line.proj_line0.strip()
                     next_line1.append(line)
                     if line.proj_line2.strip():
-                        next_line2_text += ' ' + line.proj_line2.strip()
+                        next_line2_text += line.proj_line2.strip()
                     # do not merge anything else at this point
                 else:
                     # we need a new sheet ..
