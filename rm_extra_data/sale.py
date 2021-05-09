@@ -61,6 +61,20 @@ class Sale(metaclass=PoolMeta):
                 msg = 'Position ohne Produkt gefunden!!'
                 #msg += '\n'.join(need_fixing)
                 raise UserWarning(warning_name, msg)
+        warning_sale_date_extra = 'sale_date_extra,%s' % cls
+        warn_sale_date = []
+        for sale in sales:
+            others = Pool().get('sale.sale').search([('sale_folder_postfix', '=', sale.sale_folder_postfix),
+                                                     ('party', '=', sale.party),
+                                                     ('sale_date', '=', sale.sale_date),
+                                                     ('number', '!=', sale.number), ])
+            for s in others:
+                warn_sale_date.append(s.number)
+        if Warning.check(warning_sale_date_extra):
+            if warn_sale_date:
+                msg = 'Verkauf für diesen Kunden mit gleichem Bestelldatum und Bestellordner Zusatz existiert bereits:'
+                msg += '\n'.join(warn_sale_date)
+                raise UserWarning(warning_sale_date_extra, msg)
 
 
 class SaleReport(metaclass=PoolMeta):
