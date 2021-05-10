@@ -5,6 +5,7 @@
     <field name="product" />
   </xpath>
   <xpath expr="/tree/field[@name='quantity']" position="before">
+    <field name="folder_skip" />
     <field name="folder_no" />
     <field name="folder_subno" />
     <field name="folder_submax" />

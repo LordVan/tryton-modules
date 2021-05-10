@@ -8,6 +8,8 @@
     <field name="due_date_postfix" />
     <label name="folder_no" />
     <field name="folder_no" />
+    <label name="folder_skip" />
+    <field name="folder_skip" />
     <newline />
     <label name="folder_subno" />
     <field name="folder_subno" />

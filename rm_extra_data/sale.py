@@ -84,7 +84,11 @@ class SaleReport(metaclass=PoolMeta):
     def get_context(cls, records, data):
         context = super(SaleReport, cls).get_context(records, data)
         def get_project_lines(sale):
-            sorted_lines = list(sale.lines)
+            sorted_lines = list(filter(lambda x: x.folder_skip == False, sale.lines)) # copy the list but filter skipped ones here
+            if not sorted_lines:
+                # we got nothing
+                # TODO: raise an error, or just let the user figure it out?␘
+                return []
             # for project sheets we sort lines by folder number, then subfolder number
             # also makes it a lot easier to combine lines for project sheets
             sorted_lines.sort(key=lambda x: (x.folder_no, x.folder_subno))
@@ -138,19 +142,17 @@ class SaleLine(metaclass=PoolMeta):
     # extra fields
     folder_no = fields.Integer('Folder number',
                                required = True,
-                               states = { 'readonly': Eval('sale_state') != 'draft', },
+                               states = { 'readonly': ((Eval('sale_state') != 'draft') | Eval('folder_skip')), },
                                help = 'Folder number')
-#    folder_subcount = fields.Integer('Folder sub count',
-#                                     required = True,
-#                                     help = 'subfolder count')
-
     folder_subno = fields.Char('Subfolder',
-                               states = { 'readonly': Eval('sale_state') != 'draft', },
+                               states = { 'readonly': ((Eval('sale_state') != 'draft') | Eval('folder_skip')), },
                                help = 'Subfolder number (letter)')
     folder_submax = fields.Char('Subfolder maximum',
-                                states = { 'readonly': Eval('sale_state') != 'draft', },
+                                states = { 'readonly': ((Eval('sale_state') != 'draft') | Eval('folder_skip')), },
                                 help = 'Subfolder maximum')
-
+    folder_skip = fields.Boolean('Skip this on project sheets',
+                                 #states = { 'readonly': Eval('sale_state') != 'draft', },
+                                 help = 'if selected this sale line will not show on project sheets')
     due_date = fields.Date('Due date',
                            states = { 'readonly': Eval('sale_state') != 'draft', },
                            help = 'Due date for this sale line (replaces due date from project sheet)')
@@ -224,7 +226,11 @@ class SaleLine(metaclass=PoolMeta):
                                                            | Eval('inv_skip')),
                                               },
                                     help = 'if selected invoice line 2 will be ignored')
-   
+
+    @classmethod
+    def default_folder_skip(cls):
+        return False
+    
     @classmethod
     def default_folder_no(cls):
         # TODO: maybe use highet existing as default ?
