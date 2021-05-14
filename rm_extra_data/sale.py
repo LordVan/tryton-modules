@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import Workflow, Model, ModelView, ModelSQL, fields, sequence_ordered
 from trytond.modules.company.model import (
         employee_field, set_employee, reset_employee)
-from trytond.exceptions import UserWarning
+from trytond.exceptions import UserWarning, UserError
 
 __all__ = ['Sale', 'SaleLine', 'SaleContact', 'SaleReport']
 
@@ -306,7 +306,9 @@ class SaleLine(metaclass=PoolMeta):
             self.folder_submax = self.product.folder_submax
             self.folder_skip = self.product.folder_skip
             self.proj_line0 = self.product.proj_line0
-            self.proj_line1 = self.product.proj_line1 # TODO check this is not empty otherwise raise error!
+            if not self.product.proj_line1:
+                raise UserError('Produkte ohne Projektzeile 1 können nicht hinzugefügt werden.')
+            self.proj_line1 = self.product.proj_line1
             self.proj_line2 = self.product.proj_line2
             self.material_extra = self.product.material_extra
             self.material_surface = self.product.material_surface
