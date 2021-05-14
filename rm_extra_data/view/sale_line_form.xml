@@ -30,7 +30,6 @@
     <field name="material_extra" />
     <label name="material_surface" />
     <field name="material_surface" />
-    
     <separator name="invoice_lines" colspan="4"/>
     <label name="inv_skip" />
     <field name="inv_skip" />
@@ -46,6 +45,8 @@
     <field name="inv_line2" />
     <label name="inv_line2_skip" />
     <field name="inv_line2_skip" />
+    <label name="real_product" />
+    <field name="real_product" />
   </xpath>
   <xpath expr="/form/notebook/page/field[@name='shipping_date']"
 	 position="replace" />
