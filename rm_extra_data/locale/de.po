@@ -2,6 +2,94 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:party.party,customer_no:"
+msgid "Customer number"
+msgstr "Kundennummer"
+
+msgctxt "field:party.party,legal_name:"
+msgid "Legal name"
+msgstr "Rechtlicher Name"
+
+msgctxt "field:party.party,pn_name:"
+msgid "PN name"
+msgstr "PN Name"
+
+msgctxt "field:party.party,salutation:"
+msgid "Salutation"
+msgstr "Anrede"
+
+msgctxt "field:party.party,supplier_no:"
+msgid "Supplier number"
+msgstr "Lieferantennummer"
+
+msgctxt "field:product.product,folder_skip:"
+msgid "Skip this on project sheets"
+msgstr "Kein Projektzettel für diese Position"
+
+msgctxt "field:product.product,folder_submax:"
+msgid "Subfolder maximum"
+msgstr "Untermappe Gesamt"
+
+msgctxt "field:product.product,folder_subno:"
+msgid "Subfolder"
+msgstr "Untermappe"
+
+msgctxt "field:product.product,inv_line0:"
+msgid "Invoice / delivery note line 0"
+msgstr "LS / AR Zeile 0"
+
+msgctxt "field:product.product,inv_line0_skip:"
+msgid "Skip invoice / delivery note line 0"
+msgstr "LS / AR Zeile 0 weglassen"
+
+msgctxt "field:product.product,inv_line1:"
+msgid "Invoice / delivery note line 1"
+msgstr "LS / AR Hauptzeile"
+
+msgctxt "field:product.product,inv_line2:"
+msgid "Invoice / delivery note line 2"
+msgstr "LS / AR Zeile 2"
+
+msgctxt "field:product.product,inv_line2_skip:"
+msgid "Skip invoice / delivery note line 2"
+msgstr "LS / AR Zeile 2 weglassen"
+
+msgctxt "field:product.product,inv_skip:"
+msgid "Skip this whole sale line for invoice / delivery note"
+msgstr "Position nicht auf LS / AR anzeigen"
+
+msgctxt "field:product.product,material:"
+msgid "Material"
+msgstr "Material"
+
+msgctxt "field:product.product,material_extra:"
+msgid "Material extra text"
+msgstr "Material Zusatztext"
+
+msgctxt "field:product.product,material_surface:"
+msgid "Material surface"
+msgstr "Material Oberfläche"
+
+msgctxt "field:product.product,proj_line0:"
+msgid "Project sheet line 0"
+msgstr "Projektzettel Zeile 0"
+
+msgctxt "field:product.product,proj_line1:"
+msgid "Project sheet line 1"
+msgstr "Projektzettel Zeile 1"
+
+msgctxt "field:product.product,proj_line2:"
+msgid "Project sheet line 2"
+msgstr "Projektzettel Zeile 2"
+
+msgctxt "field:product.product,real_product:"
+msgid "Real product"
+msgstr "Echter Artikel"
+
+msgctxt "field:product.product,sheet_thickness:"
+msgid "Material thickness"
+msgstr "Materialstärke"
+
 msgctxt "field:sale.line,due_date:"
 msgid "Due date"
 msgstr "Fertigstellungsdatum"
@@ -109,6 +197,91 @@ msgstr "Mappen Gesamtanzahl"
 msgctxt "field:sale.sale,sale_folder_postfix:"
 msgid "Sale folder postfix"
 msgstr "Bestellordner Zusatz"
+
+msgctxt "help:party.party,legal_name:"
+msgid "Legally correct name"
+msgstr "Rechtsgültiger Name (Vollständiger Name bzw Firmenwortlaut)"
+
+msgctxt "help:product.product,folder_skip:"
+msgid "if selected this sale line will not show on project sheets"
+msgstr ""
+
+msgctxt "help:product.product,folder_submax:"
+msgid "Subfolder maximum"
+msgstr ""
+
+msgctxt "help:product.product,folder_subno:"
+msgid "Subfolder number (letter)"
+msgstr ""
+
+msgctxt "help:product.product,inv_line0:"
+msgid ""
+"above first line on the invoice / delivery note generated for this sale "
+"line."
+msgstr ""
+
+msgctxt "help:product.product,inv_line0_skip:"
+msgid "if selected invoice line 0 will be ignored"
+msgstr ""
+
+msgctxt "help:product.product,inv_line1:"
+msgid "first line on the invoice / delivery note generated for this sale line"
+msgstr ""
+
+msgctxt "help:product.product,inv_line2:"
+msgid ""
+"second line on the invoice / delivery note generated for this sale line"
+msgstr ""
+
+msgctxt "help:product.product,inv_line2_skip:"
+msgid "if selected invoice line 2 will be ignored"
+msgstr ""
+
+msgctxt "help:product.product,inv_skip:"
+msgid "if selected this sale line will not show on invoices or delivery notes"
+msgstr ""
+
+msgctxt "help:product.product,material:"
+msgid "Material name (auto-filled from product)"
+msgstr ""
+
+msgctxt "help:product.product,material_extra:"
+msgid "extra text to be appended to material"
+msgstr ""
+
+msgctxt "help:product.product,material_extra:"
+msgid ""
+"extra text to be appended to material (usually only needed on sale line)"
+msgstr ""
+
+msgctxt "help:product.product,material_surface:"
+msgid "surface treatment for material (paint,..) "
+msgstr ""
+
+msgctxt "help:product.product,material_surface:"
+msgid ""
+"surface treatment for material (paint,..) (usually only needed on sale line)"
+msgstr ""
+
+msgctxt "help:product.product,proj_line0:"
+msgid "above first line on the project sheets generated for this sale line"
+msgstr ""
+
+msgctxt "help:product.product,proj_line1:"
+msgid "first line on the project sheets generated for this sale line"
+msgstr ""
+
+msgctxt "help:product.product,proj_line2:"
+msgid "second line on the project sheets generated for this sale line"
+msgstr ""
+
+msgctxt "help:product.product,real_product:"
+msgid "if selected this is a real, final product, not a placeholder"
+msgstr ""
+
+msgctxt "help:product.product,sheet_thickness:"
+msgid "material thickness"
+msgstr ""
 
 msgctxt "help:sale.line,due_date:"
 msgid "Due date for this sale line"
