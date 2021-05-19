@@ -1,0 +1,199 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:sale.line,due_date:"
+msgid "Due date"
+msgstr "Fertigstellungsdatum"
+
+msgctxt "field:sale.line,due_date_extra:"
+msgid "Due date extra"
+msgstr "Fertigstellungsdatum Zusatz"
+
+msgctxt "field:sale.line,due_date_postfix:"
+msgid "Due date extra"
+msgstr "Fertigstellungsdatum Zusatz"
+
+msgctxt "field:sale.line,folder_no:"
+msgid "Folder number"
+msgstr "Mappen Nummer"
+
+msgctxt "field:sale.line,folder_no:"
+msgid "Folder number"
+msgstr "Mappen Nummer"
+
+msgctxt "field:sale.line,folder_skip:"
+msgid "Skip this on project sheets"
+msgstr "Kein Projektzettel für diese Position"
+
+msgctxt "field:sale.line,folder_subcount:"
+msgid "Folder sub count"
+msgstr "Anzal Untermappen"
+
+msgctxt "field:sale.line,folder_submax:"
+msgid "Subfolder maximum"
+msgstr "Untermappe Gesamt"
+
+msgctxt "field:sale.line,folder_subno:"
+msgid "Subfolder"
+msgstr "Untermappe"
+
+msgctxt "field:sale.line,inv_line0:"
+msgid "Invoice / delivery note line 0"
+msgstr "LS / AR Zeile 0"
+
+msgctxt "field:sale.line,inv_line0_skip:"
+msgid "Skip invoice / delivery note line 0"
+msgstr "LS / AR Zeile 0 weglassen"
+
+msgctxt "field:sale.line,inv_line1:"
+msgid "Invoice / delivery note line 1"
+msgstr "LS / AR Hauptzeile"
+
+msgctxt "field:sale.line,inv_line2:"
+msgid "Invoice / delivery note line 2"
+msgstr "LS / AR Zeile 2"
+
+msgctxt "field:sale.line,inv_line2_skip:"
+msgid "Skip invoice / delivery note line 2"
+msgstr "LS / AR Zeile 2 weglassen"
+
+msgctxt "field:sale.line,inv_skip:"
+msgid "Skip this whole sale line for invoice / delivery note"
+msgstr "Position nicht auf LS / AR anzeigen"
+
+msgctxt "field:sale.line,material:"
+msgid "Material"
+msgstr "Material"
+
+msgctxt "field:sale.line,material_extra:"
+msgid "Material extra text"
+msgstr "Material Zusatztext"
+
+msgctxt "field:sale.line,material_surface:"
+msgid "Material surface"
+msgstr "Material Oberfläche"
+
+msgctxt "field:sale.line,proj_line0:"
+msgid "Project sheet line 0"
+msgstr "Projektzettel Zeile 0"
+
+msgctxt "field:sale.line,proj_line1:"
+msgid "Project sheet line 1"
+msgstr "Projektzettel Zeile 1"
+
+msgctxt "field:sale.line,proj_line2:"
+msgid "Project sheet line 2"
+msgstr "Projektzettel Zeile 2"
+
+msgctxt "field:sale.line,sheet_thickness:"
+msgid "Material thickness"
+msgstr "Materialstärke"
+
+msgctxt "field:sale.line,sheet_thickness:"
+msgid "Sheet metal thickness"
+msgstr "Blechstärke"
+
+msgctxt "field:sale.sale,dolibarr_pid:"
+msgid "Dolibarr project id"
+msgstr "Dolibarr Projektnummer"
+
+msgctxt "field:sale.sale,extra_contacts:"
+msgid "Extra Contacts"
+msgstr "Kontaktpersonen"
+
+msgctxt "field:sale.sale,folder_total:"
+msgid "Total folder number"
+msgstr "Mappen Gesamtanzahl"
+
+msgctxt "field:sale.sale,sale_folder_postfix:"
+msgid "Sale folder postfix"
+msgstr "Bestellordner Zusatz"
+
+msgctxt "help:sale.line,due_date:"
+msgid "Due date for this sale line"
+msgstr "Fertistellungsdatum für diese Position"
+
+msgctxt "help:sale.line,due_date:"
+msgid "Due date for this sale line (replaces due date from project sheet)"
+msgstr ""
+"Fertigstellungsdatum für diese Position (ersetzt selbiges vom zugeordneten "
+"Verkauf)"
+
+msgctxt "help:sale.line,due_date_extra:"
+msgid "Extra text for due date for this sale line"
+msgstr "Zusatztext zum Fertigstellungsdatum"
+
+msgctxt "help:sale.line,folder_skip:"
+msgid "if selected this sale line will not show on project sheets"
+msgstr "Wenn ausgewählt wird kein Projektzetel für diese Position erstellt"
+
+msgctxt "help:sale.line,folder_subcount:"
+msgid "subfolder count"
+msgstr "Anzahl Untermappen (A, B, ..)"
+
+msgctxt "help:sale.line,folder_subno:"
+msgid "Subfolder number (letter)"
+msgstr "Untermappe (Buchstabe)"
+
+msgctxt "help:sale.line,inv_line0:"
+msgid ""
+"above first line on the invoice / delivery note generated for this sale line"
+msgstr "LS / AR Zeile über Hauptzeile"
+
+msgctxt "help:sale.line,inv_line1:"
+msgid "first line on the invoice / delivery note generated for this sale line"
+msgstr "LS / AR Hauptzeile"
+
+msgctxt "help:sale.line,inv_line2:"
+msgid ""
+"second line on the invoice / delivery note generated for this sale line"
+msgstr "LS / AR Zeile unter Hauptzeile"
+
+msgctxt "help:sale.line,inv_skip:"
+msgid "if selected this sale line will not show on invoices or delivery notes"
+msgstr "Wenn ausgewählt wird diese Position nicht auf LS /AR anzeigen"
+
+msgctxt "help:sale.line,material:"
+msgid "Material name (auto-filled from product)"
+msgstr "Materialname (automatisch vom Artikel übernommen)"
+
+msgctxt "help:sale.line,material_extra:"
+msgid "extra text to be appended to material"
+msgstr "Zusatz für Material text"
+
+msgctxt "help:sale.line,material_surface:"
+msgid "surface treatment for material (paint,..) "
+msgstr "Oberflächenbehandlung (Lackiert, ..)"
+
+msgctxt "help:sale.line,proj_line0:"
+msgid "above first line on the project sheets generated for this sale line"
+msgstr "Zeile am Projektzettel über der ersten Zeile"
+
+msgctxt "help:sale.line,proj_line1:"
+msgid "first line on the project sheets generated for this sale line"
+msgstr "Erste Zeile für diese Position am Projektzettel"
+
+msgctxt "help:sale.line,proj_line2:"
+msgid "second line on the project sheets generated for this sale line"
+msgstr "Zweite Zeile für diese Potition am Projektzettel"
+
+msgctxt "help:sale.line,sheet_thickness:"
+msgid "material thickness"
+msgstr "Materialstärke (automatisch vom Artikel übernommen)"
+
+msgctxt "help:sale.line,sheet_thickness:"
+msgid "sheet metal thickness"
+msgstr "Blechstärke in mm"
+
+msgctxt "help:sale.sale,dolibarr_pid:"
+msgid "project id from dolibarr (for import purposes only)"
+msgstr "Interne Dolibarr Projektnummer"
+
+msgctxt "help:sale.sale,folder_total:"
+msgid "total number of folders (not counting subfolders)"
+msgstr "Gesamtanzahl der Mappen (Untermappen [A,B,..] nicht berüchsichtigt)"
+
+msgctxt "help:sale.sale,sale_folder_postfix:"
+msgid "this will be appended to the folder name"
+msgstr "wird am Projektzettel hinten beim Bestellordner hinzugefügt "
