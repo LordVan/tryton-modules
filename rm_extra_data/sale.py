@@ -81,8 +81,8 @@ class SaleReport(metaclass=PoolMeta):
     __name__ = 'sale.sale.project'
 
     @classmethod
-    def get_context(cls, records, data):
-        context = super(SaleReport, cls).get_context(records, data)
+    def get_context(cls, records, header, data):
+        context = super(SaleReport, cls).get_context(records, header, data)
         def get_project_lines(sale):
             sorted_lines = list(filter(lambda x: x.folder_skip == False, sale.lines)) # copy the list but filter skipped ones here
             if not sorted_lines:
