@@ -53,6 +53,8 @@ class Sale(metaclass=PoolMeta):
         warning_name = 'saleline_noproduct,%s' % cls
         need_fixing = []
         for sale in sales:
+            if not sale.party.pn_name or len(sale.party.pn_name.strip()) < 1:
+                raise UserError('Verkaufsparteien müssen einen PN Namen zugewiesen haben.')
             for line in sale.lines:
                 if not line.product:
                     need_fixing.append(line.rec_name)

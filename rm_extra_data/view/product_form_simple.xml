@@ -5,5 +5,39 @@
     <field name="material" />
     <label name="sheet_thickness" />
     <field name="sheet_thickness" />
+    <label name="material_extra" />
+    <field name="material_extra" />
+    <label name="material_surface" />
+    <field name="material_surface" />
+    <separator name="proj_lines" colspan="4" />
+    <label name="real_product" />
+    <field name="real_product" />
+    <label name="folder_skip" />
+    <field name="folder_skip" />
+    <label name="folder_subno" />
+    <field name="folder_subno" />
+    <label name="folder_submax" />
+    <field name="folder_submax" />
+    <label name="proj_line0" />
+    <field name="proj_line0" />
+    <label name="proj_line1" />
+    <field name="proj_line1" />
+    <label name="proj_line2" />
+    <field name="proj_line2" />
+    <separator name="invoice_lines" colspan="4"/>
+    <label name="inv_skip" />
+    <field name="inv_skip" />
+    <newline />
+    <label name="inv_line0" />
+    <field name="inv_line0" />
+    <label name="inv_line0_skip" />
+    <field name="inv_line0_skip" />
+    <label name="inv_line1" />
+    <field name="inv_line1" />
+    <newline />
+    <label name="inv_line2" />
+    <field name="inv_line2" />
+    <label name="inv_line2_skip" />
+    <field name="inv_line2_skip" />
   </xpath>
 </data>
