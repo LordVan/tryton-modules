@@ -191,6 +191,12 @@ class SaleLine(metaclass=PoolMeta):
                                                      Eval('real_product')),
                              },
                              help = 'second line on the project sheets generated for this sale line')
+    proj_impnote = fields.Char('Project important notes',
+                               states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                      Eval('product') |
+                                                      Eval('real_product')),
+                               },
+                               help = 'important production notes')
     material = fields.Char('Material',
                            states = {'readonly': ((Eval('sale_state') != 'draft') |
                                                   Eval('product') |
@@ -312,6 +318,7 @@ class SaleLine(metaclass=PoolMeta):
                 raise UserError('Produkte ohne Projektzeile 1 können nicht hinzugefügt werden.')
             self.proj_line1 = self.product.proj_line1
             self.proj_line2 = self.product.proj_line2
+            self.proj_impnote = self.product.proj_impnote
             self.material_extra = self.product.material_extra
             self.material_surface = self.product.material_surface
             # material and sheet_thickness are set above in any case

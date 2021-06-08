@@ -28,6 +28,8 @@
       <field name="proj_line1" />
       <label name="proj_line2" />
       <field name="proj_line2" />
+      <label name="proj_impnote" />
+      <field name="proj_impnote" />
       <newline />
       <label name="material" />
       <field name="material" />

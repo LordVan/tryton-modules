@@ -24,6 +24,8 @@
     <field name="proj_line1" />
     <label name="proj_line2" />
     <field name="proj_line2" />
+    <label name="proj_impnote" />
+    <field name="proj_impnote" />
     <separator name="invoice_lines" colspan="4"/>
     <label name="inv_skip" />
     <field name="inv_skip" />
