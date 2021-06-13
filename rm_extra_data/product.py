@@ -4,8 +4,32 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import Workflow, Model, ModelView, ModelSQL, fields, sequence_ordered
 from trytond.modules.company.model import (
         employee_field, set_employee, reset_employee)
+import decimal
 
-__all__ = ['Product']
+__all__ = ['Product', 'Template']
+
+class Template(metaclass=PoolMeta):
+    __name__ = 'product.template'
+
+    @classmethod
+    def default_consumable(cls):
+        return True
+
+    @classmethod
+    def default_salable(cls):
+        return True
+
+    @classmethod
+    def default_list_price(cls):
+        return decimal.Decimal(0.0)
+
+    @classmethod
+    def default_account_category(cls):
+        try:
+            return Pool().get('product.category').search([('name', '=', 'MWSt'), ('accounting', '=', True)])[0].id
+        except:
+            # FIXME: should I log an error here for not finding a hardcoded accounting category?
+            return None
 
 class Product(metaclass=PoolMeta):
     __name__ = 'product.product'

@@ -7,6 +7,7 @@ def register():
     Pool.register(
         party.Party,
         product.Product,
+        product.Template,
         sale.Sale,
         sale.SaleContact,
         sale.SaleLine,
