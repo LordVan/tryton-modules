@@ -28,7 +28,7 @@ class Sale(metaclass=PoolMeta):
                                       help = 'this will be appended to the folder name')
     due_date = fields.Date('Due date',
                            states = { 'readonly': Eval('state') != 'draft', },
-                           help = 'Due date for this sale line (replaces due date from project sheet)')
+                           help = 'Due date for this sale')
     # TODO: renomae to due_date_extra 
     shipping_date_extra = fields.Char('Shipping date extra',
                                       states = { 'readonly': Eval('state') != 'draft', },
