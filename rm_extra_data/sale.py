@@ -42,6 +42,20 @@ class Sale(metaclass=PoolMeta):
     @classmethod
     def default_folder_total(cls):    
         return 1
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('quotation')
+    @set_employee('quoted_by')
+    def quote(cls, sales):
+        super(Sale, cls).quote(sales)
+        # we need to apply folder_no to components of kits
+        for sale in sales:
+            for line in sale.lines:
+                for lc in line.component_children:
+                    lc.folder_no = line.folder_no
+                    lc.save()
+        cls.save(sales)
     
     @classmethod
     @ModelView.button
@@ -193,7 +207,6 @@ class SaleLine(metaclass=PoolMeta):
                              help = 'second line on the project sheets generated for this sale line')
     proj_impnote = fields.Char('Project important notes',
                                states = {'readonly': ((Eval('sale_state') != 'draft') |
-                                                      Eval('product') |
                                                       Eval('real_product')),
                                },
                                help = 'important production notes')
