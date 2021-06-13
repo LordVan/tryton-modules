@@ -39,13 +39,15 @@
 	 position="after">
     <label name="sale_date_extra" />
     <field name="sale_date_extra" />
-    <label name="shipping_date" />
-    <field name="shipping_date" />
-    <label name="shipping_date_extra" />
-    <field name="shipping_date_extra" />
     <label name="sale_folder_postfix" />
     <field name="sale_folder_postfix" />
     <label name="folder_total" />
     <field name="folder_total" />
+    <label name="due_date" />
+    <field name="due_date" />
+    <label name="shipping_date_extra" />
+    <field name="shipping_date_extra" />
+    <label name="shipping_date" />
+    <field name="shipping_date" />
   </xpath>
 </data>
