@@ -115,9 +115,15 @@ class SaleReport(metaclass=PoolMeta):
             merged_lines = []
             # the next line to be added (after potential merging)
             next_line = sorted_lines[0]
-            next_line0_text = next_line.proj_line0.strip()
+            try:
+                next_line0_text = next_line.proj_line0.strip()
+            except:
+                next_line0_text = ''
             next_line1 = [next_line,]
-            next_line2_text = next_line.proj_line2.strip()
+            try:
+                next_line2_text = next_line.proj_line2.strip()
+            except:
+                next_line2_text = ''
             for line in sorted_lines[1:]:
                 if (line.folder_no == next_line.folder_no and
                     line.folder_subno == next_line.folder_subno and
@@ -128,20 +134,32 @@ class SaleReport(metaclass=PoolMeta):
                     line.due_date == next_line.due_date and
                     line.due_date_postfix == next_line.due_date_postfix):
                     # this line matches the next line to be added so append data
-                    if line.proj_line0.strip():
-                        next_line0_text += line.proj_line0.strip()
+                    try:
+                        if line.proj_line0.strip():
+                            next_line0_text += line.proj_line0.strip()
+                    except:
+                        pass # ignore NoneType error
                     next_line1.append(line)
-                    if line.proj_line2.strip():
-                        next_line2_text += line.proj_line2.strip()
+                    try:
+                        if line.proj_line2.strip():
+                            next_line2_text += line.proj_line2.strip()
+                    except:
+                        pass # ignore NoneType error
                     # do not merge anything else at this point
                 else:
                     # we need a new sheet ..
                     merged_lines.append((next_line, next_line0_text, next_line1, next_line2_text)) # append the last line
                     next_line = line # the current line is now the next one
                     # assign initial values
-                    next_line0_text = next_line.proj_line0.strip()
+                    try:
+                        next_line0_text = next_line.proj_line0.strip()
+                    except:
+                        next_line0_text = ''
                     next_line1 = [next_line,]
-                    next_line2_text = next_line.proj_line2.strip()
+                    try:
+                        next_line2_text = next_line.proj_line2.strip()
+                    except:
+                        next_line2_text = ''
             # Important: append the last line
             merged_lines.append((next_line, next_line0_text, next_line1, next_line2_text)) # append the last line
             return merged_lines
@@ -345,3 +363,4 @@ class SaleLine(metaclass=PoolMeta):
             self.inv_line1 = self.product.inv_line1
             self.inv_line2 = self.product.inv_line2
             self.inv_line2_skip = self.product.inv_line2_skip
+
