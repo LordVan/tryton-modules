@@ -17,6 +17,7 @@ PrelTyp = Model.get('party.relation.type')
 Prod = Model.get('product.product')
 ProdTpl = Model.get('product.template')
 Sale = Model.get('sale.sale')
+Stock = Model.get('stock.shipment.out')
 
 try:
     prm, = Party.find([('code', '=', '1')])
