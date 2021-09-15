@@ -136,13 +136,13 @@ class SaleReport(metaclass=PoolMeta):
                     # this line matches the next line to be added so append data
                     try:
                         if line.proj_line0.strip():
-                            next_line0_text += line.proj_line0.strip()
+                            next_line0_text += ' ' + line.proj_line0.strip()
                     except:
                         pass # ignore NoneType error
                     next_line1.append(line)
                     try:
                         if line.proj_line2.strip():
-                            next_line2_text += line.proj_line2.strip()
+                            next_line2_text += ' ' + line.proj_line2.strip()
                     except:
                         pass # ignore NoneType error
                     # do not merge anything else at this point
