@@ -17,6 +17,7 @@ PrelTyp = Model.get('party.relation.type')
 Prod = Model.get('product.product')
 ProdTpl = Model.get('product.template')
 Sale = Model.get('sale.sale')
+SaleLine = Model.get('sale.line')
 Stock = Model.get('stock.shipment.out')
 
 try:
