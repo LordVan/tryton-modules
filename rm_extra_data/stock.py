@@ -14,5 +14,7 @@ class DeliveryNote(metaclass=PoolMeta):
     @classmethod
     def get_context(cls, records, header, data):
         context = super(DeliveryNote, cls).get_context(records, header, data)
-        context['testdata'] = str(context)
+        import pprint
+        pp = pprint.PrettyPrinter(indent=4)
+        context['testdata'] = pp.pformat(context)
         return context

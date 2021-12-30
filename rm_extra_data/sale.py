@@ -96,6 +96,7 @@ class Sale(metaclass=PoolMeta):
                 msg += '\n'.join(warn_sale_date)
                 raise UserWarning(warning_sale_date_extra, msg)
 
+        super(Sale, cls).confirm(sales)
 
 class SaleReport(metaclass=PoolMeta):
     __name__ = 'sale.sale.project'
@@ -364,3 +365,246 @@ class SaleLine(metaclass=PoolMeta):
             self.inv_line2 = self.product.inv_line2
             self.inv_line2_skip = self.product.inv_line2_skip
 
+            
+class AmendmentLine(metaclass=PoolMeta):
+    __name__ = 'sale.amendment.line'
+    # extra fields
+    real_product = fields.Boolean('Real product',
+                                  states = { 'invisible': True, },
+                                  help = 'this gets set if data is filled in from an actual product')
+    folder_no = fields.Integer('Folder number',
+                               required = True,
+                               states = { 'readonly': Eval('folder_skip') & True,
+                                          'invisible': Eval('action') != 'line',
+                               },
+                               help = 'Folder number')
+    folder_subno = fields.Char('Subfolder',
+                               states = { 'readonly': (Eval('folder_skip') |
+                                                       Eval('real_product')),
+                                          'invisible': Eval('action') != 'line',
+                               },
+                               help = 'Subfolder number (letter)')
+    folder_submax = fields.Char('Subfolder maximum',
+                                states = { 'readonly': (Eval('folder_skip') |
+                                                        Eval('real_product')),
+                                           'invisible': Eval('action') != 'line',
+                                },
+                                help = 'Subfolder maximum')
+    folder_skip = fields.Boolean('Skip this on project sheets',
+                                 states = { 'readonly': Eval('real_product') & True,
+                                            'invisible': Eval('action') != 'line',
+                                 },
+                                 help = 'if selected this sale line will not show on project sheets')
+    due_date = fields.Date('Due date',
+                           states = { 'invisible': Eval('action') != 'line',
+                                     },
+                           help = 'Due date for this sale line (replaces due date from project sheet)')
+
+    due_date_postfix = fields.Char('Due date extra',
+                                   states = { 'invisible': Eval('action') != 'line',},
+                                   help = 'Extra text for due date for this sale line (replaces due date extra from project sheet ')
+    proj_line0 = fields.Char('Project sheet line 0',
+                             states = { 'readonly': Eval('real_product') & True,
+                                        'invisible': Eval('action') != 'line',
+                             },
+                             help = 'above first line on the project sheets generated for this sale line')
+    proj_line1 = fields.Char('Project sheet line 1',
+                             required = True,
+                             states = { 'readonly': Eval('real_product') & True,
+                                        'invisible': Eval('action') != 'line',
+                             },
+                             help = 'second line on the project sheets generated for this sale line')
+    proj_line2 = fields.Char('Project sheet line 2',
+                             states = { 'readonly': Eval('real_product') & True,
+                                        'invisible': Eval('action') != 'line',
+                             },
+                             help = 'second line on the project sheets generated for this sale line')
+    proj_impnote = fields.Char('Project important notes',
+                               states = {'readonly': Eval('real_product') & True,
+                                         'invisible': Eval('action') != 'line',
+                               },
+                               help = 'important production notes')
+    material = fields.Char('Material',
+                           states = {'readonly': (Eval('product') |
+                                                  Eval('real_product')),
+                                     'invisible': Eval('action') != 'line',
+                           },
+                           help = 'Material name (auto-filled from product)')
+    # those 2 are not usually set on the product (at least not for now so leave them read-write
+    # TODO: maybe make them readonly only if values were set from the product
+    material_extra = fields.Char('Material extra text',
+                                 states = { 'readonly': Eval('real_product') & True,
+                                            'invisible': Eval('action') != 'line',
+                                 },
+                                 #states = {'readonly': (Eval('sale_state') != 'draft') | Eval('product'), },
+                                 help = 'extra text to be appended to material')
+    material_surface = fields.Char('Material surface',
+                                   states = { 'readonly': Eval('real_product') & True,
+                                              'invisible': Eval('action') != 'line',
+                                   },
+                                   #states = {'readonly': (Eval('sale_state') != 'draft') | Eval('product'), },
+                                   help = 'surface treatment for material (paint,..) ')
+    # this is actually also used for non sheet metal thickness, but not going to rename the field, just changing the description
+    sheet_thickness = fields.Float('Material thickness',
+                                   states = {'readonly': (Eval('product') |
+                                                          Eval('real_product')),
+                                             'invisible': Eval('action') != 'line',
+                                   },
+                                   digits = (2, 2),
+                                   help = 'material thickness')
+    
+    # extra fields for delivery notes / invoices (where it does not match the normal lines)
+    # line(s)
+
+    inv_skip = fields.Boolean('Skip this whole sale line for invoice / delivery note',
+                              states = { 'readonly': Eval('real_product') & True,
+                                         'invisible': Eval('action') != 'line',
+                              },
+                              help = 'if selected this sale line will not show on invoices or delivery notes')
+    
+    inv_line0 = fields.Char('Invoice / delivery note line 0',
+                             states = {
+                                 'readonly': (Eval('inv_line0_skip') |
+                                              Eval('inv_skip') |
+                                              Eval('real_product')
+                                 ),
+                                 'invisible': Eval('action') != 'line',
+                             },
+                             help = 'above first line on the invoice / delivery note generated for this sale line.')
+    inv_line0_skip = fields.Boolean('Skip invoice / delivery note line 0',
+                                    states = {'readonly': (Eval('inv_skip') |
+                                                           Eval('real_product')),
+                                              'invisible': Eval('action') != 'line',
+                                    },
+                                    help = 'if selected invoice line 0 will be ignored')
+    inv_line1 = fields.Char('Invoice / delivery note line 1',
+                             states = {
+                                 'readonly': (Eval('inv_skip') |
+                                              Eval('real_product')),
+                                 'invisible': Eval('action') != 'line',
+                             },
+                             help = 'first line on the invoice / delivery note generated for this sale line')
+    inv_line2 = fields.Char('Invoice / delivery note line 2',
+                             states = {
+                                 'readonly': (Eval('inv_line2_skip') |
+                                              Eval('inv_skip') |
+                                              Eval('real_product')),
+                                 'invisible': Eval('action') != 'line',
+                             },
+                             help = 'second line on the invoice / delivery note generated for this sale line')
+    inv_line2_skip = fields.Boolean('Skip invoice / delivery note line 2',
+                                    states = {'readonly': (Eval('inv_skip') |
+                                                           Eval('real_product')),
+                                              'invisible': Eval('action') != 'line',
+                                    },
+                                    help = 'if selected invoice line 2 will be ignored')
+
+    @classmethod
+    def default_real_product(cls):
+        return False
+    
+    @classmethod
+    def default_folder_skip(cls):
+        return False
+    
+    @classmethod
+    def default_folder_no(cls):
+        # TODO: maybe use highest existing as default ?
+        return 1
+
+    @classmethod
+    def default_proj_line1(cls):
+        # return empty string here in case there are already invoices cuz NOT NULL
+        return ' '
+    
+    @fields.depends('material', 'material_extra', 'sheet_thickness', 'material_surface', 'real_product', 'folder_skip')
+    def on_change_product(self):
+        # TODO: set material and sheet_thickness as readonly normally and only allow overwriting if no product is set?
+        super(SaleLine, self).on_change_product()
+        if not self.product:
+            #reset real_product to false as the product was removed
+            self.real_product = False
+            return
+        
+        # fields that are always set as soon as a product is chosen:
+        self.real_product = self.product.real_product
+        # overwriting material and material thickness
+        self.material = self.product.material
+        self.sheet_thickness = self.product.sheet_thickness
+        
+        if not self.product.real_product:
+            # this is a placeholder product not a real one so only copy basic data
+            # those two won't usually be set so do not overwrite with empty values
+            if self.product.material_extra:
+                self.material_extra = self.product.material_extra
+            if self.product.material_surface:
+                self.material_surface = self.product.material_surface
+        else:
+            # copy all data from the product since this is an actual product and nto a placeholder
+            # overwriting everything here even if empty
+            self.folder_subno = self.product.folder_subno
+            self.folder_submax = self.product.folder_submax
+            self.folder_skip = self.product.folder_skip
+            self.proj_line0 = self.product.proj_line0
+            if not self.product.proj_line1:
+                raise UserError('Produkte ohne Projektzeile 1 können nicht hinzugefügt werden.')
+            self.proj_line1 = self.product.proj_line1
+            self.proj_line2 = self.product.proj_line2
+            self.proj_impnote = self.product.proj_impnote
+            self.material_extra = self.product.material_extra
+            self.material_surface = self.product.material_surface
+            # material and sheet_thickness are set above in any case
+            self.inv_skip = self.product.inv_skip
+            self.inv_line0 = self.product.inv_line0
+            self.inv_line0_skip = self.product.inv_line0_skip
+            self.inv_line1 = self.product.inv_line1
+            self.inv_line2 = self.product.inv_line2
+            self.inv_line2_skip = self.product.inv_line2_skip
+
+    @fields.depends('line')
+    def on_change_line(self):
+        super().on_change_line()
+        if self.line:
+            self.real_product = self.line.real_product
+            self.folder_no = self.line.folder_no
+            self.folder_subno = self.line.folder_subno
+            self.folder_submax = self.line.folder_submax
+            self.folder_skip = self.line.folder_skip
+            self.due_date = self.line.due_date
+            self.due_date_postfix = self.line.due_date_postfix
+            self.proj_line0 = self.line.proj_line0
+            self.proj_line1 = self.line.proj_line1
+            self.proj_line2 = self.line.proj_line2
+            self.proj_impnote = self.line.proj_impnote
+            self.material = self.line.material
+            self.material_extra = self.line.material_extra
+            self.material_surface = self.line.material_surface
+            self.sheet_thickness = self.line.sheet_thickness
+            self.inv_skip = self.line.inv_skip
+            self.inv_line0 = self.line.inv_line0
+            self.inv_line1 = self.line.inv_line1
+            self.inv_line2 = self.line.inv_line2
+            self.inv_line2_skip = self.line.inv_line2_skip
+            
+    def _apply_line(self, sale, sale_line):
+        super()._apply_line(sale, sale_line)
+        sale_line.real_product = self.real_product
+        sale_line.folder_no = self.folder_no
+        sale_line.folder_subno = self.folder_subno
+        sale_line.folder_submax = self.folder_submax
+        sale_line.folder_skip = self.folder_skip
+        sale_line.due_date = self.due_date
+        sale_line.due_date_postfix = self.due_date_postfix
+        sale_line.proj_line0 = self.proj_line0
+        sale_line.proj_line1 = self.proj_line1
+        sale_line.proj_line2 = self.proj_line2
+        sale_line.proj_impnote = self.proj_impnote
+        sale_line.material = self.material
+        sale_line.material_extra = self.material_extra
+        sale_line.material_surface = self.material_surface
+        sale_line.sheet_thickness = self.sheet_thickness
+        sale_line.inv_skip = self.inv_skip
+        sale_line.inv_line0 = self.inv_line0
+        sale_line.inv_line1 = self.inv_line1
+        sale_line.inv_line2 = self.inv_line2
+        sale_line.inv_line2_skip = self.inv_line2_skip

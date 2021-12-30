@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/form/field[@name='unit_price']" position="after">
+    <separator colspan="4" />
+    <label name="due_date" />
+    <field name="due_date" />
+    <label name="due_date_postfix" />
+    <field name="due_date_postfix" />
+    <label name="folder_no" />
+    <field name="folder_no" />
+    <label name="folder_skip" />
+    <field name="folder_skip" />
+    <newline />
+    <label name="folder_subno" />
+    <field name="folder_subno" />
+    <label name="folder_submax" />
+    <field name="folder_submax" />
+    <label name="proj_line0" />
+    <field name="proj_line0" />
+    <label name="proj_line1" />
+    <field name="proj_line1" />
+    <label name="proj_line2" />
+    <field name="proj_line2" />
+    <label name="proj_impnote" />
+    <field name="proj_impnote" />
+    <newline />
+    <label name="material" />
+    <field name="material" />
+    <label name="sheet_thickness" />
+    <field name="sheet_thickness" />
+    <label name="material_extra" />
+    <field name="material_extra" />
+    <label name="material_surface" />
+    <field name="material_surface" />
+    <separator name="invoice_lines" colspan="4"/>
+    <label name="inv_skip" />
+    <field name="inv_skip" />
+    <newline />
+    <label name="inv_line0" />
+    <field name="inv_line0" />
+    <label name="inv_line0_skip" />
+    <field name="inv_line0_skip" />
+    <label name="inv_line1" />
+    <field name="inv_line1" />
+    <newline />
+    <label name="inv_line2" />
+    <field name="inv_line2" />
+    <label name="inv_line2_skip" />
+    <field name="inv_line2_skip" />
+    <label name="real_product" />
+    <field name="real_product" />
+  </xpath>
+</data>
