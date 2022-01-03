@@ -2,7 +2,7 @@
 <data>
   <xpath expr="/form/field[@name='unit_price']" position="after">
     <newline />
-    <separator colspan="4" />
+    <separator name="rm_custom" colspan="4" />
     <label name="due_date" />
     <field name="due_date" />
     <label name="due_date_postfix" />
