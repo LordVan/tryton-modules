@@ -12,6 +12,8 @@ def register():
         sale.Sale,
         sale.SaleContact,
         sale.SaleLine,
+        stock.Move,
+        stock.ShipmentOut,
         module='rm_extra_data', type_='model')
     Pool.register(
         sale.AmendmentLine,

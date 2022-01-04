@@ -6,6 +6,9 @@ from trytond.modules.company.model import (
         employee_field, set_employee, reset_employee)
 from trytond.exceptions import UserWarning, UserError
 
+import logging
+logger = logging.getLogger(__name__)
+
 __all__ = ['Sale', 'SaleLine', 'SaleContact', 'SaleReport']
 
 
@@ -365,6 +368,12 @@ class SaleLine(metaclass=PoolMeta):
             self.inv_line2 = self.product.inv_line2
             self.inv_line2_skip = self.product.inv_line2_skip
 
+    def get_move(self, shipment_type):
+        move = super().get_move(shipment_type)
+        # logger.info(move)
+        if move:
+            move.on_change_origin()
+        return move
             
 class AmendmentLine(metaclass=PoolMeta):
     __name__ = 'sale.amendment.line'
