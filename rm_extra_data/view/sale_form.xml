@@ -50,4 +50,11 @@
     <label name="shipping_date" />
     <field name="shipping_date" />
   </xpath>
+  <xpath expr="/form/notebook/page/label[@name='sale_date']"
+	 position="before">
+    <label name="offer_number" />
+    <field name="offer_number" />
+    <label name="offer_date" />
+    <field name="offer_date" />
+  </xpath>
 </data>

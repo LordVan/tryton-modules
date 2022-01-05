@@ -24,28 +24,33 @@ class Sale(metaclass=PoolMeta):
                                   },
                                   help = 'project id from dolibarr (for import purposes only)')
     sale_date_extra = fields.Char('Sale date extra',
-                                  states = { 'readonly': Eval('state') != 'draft', },
+                                  states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                   help = 'sale date extra text')
     sale_folder_postfix = fields.Char('Sale folder postfix',
-                                      states = { 'readonly': Eval('state') != 'draft', },
+                                      states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                       help = 'this will be appended to the folder name')
     due_date = fields.Date('Due date',
-                           states = { 'readonly': Eval('state') != 'draft', },
+                           states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                            help = 'Due date for this sale')
     # TODO: renomae to due_date_extra 
     shipping_date_extra = fields.Char('Shipping date extra',
-                                      states = { 'readonly': Eval('state') != 'draft', },
+                                      states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                       help ='shipping date extra text')
 
 
     extra_contacts = fields.Many2Many('party.party-sale.sale', 'sale', 'party', 'Extra Contacts',
-                                      states = { 'readonly': Eval('state') != 'draft', })
+                                      states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), })
 
     folder_total = fields.Integer('Total folder number',
                                   required = True,
                                   states = { 'readonly': Eval('state') != 'draft', },
                                   help = 'total number of folders (not counting subfolders)')
-    
+    offer_number = fields.Char('Offer number',
+                               states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
+                               help = 'Offer number')
+    offer_date = fields.Date('Offer date',
+                             states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
+                             help = 'Offer date')
     @classmethod
     def default_folder_total(cls):    
         return 1
@@ -69,7 +74,7 @@ class Sale(metaclass=PoolMeta):
     @Workflow.transition('confirmed')
     @set_employee('confirmed_by')
     def confirm(cls, sales):
-        # skip original logic, so we do not process automagically
+        # first check if we have a line without product and issue a warning
         Warning = Pool().get('res.user.warning')
         warning_name = 'saleline_noproduct,%s' % cls
         need_fixing = []
@@ -84,6 +89,7 @@ class Sale(metaclass=PoolMeta):
                 msg = 'Position ohne Produkt gefunden!!'
                 #msg += '\n'.join(need_fixing)
                 raise UserWarning(warning_name, msg)
+        # check if we already have an order fromt his customer for this date with the same sale_date_extra
         warning_sale_date_extra = 'sale_date_extra,%s' % cls
         warn_sale_date = []
         for sale in sales:
@@ -98,7 +104,14 @@ class Sale(metaclass=PoolMeta):
                 msg = 'Verkauf für diesen Kunden mit gleichem Bestelldatum und Bestellordner Zusatz existiert bereits:'
                 msg += '\n'.join(warn_sale_date)
                 raise UserWarning(warning_sale_date_extra, msg)
-
+        # warn if we have offer number without date or vice versa
+        offer_warning_name = 'saleline_offer,%s' % cls
+        for sale in sales:
+            if sale.offer_number and not sale.offer_date:
+                raise UserWarning(offer_warning_name, 'Angebotsnummer ohne Angebotsdatum gefunden. Trotzdem weiter?')
+            elif not sale.offer_number and sale.offer_date:
+                raise UserWarning(offer_warning_name, 'Angebotsdatum ohne Angebotnummer gefunden. Trotzdem weiter?')
+                                
         super(Sale, cls).confirm(sales)
 
 class SaleReport(metaclass=PoolMeta):
