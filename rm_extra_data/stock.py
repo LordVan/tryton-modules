@@ -19,10 +19,10 @@ class DeliveryNote(metaclass=PoolMeta):
     @classmethod
     def get_context(cls, records, header, data):
         context = super(DeliveryNote, cls).get_context(records, header, data)
-        import pprint
-        pp = pprint.PrettyPrinter(indent=4)
-        context['testdata'] = pp.pformat(context)
-        logger.info(context['record'])
+        # import pprint
+        # pp = pprint.PrettyPrinter(indent=4)
+        # context['testdata'] = pp.pformat(context)
+        # logger.info(context['record'])
         return context
 
 class Move(metaclass=PoolMeta):
@@ -34,6 +34,7 @@ class Move(metaclass=PoolMeta):
     line2 = fields.Char('Delivery note line 2')
     skip = fields.Boolean('Skip this on delivery notes and invoices')
 
+    # FIXME: should i add the line fields here too?..
     @fields.depends('origin')
     def on_change_origin(self):
         # gets line0,1,2 from self.origin if it is a SaleLine
