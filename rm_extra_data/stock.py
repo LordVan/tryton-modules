@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 __all__ = ['DeliveryNote', 'Move']
 
 class DeliveryNote(metaclass=PoolMeta):
-    __name__ = 'stock.shipment.out.delivery_note.rm'
+    __name__ = 'stock.shipment.out.delivery_note'
 
     @classmethod
     def get_context(cls, records, header, data):
