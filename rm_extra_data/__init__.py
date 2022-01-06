@@ -3,6 +3,7 @@ from . import party
 from . import sale
 from . import stock
 from . import product
+from . import invoice
 
 def register():
     Pool.register(
@@ -23,6 +24,7 @@ def register():
     Pool.register(
         sale.SaleReport,
         stock.DeliveryNote,
+        invoice.InvoiceReport,
         module='rm_extra_data', type_='report')
     
     
