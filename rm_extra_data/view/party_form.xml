@@ -6,6 +6,10 @@
       <field name="salutation" />
       <label name="legal_name" />
       <field name="legal_name" />
+      <label name="inv_name_line1" />
+      <field name="inv_name_line1" />
+      <label name="inv_name_line2" />
+      <field name="inv_name_line2" />
       <label name="customer_no" />
       <field name="customer_no" />
       <label name="supplier_no" />

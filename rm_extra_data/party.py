@@ -21,6 +21,12 @@ class Party(metaclass=PoolMeta):
                              help = 'Legally correct name')
     salutation = fields.Char('Salutation',
                              size = 50) # limiting length since more seems useless
+    inv_name_line1 = fields.Char('Invoice name line 1',
+                                 help = 'Invoice customer name line 1'
+                                 )
+    inv_name_line2 = fields.Char('Invoice name line 2',
+                                 help = 'Invoice customer name line 2'
+                                 )
     dolibarr_pid = fields.Integer('Dolibarr party id',
                                   states = { 'invisible': True, },
                                   readonly = True,
@@ -41,3 +47,17 @@ class Party(metaclass=PoolMeta):
             ('dolibarrpid_uniq', Unique(t, t.dolibarr_pid), 'dolibarr_id_dolibarrpid_uniq'),
             ('dolibarrcid_uniq', Unique(t, t.dolibarr_cid), 'dolibarr_id_dolibarrcid_uniq'),
         ]
+
+    @classmethod
+    def copy(cls, parties, default=None):
+        '''
+        Allow copying of entries that have dolibarr_[pc]id by setting them to None
+        as it is pointless to copy (and they are unique)
+        '''
+        if default is None:
+            default = {}
+        else:
+            default = default.copy()
+        default.setdefault('dolibarr_pid', None)
+        default.setdefault('dolibarr_cid', None)
+        return super().copy(parties, default=default)
