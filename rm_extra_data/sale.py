@@ -74,8 +74,14 @@ class Sale(metaclass=PoolMeta):
     @Workflow.transition('confirmed')
     @set_employee('confirmed_by')
     def confirm(cls, sales):
-        # first check if we have a line without product and issue a warning
         Warning = Pool().get('res.user.warning')
+        # make sure noone is able to confirm a sale with shipment or invoice methods we do not want
+        for sale in sales:
+            if sale.shipment_method != 'order':
+                raise UserError('Liefermethode ungültig')
+            if sale.invoice_method != 'shipment':
+                raise UserError('Rechnungmethode ungültig')
+        # first check if we have a line without product and issue a warning
         warning_name = 'saleline_noproduct,%s' % cls
         need_fixing = []
         for sale in sales:
@@ -104,14 +110,10 @@ class Sale(metaclass=PoolMeta):
                 msg = 'Verkauf für diesen Kunden mit gleichem Bestelldatum und Bestellordner Zusatz existiert bereits:'
                 msg += '\n'.join(warn_sale_date)
                 raise UserWarning(warning_sale_date_extra, msg)
-        # warn if we have offer number without date or vice versa
-        offer_warning_name = 'saleline_offer,%s' % cls
-        for sale in sales:
-            if sale.offer_number and not sale.offer_date:
-                raise UserWarning(offer_warning_name, 'Angebotsnummer ohne Angebotsdatum gefunden. Trotzdem weiter?')
-            elif not sale.offer_number and sale.offer_date:
-                raise UserWarning(offer_warning_name, 'Angebotsdatum ohne Angebotnummer gefunden. Trotzdem weiter?')
-                                
+        # give the users a warning before actually confirming an order and creating shipments,..
+        confirm_warning = 'sale_confirm,%s' % cls
+        if Warning.check(confirm_warning):
+            raise UserWarning(confirm_warning, 'Bestätigen des Verkaufs erzeugt einen Lieferschein - fortfahren?')
         super(Sale, cls).confirm(sales)
 
 class SaleReport(metaclass=PoolMeta):
