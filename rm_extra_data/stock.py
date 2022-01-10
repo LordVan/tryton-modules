@@ -39,7 +39,7 @@ class Move(metaclass=PoolMeta):
     line0 = fields.Char('Delivery note line 0')
     line1 = fields.Char('Delivery note line 1')
     line2 = fields.Char('Delivery note line 2')
-    skip = fields.Boolean('Skip this on delivery notes and invoices')
+    skip = fields.Boolean('Skip this on delivery notes')
 
     # FIXME: should i add the line fields here too?..
     @fields.depends('origin')
@@ -48,7 +48,7 @@ class Move(metaclass=PoolMeta):
         # WARNING: overwrites without checkinf if non-empty (but that shouldn't be an issue)
         # TODO: decide if we should or should not strip the lines first
         if isinstance(self.origin, SaleLine) :
-            logger.debug('copying lines from sale line')
+            #logger.debug('copying lines from sale line')
             if not self.origin.inv_line0_skip:
                 if self.origin.inv_line0:
                     self.line0 = self.origin.inv_line0
@@ -67,7 +67,7 @@ class Move(metaclass=PoolMeta):
             self.skip = self.origin.inv_skip
         elif isinstance(self.origin, Move):
             # this is based on another move
-            logger.debug('copying from another move')
+            #logger.debug('copying from another move')
             # no need to check if we are copying from another move (same class) anyway
             self.line0 = self.origin.line0
             self.line1 = self.origin.line1
