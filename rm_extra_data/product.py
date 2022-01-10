@@ -31,6 +31,13 @@ class Template(metaclass=PoolMeta):
             # FIXME: should I log an error here for not finding a hardcoded accounting category?
             return None
 
+    @classmethod
+    def default_default_uom_category(cls):
+        try:
+            return Pool().get('product.uom.category').search([('name', '=', 'Stück')])[0].id
+        except:
+            return None
+
 class Product(metaclass=PoolMeta):
     __name__ = 'product.product'
 

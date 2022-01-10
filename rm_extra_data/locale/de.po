@@ -256,12 +256,12 @@ msgstr ""
 
 msgctxt "help:product.product,material_surface:"
 msgid "surface treatment for material (paint,..) "
-msgstr ""
+msgstr "Oberflächenbehandlung"
 
 msgctxt "help:product.product,material_surface:"
 msgid ""
 "surface treatment for material (paint,..) (usually only needed on sale line)"
-msgstr ""
+msgstr "Oberflächenbehandlung (normalerweise nur für Verkauf benötigt)"
 
 msgctxt "help:product.product,proj_line0:"
 msgid "above first line on the project sheets generated for this sale line"
