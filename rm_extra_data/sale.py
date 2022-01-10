@@ -200,29 +200,29 @@ class SaleLine(metaclass=PoolMeta):
                                   help = 'this gets set if data is filled in from an actual product')
     folder_no = fields.Integer('Folder number',
                                required = True,
-                               states = { 'readonly': ((Eval('sale_state') != 'draft') |
+                               states = { 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                                        Eval('folder_skip')),
                                },
                                help = 'Folder number')
     folder_subno = fields.Char('Subfolder',
-                               states = { 'readonly': ((Eval('sale_state') != 'draft') |
+                               states = { 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                                        Eval('folder_skip') |
                                                        Eval('real_product')),
                                },
                                help = 'Subfolder number (letter)')
     folder_submax = fields.Char('Subfolder maximum',
-                                states = { 'readonly': ((Eval('sale_state') != 'draft') |
+                                states = { 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                                         Eval('folder_skip') |
                                                         Eval('real_product')),
                                 },
                                 help = 'Subfolder maximum')
     folder_skip = fields.Boolean('Skip this on project sheets',
-                                 states = { 'readonly': ((Eval('sale_state') != 'draft') |
+                                 states = { 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                                         Eval('real_product')),
                                  },
                                  help = 'if selected this sale line will not show on project sheets')
     due_date = fields.Date('Due date',
-                           states = { 'readonly': Eval('sale_state') != 'draft', },
+                           states = { 'readonly': ~Eval('sale_state').in_(['draft', 'quotation']), },
                            help = 'Due date for this sale line (replaces due date from project sheet)')
 
     due_date_postfix = fields.Char('Due date extra',
@@ -282,14 +282,14 @@ class SaleLine(metaclass=PoolMeta):
     # line(s)
 
     inv_skip = fields.Boolean('Skip this whole sale line for invoice / delivery note',
-                              states = { 'readonly': ((Eval('sale_state') != 'draft') |
+                              states = { 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                                       Eval('real_product')),
                               },
                               help = 'if selected this sale line will not show on invoices or delivery notes')
     
     inv_line0 = fields.Char('Invoice / delivery note line 0',
                              states = {
-                                 'readonly': ((Eval('sale_state') != 'draft') |
+                                 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                               Eval('inv_line0_skip') |
                                               Eval('inv_skip') |
                                               Eval('real_product')
@@ -297,28 +297,28 @@ class SaleLine(metaclass=PoolMeta):
                              },
                              help = 'above first line on the invoice / delivery note generated for this sale line.')
     inv_line0_skip = fields.Boolean('Skip invoice / delivery note line 0',
-                                    states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                    states = {'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                                            Eval('inv_skip') |
                                                            Eval('real_product')),
                                     },
                                     help = 'if selected invoice line 0 will be ignored')
     inv_line1 = fields.Char('Invoice / delivery note line 1',
                              states = {
-                                 'readonly': ((Eval('sale_state') != 'draft') |
+                                 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                               Eval('inv_skip') |
                                               Eval('real_product')),
                              },
                              help = 'first line on the invoice / delivery note generated for this sale line')
     inv_line2 = fields.Char('Invoice / delivery note line 2',
                              states = {
-                                 'readonly': ((Eval('sale_state') != 'draft') |
+                                 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                               Eval('inv_line2_skip') |
                                               Eval('inv_skip') |
                                               Eval('real_product')),
                              },
                              help = 'second line on the invoice / delivery note generated for this sale line')
     inv_line2_skip = fields.Boolean('Skip invoice / delivery note line 2',
-                                    states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                    states = {'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
                                                            Eval('inv_skip') |
                                                            Eval('real_product')),
                                     },
