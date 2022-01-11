@@ -78,6 +78,21 @@ class ShipmentOut(metaclass=PoolMeta):
     "ShipmentOut with custom fields"
     __name__ = 'stock.shipment.out'
 
+    sale_refs = fields.Char('Sale references',
+                            states = {'readonly': ~Eval('state').in_(['draft', 'waiting']),},
+                            help = 'Sale references copied from sale')
+
+    # do not use a function field here as it could be an issue performance wise on large lists
+    # sale_refs = fields.Function(fields.Char('References'), 'get_sale_references')
+
+    # def get_sale_references(self, name):
+    #     ref = 'lala'
+    #     sales = []
+    #     # for move in self.get_outgoing_moves(''):
+    #     #     if isinstance(move.origin, SaleLine):
+    #     #         pass
+    #     return ref
+
     def _get_inventory_move(self, incoming_move):
         move = super()._get_inventory_move(incoming_move)
         move.on_change_origin()
