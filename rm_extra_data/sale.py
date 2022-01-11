@@ -116,6 +116,20 @@ class Sale(metaclass=PoolMeta):
             raise UserWarning(confirm_warning, 'Bestätigen des Verkaufs erzeugt einen Lieferschein - fortfahren?')
         super(Sale, cls).confirm(sales)
 
+    # try to just use a function field instead
+    # def _get_shipment_sale(self, Shipment, key):
+    #     shipment = super()._get_shipment_Sale(Shipment, key)
+    #     # add commission / customer reference as shipment reference by default
+    #     ref = ''
+    #     if self.reference and self.reference.strip():
+    #         ref += self.reference.strip()
+    #     if self.description and self.description.strip():
+    #         if ref:
+    #             ref += ' / '
+    #         ref += self.description.strip()
+    #     shipment.reference = ref
+    #     return shipment
+
 class SaleReport(metaclass=PoolMeta):
     __name__ = 'sale.sale.project'
 
