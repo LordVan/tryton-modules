@@ -66,6 +66,7 @@ class Sale(metaclass=PoolMeta):
             for line in sale.lines:
                 for lc in line.component_children:
                     lc.folder_no = line.folder_no
+                    lc.due_date = line.due_date
                     lc.save()
         cls.save(sales)
     
@@ -217,8 +218,7 @@ class SaleLine(metaclass=PoolMeta):
                                   help = 'this gets set if data is filled in from an actual product')
     folder_no = fields.Integer('Folder number',
                                required = True,
-                               states = { 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])) |
-                                                       Eval('folder_skip')),
+                               states = { 'readonly': (~Eval('sale_state').in_(['draft', 'quotation'])),
                                },
                                help = 'Folder number')
     folder_subno = fields.Char('Subfolder',
