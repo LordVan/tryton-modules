@@ -64,7 +64,11 @@ class Move(metaclass=PoolMeta):
                     self.line2 = self.origin.inv_line2
                 elif self.origin.proj_line2:
                     self.line2 = self.origin.proj_line2
-            self.skip = self.origin.inv_skip
+            if self.origin.inv_skip:
+                # do it this way as some older entries could have NULL set in the DB!
+                self.skip = True
+            else:
+                self.skip = False
         elif isinstance(self.origin, Move):
             # this is based on another move
             #logger.debug('copying from another move')
