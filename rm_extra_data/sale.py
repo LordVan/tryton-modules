@@ -404,6 +404,17 @@ class SaleLine(metaclass=PoolMeta):
         if move:
             move.on_change_origin()
         return move
+
+    def get_invoice_line(self):
+        inv_line = super().get_invoice_line()
+        # try to call custom on_change_origin
+        try:
+            inv_line[0].on_change_origin()
+        except:
+            # was not InvoiceLine, it seems..
+            # (cannot use isinstance here cuz of circular imports, also doing nothing is fine in this case 
+            pass
+        return inv_line
             
 class AmendmentLine(metaclass=PoolMeta):
     __name__ = 'sale.amendment.line'

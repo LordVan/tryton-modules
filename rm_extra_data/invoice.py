@@ -25,12 +25,12 @@ class InvoiceLine(metaclass=PoolMeta):
 
     @fields.depends('origin')
     def on_change_origin(self):
-        # special treatment of SaleLine origins
+        # copy line0,1,2 from SaleLine or Moves
         if isinstance(self.origin, SaleLine):
             moves = self.origin.moves
-            logger.info(moves)
+            logger.info('%s ### moves found: %s', self, moves)
             if not moves:
-                # no moves found .. copy from sale line I guess
+                logger.info('%s ### no moves found .. copy from sale line', self)
                 if not self.origin.inv_line0_skip:
                     if self.origin.inv_line0:
                         self.line0 = self.origin.inv_line0
@@ -49,12 +49,13 @@ class InvoiceLine(metaclass=PoolMeta):
                 self.skip = self.origin.inv_skip
             else:
                 if len(moves) != 1:
-                    logger.info('More than one move per invoice line. what to do .. nothing I guess')
-                    return
-                self.line0 = moves[0].line0
-                self.line1 = moves[0].line1
-                self.line2 = moves[0].line2
-                self.skip = moves[0].skip
+                    logger.info('%s ### More than one move per invoice line. Taking the lines from the last one', self)
+                    moves.sort(key=lambda x: x.id) # id is fine as we are using it for now and sorting is faster that way
+                    logger.info('%s ### moves after sorting: %s', self, moves)
+                self.line0 = moves[-1].line0
+                self.line1 = moves[-1].line1
+                self.line2 = moves[-1].line2
+                self.skip = moves[-1].skip
                 
 
 class InvoiceReport(metaclass=PoolMeta):
