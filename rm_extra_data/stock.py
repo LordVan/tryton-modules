@@ -101,3 +101,22 @@ class ShipmentOut(metaclass=PoolMeta):
         move = super()._get_inventory_move(incoming_move)
         move.on_change_origin()
         return move
+
+    def _sync_move_key(self, move):
+        '''
+        Make sure to sync (potentially) fixed line0,1,2, and skip to outgoing moves
+        '''
+        ret = super()._sync_move_key(move)
+  #       logger.info('stock.ShipmentOut._sync_move_key ### %s', self)
+  #       logger.info(f'############# {ret}')
+  #       logger.info(f'''##### Move ({move})
+  # line0: {move.line0}
+  # line1: {move.line1}
+  # line2: {move.line2}
+  # skip: {move.skip}
+  # origin: {move.origin}''')
+        return ret + (('line0', move.line0),
+                      ('line1', move.line1),
+                      ('line2', move.line2),
+                      ('skip', move.skip),
+                      )
