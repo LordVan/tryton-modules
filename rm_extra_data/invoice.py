@@ -56,7 +56,7 @@ class InvoiceLine(metaclass=PoolMeta):
                 self.line1 = moves[-1].line1
                 self.line2 = moves[-1].line2
                 self.skip = moves[-1].skip
-                
+
 
 class InvoiceReport(metaclass=PoolMeta):
     __name__ = 'account.invoice'
@@ -80,14 +80,43 @@ class InvoiceReport(metaclass=PoolMeta):
         sorted_lines = []
         for sale in sales:
             # WARNING: make sure skipped items never have a price so subtotal and total match!!
-            sale_lines = list(filter(lambda x: ((x.origin.inv_skip == False) &
+            # get all invoice lines for the first sale and filter out skipped ones
+            invoice_lines = list(filter(lambda x: ((x.skip == False) &
                                                 (x.origin.sale == sale)),
-                                     records[0].lines))
+                                     filtered_lines))
+            my_invoice_lines = []
             delnotes = []
-            for sl in sale_lines:
-                if sl.origin and sl.origin.moves:
+            shipment_numbers = []
+            delnotes_text = ''
+            for il in invoice_lines:
+                # first get delivery notes if we have some and append to sale
+                if il.origin and il.origin.moves:
                     logger.info(delnotes)
-                    delnotes = delnotes + list(sl.origin.moves)
+                    delnotes = delnotes + list(il.origin.moves)
+                for move in delnotes:
+                    if move.shipment.number not in shipment_numbers:
+                        shipment_numbers.append(move.shipment.number)
+                # then make our custom invoice line array of dicts
+                # check if we got this origin line already:
+                # TODO: deal with split positions,..
+                #il_exists = next((i for i, item in enumerate(my_invoice_lines) if item['origin'] == il.origin
+                my_il = {}
+                my_il['il_original'] = il # just in case we need something not in the dict
+                my_il['origin'] = il.origin # the sale line
+                my_il['quantity'] = il.quantity
+                my_il['unit_price'] = il.unit_price
+                # TODO: fix amount for merged lines
+                my_il['line_amount'] = il.amount #il.unit_price * il.quantity # just calculate here for simplicity
+                my_il['currency'] = il.currency
+                my_il['taxes_deductible_rate'] = il.taxes_deductible_rate
+                my_il['unit'] = il.unit
+                my_il['line0'] = il.line0.strip()
+                my_il['line1'] = il.line1.strip()
+                my_il['line2'] = il.line2.strip()
+                my_invoice_lines.append(my_il)
+            # sort out deliver note text here cuz it is so much easier:
+            shipment_numbers.sort() # sort it in order
+            delnotes_text = ', '.join(list(set(shipment_numbers))) # use conversion to set to make sure it is a unique list
             sorted_lines.append({'sale': sale,
                                  'sale_date': sale.sale_date,
                                  'sale_number': sale.number,
@@ -96,7 +125,8 @@ class InvoiceReport(metaclass=PoolMeta):
                                  'offer_nr': sale.offer_number,
                                  'offer_date': sale.offer_date,
                                  'delivery_notes': delnotes,
-                                 'inv_lines': sale_lines})
+                                 'delivery_notes_text': delnotes_text,
+                                 'inv_lines': my_invoice_lines})
         context['sorted_lines'] = sorted_lines
 #         for sl in sorted_lines:
 #             logger.info(f'''Sale number: {sl['sale_number']}
