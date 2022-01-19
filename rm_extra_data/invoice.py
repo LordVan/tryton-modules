@@ -64,26 +64,26 @@ class InvoiceReport(metaclass=PoolMeta):
     @classmethod
     def get_context(cls, records, header, data):
         context = super(InvoiceReport, cls).get_context(records, header, data)
-        #context['testdata'] = 'This is just some testdata to make sure things work ok'
-        # logger.info(context.keys())
-        # for line in context['invoice'].lines:
-        #     logger.info(line)
+
+        # get and sort invoice lines by sale and origin sequence
         filtered_lines = list(records[0].lines)
-        #list(filter(lambda x:x.origin.inv_skip == False, records[0].lines))
-        # do not skip them yet here in case the amounts are not zero !!
         filtered_lines.sort(key=lambda x: (x.origin.sale, x.origin.sequence))
+        # logger.info('inv. lines sorted: ' + str(filtered_lines))
+
+        #get a list of the different sales included in this invoice
         sales = []
         for fl in filtered_lines:
             if fl.origin.sale not in sales:
                 sales.append(fl.origin.sale)
-        logger.info('sales: ' + str(sales))
-        sorted_lines = []
+
+        sorted_lines = [] # this will hold our final invoice lines for the report
         for sale in sales:
             # WARNING: make sure skipped items never have a price so subtotal and total match!!
             # get all invoice lines for the first sale and filter out skipped ones
             invoice_lines = list(filter(lambda x: ((x.skip == False) &
                                                 (x.origin.sale == sale)),
                                      filtered_lines))
+            # logger.info('inv. lines for sale: ' + str(invoice_lines))
             my_invoice_lines = []
             delnotes = []
             shipment_numbers = []
