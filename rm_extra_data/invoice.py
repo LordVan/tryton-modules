@@ -19,7 +19,7 @@ class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     performance_period = fields.Char('Performance period',
-                                     required = True,
+                                     # required = True,
                                      states = { 'readonly': ~Eval('state').in_(['draft', 'validated']) })
 
     @classmethod
@@ -77,7 +77,10 @@ class InvoiceReport(metaclass=PoolMeta):
         context = super(InvoiceReport, cls).get_context(records, header, data)
 
         # get and sort invoice lines by sale and origin sequence
-        filtered_lines = list(records[0].lines)
+        # first filter out lines that have no origins
+        filtered_lines = list(filter(lambda x: (x.origin), records[0].lines))
+        no_origin_lines = list(filter(lambda x: (not x.origin), records[0].lines))
+        # Then] sort
         filtered_lines.sort(key=lambda x: (x.origin.sale, x.origin.sequence))
         # logger.info('inv. lines sorted: ' + str(filtered_lines))
 
@@ -138,7 +141,30 @@ class InvoiceReport(metaclass=PoolMeta):
                                  'delivery_notes': delnotes,
                                  'delivery_notes_text': delnotes_text,
                                  'inv_lines': my_invoice_lines})
-        context['sorted_lines'] = sorted_lines
+    # if no_origin_lines:
+    #     # we have lines with no origin (sale line / move / ..)
+    #     my_invoice_lines = []
+    #     for il in no_origin_lines:
+    #         my_il = {}
+    #         my_il['il_original'] = il
+    #         my_il['origin'] = None
+    #         my_il['quantity'] = il.quantity
+    #         my_il['unit_price'] = il.unit_price
+    #         # TODO: fix amount for merged lines
+    #         my_il['line_amount'] = il.amount #il.unit_price * il.quantity # just calculate here for simplicity
+    #         my_il['currency'] = il.currency
+    #         my_il['taxes_deductible_rate'] = il.taxes_deductible_rate
+    #         my_il['unit'] = il.unit
+    #         my_il['line0'] = il.line0.strip()
+    #         my_il['line1'] = il.line1.strip()
+    #         my_il['line2'] = il.line2.strip()
+    #         my_invoice_lines.append(my_il)
+    #     sorted_lines.append({'sale': None,
+    #                          'sale_date': None,
+    #                          '
+    #     })
+        
+
 #         for sl in sorted_lines:
 #             logger.info(f'''Sale number: {sl['sale_number']}
 # Sale date: {sl['sale_date']}
@@ -147,4 +173,6 @@ class InvoiceReport(metaclass=PoolMeta):
 # Offer number: {sl['offer_nr']}
 # Offer date: {sl['offer_date']}
 # lines: {sl['inv_lines']}''')
+
+        context['sorted_lines'] = sorted_lines
         return context
