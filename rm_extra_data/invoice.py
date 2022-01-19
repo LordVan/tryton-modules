@@ -12,8 +12,19 @@ from .sale import SaleLine
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['InvoiceLine', 'InvoiceReport']
+__all__ = ['InvoiceLine', 'InvoiceReport', 'Invoice']
 
+
+class Invoice(metaclass=PoolMeta):
+    __name__ = 'account.invoice'
+
+    performance_period = fields.Char('Performance period',
+                                     required = True,
+                                     states = { 'readonly': ~Eval('state').in_(['draft', 'validated']) })
+
+    @classmethod
+    def default_performance_period(cls):
+        return ''
 
 class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
