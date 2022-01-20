@@ -5,6 +5,8 @@
     <separator name="rm_custom" colspan="4" />
     <label name="skip" />
     <field name="skip" />
+    <label name="hide_unit_price" />
+    <field name="hide_unit_price" />
     <newline />
     <label name="line0" />
     <field name="line0" colspan="3" />

@@ -33,6 +33,15 @@ class InvoiceLine(metaclass=PoolMeta):
     line1 = fields.Char('Invoice line 1')
     line2 = fields.Char('invoice line 2')
     skip = fields.Boolean('Skip this line on invoices')
+    hide_unit_price = fields.Boolean('Hide unit price on invoice')
+
+    @classmethod
+    def default_skip(cls):
+        return False
+
+    @classmethod
+    def default_hide_unit_price(cls):
+        return False
 
     @fields.depends('origin')
     def on_change_origin(self):
@@ -119,6 +128,7 @@ class InvoiceReport(metaclass=PoolMeta):
                 my_il['origin'] = il.origin # the sale line
                 my_il['quantity'] = il.quantity
                 my_il['unit_price'] = il.unit_price
+                my_il['hide_unit_price'] = il.hide_unit_price
                 # TODO: fix amount for merged lines
                 my_il['line_amount'] = il.amount #il.unit_price * il.quantity # just calculate here for simplicity
                 my_il['currency'] = il.currency
