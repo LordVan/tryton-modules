@@ -22,7 +22,12 @@ class DeliveryNote(metaclass=PoolMeta):
         # first filter, then sort the move lines (we only want delivery notes for
         # individual sales, so no need to sort by sale, but just in case adding it
         sorted_lines = list(filter(lambda x:x.skip == False, records[0].outgoing_moves))
-        sorted_lines.sort(key=lambda x: (x.origin.sale, x.origin.sequence))
+        try:
+            sorted_lines.sort(key=lambda x: (x.origin.sale, x.origin.sequence))
+        except:
+            # if this fails (due to missing origin,..) ignore sorting
+            pass
+        
         context['sorted_lines'] = sorted_lines
 
         # some debugging
