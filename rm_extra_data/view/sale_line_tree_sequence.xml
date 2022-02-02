@@ -1,22 +1,22 @@
 <?xml version="1.0" ?>
 <data>
   <xpath expr="/tree/field[@name='type']" position="replace" />
-  <xpath expr="/tree/field[@name='product']" position="replace">
-    <field name="product" />
-  </xpath>
-  <xpath expr="/tree/field[@name='quantity']" position="before">
-    <field name="folder_skip" />
-    <field name="folder_no" />
-    <field name="folder_subno" />
-    <field name="folder_submax" />
-  </xpath>
+  <xpath expr="/tree/field[@name='product']" position="replace" />
+  <xpath expr="/tree/field[@name='summary']" position="replace" />
   <xpath expr="/tree/field[@name='quantity']" position="after">
+    <field name="proj_line0" expand="1" />
     <field name="proj_line1" expand="1" />
     <field name="proj_line2" expand="1" />
     <field name="material" expand="1" />
-    <field name="material_extra" expand="1" />
+    <field name="material_extra" />
     <field name="sheet_thickness" />
     <field name="material_surface" expand="1"/>
+    <field name="product" />
+    <field name="folder_skip" />
+    <field name="inv_skip" />
+    <field name="folder_no" />
+    <field name="folder_subno" />
+    <field name="folder_submax" />
   </xpath>
 </data>
 
