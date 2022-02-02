@@ -384,7 +384,7 @@ class SaleLine(metaclass=PoolMeta):
             self.folder_skip = self.product.folder_skip
             self.proj_line0 = self.product.proj_line0
             if not self.product.proj_line1:
-                raise UserError('Produkte ohne Projektzeile 1 können nicht hinzugefügt werden.')
+                raise UserError(f'Produkte ohne Projektzeile 1 können nicht hinzugefügt werden: Pos {self.sequence}:\n{self.product}')
             self.proj_line1 = self.product.proj_line1
             self.proj_line2 = self.product.proj_line2
             self.proj_impnote = self.product.proj_impnote
