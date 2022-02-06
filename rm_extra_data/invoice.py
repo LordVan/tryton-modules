@@ -149,7 +149,7 @@ class InvoiceReport(metaclass=PoolMeta):
             # sort out deliver note text here cuz it is so much easier:
             shipment_numbers.sort() # sort it in order
             delnotes_text = ', '.join(list(set(shipment_numbers))) # use conversion to set to make sure it is a unique list
-            if not self.performance_period:
+            if not cls.performance_period:
                 raise UserError('Leistungszeitraum nicht angegeben!')
             sorted_lines.append({'sale': sale,
                                  'sale_date': sale.sale_date,
