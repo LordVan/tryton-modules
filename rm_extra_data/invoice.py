@@ -85,6 +85,8 @@ class InvoiceReport(metaclass=PoolMeta):
     def get_context(cls, records, header, data):
         context = super(InvoiceReport, cls).get_context(records, header, data)
 
+        # Warning = Pool().get('res.user.warning')
+        
         # get and sort invoice lines by sale and origin sequence
         # first filter out lines that have no origins
         filtered_lines = list(filter(lambda x: (x.origin), records[0].lines))
@@ -134,13 +136,21 @@ class InvoiceReport(metaclass=PoolMeta):
                 my_il['currency'] = il.currency
                 my_il['taxes_deductible_rate'] = il.taxes_deductible_rate
                 my_il['unit'] = il.unit
-                my_il['line0'] = il.line0.strip()
+                if il.line0:
+                    my_il['line0'] = il.line0.strip()
+                else:
+                    my_il['line0'] = ''
                 my_il['line1'] = il.line1.strip()
-                my_il['line2'] = il.line2.strip()
+                if il.line2:
+                    my_il['line2'] = il.line2.strip()
+                else:
+                    my_il['line2'] = ''
                 my_invoice_lines.append(my_il)
             # sort out deliver note text here cuz it is so much easier:
             shipment_numbers.sort() # sort it in order
             delnotes_text = ', '.join(list(set(shipment_numbers))) # use conversion to set to make sure it is a unique list
+            if not self.performance_period:
+                raise UserError('Leistungszeitraum nicht angegeben!')
             sorted_lines.append({'sale': sale,
                                  'sale_date': sale.sale_date,
                                  'sale_number': sale.number,
