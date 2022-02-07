@@ -1,10 +1,61 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
-msgstr "Content-Type: text/plain; charset=utf-8\n"
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#~ #
+#~ msgid ""
+#~ msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.invoice.line,hide_unit_price:"
+msgid "Hide unit price on invoice"
+msgstr "Einzelpreis nicht auf Rechnung anzeigen."
+
+msgctxt "field:account.invoice.line,line0:"
+msgid "Invoice line 0"
+msgstr "Zeile 0 dieser Position auf der Rechnung"
+
+msgctxt "field:account.invoice.line,line1:"
+msgid "Invoice line 1"
+msgstr "Zeile 1 dieser Position auf der Rechnung"
+
+msgctxt "field:account.invoice.line,line2:"
+msgid "Invoice line 2"
+msgstr "Zeile 2 dieser Position auf der Rechnung"
+
+msgctxt "field:account.invoice.line,skip:"
+msgid "Skip this line on invoices"
+msgstr "Zeile nicht auf der Rechnung anzeigen."
+
+msgctxt "field:party.party,accept_exact_amounts:"
+msgid "Exact quantities"
+msgstr "Genaue Anzahl bei Lieferung"
+
+msgctxt "field:party.party,charge_setup_costs:"
+msgid "Setup costs"
+msgstr "Programm/Rüstkosten"
 
 msgctxt "field:party.party,customer_no:"
 msgid "Customer number"
 msgstr "Kundennummer"
+
+msgctxt "field:party.party,inv_name_line1:"
+msgid "Invoice name line 1"
+msgstr "Name Zeile 1 Rechnung/Lieferschein"
+
+msgctxt "field:party.party,inv_name_line2:"
+msgid "Invoice name line 2"
+msgstr "Name Zeile 2 Rechnung/Lieferschein"
 
 msgctxt "field:party.party,legal_name:"
 msgid "Legal name"
@@ -90,6 +141,10 @@ msgctxt "field:product.product,sheet_thickness:"
 msgid "Material thickness"
 msgstr "Materialstärke"
 
+msgctxt "field:product.product,proj_impnote:"
+msgid "Project important notes"
+msgstr "Wichtige Notizen Projektzettel"
+
 msgctxt "field:sale.line,due_date:"
 msgid "Due date"
 msgstr "Fertigstellungsdatum"
@@ -101,10 +156,6 @@ msgstr "Fertigstellungsdatum Zusatz"
 msgctxt "field:sale.line,due_date_postfix:"
 msgid "Due date extra"
 msgstr "Fertigstellungsdatum Zusatz"
-
-msgctxt "field:sale.line,folder_no:"
-msgid "Folder number"
-msgstr "Mappen Nummer"
 
 msgctxt "field:sale.line,folder_no:"
 msgid "Folder number"
@@ -178,13 +229,21 @@ msgctxt "field:sale.line,sheet_thickness:"
 msgid "Material thickness"
 msgstr "Materialstärke"
 
-msgctxt "field:sale.line,sheet_thickness:"
-msgid "Sheet metal thickness"
-msgstr "Blechstärke"
+msgctxt "field:sale.line,proj_impnote:"
+msgid "Project important notes"
+msgstr "Wichtige Prduktionshinweise"
 
 msgctxt "field:sale.sale,dolibarr_pid:"
 msgid "Dolibarr project id"
 msgstr "Dolibarr Projektnummer"
+
+msgctxt "field:sale.sale,due_date:"
+msgid "Due date"
+msgstr "Fertigstellungsdatum"
+
+msgctxt "field:sale.sale,shipping_date_extra:"
+msgid "Shipping date extra"
+msgstr "Fertigstellung Zusatz"
 
 msgctxt "field:sale.sale,extra_contacts:"
 msgid "Extra Contacts"
@@ -194,9 +253,81 @@ msgctxt "field:sale.sale,folder_total:"
 msgid "Total folder number"
 msgstr "Mappen Gesamtanzahl"
 
+msgctxt "field:sale.sale,offer_date:"
+msgid "Offer date"
+msgstr "Angebotsdatum"
+
+msgctxt "field:sale.sale,offer_number:"
+msgid "Offer number"
+msgstr "Angebotsnummer"
+
+msgctxt "field:sale.sale,sale_date_extra:"
+msgid "Sale date extra"
+msgstr "Bestelldatum Zusatz"
+
 msgctxt "field:sale.sale,sale_folder_postfix:"
 msgid "Sale folder postfix"
 msgstr "Bestellordner Zusatz"
+
+msgctxt "field:stock.move,line0:"
+msgid "Delivery note line 0"
+msgstr "Lieferscheinposition Zeile 0"
+
+msgctxt "field:stock.move,line1:"
+msgid "Delivery note line 1"
+msgstr "Lieferscheinposition Zeile 1"
+
+msgctxt "field:stock.move,line2:"
+msgid "Delivery note line 2"
+msgstr "Lieferscheinposition Zeile 2"
+
+msgctxt "field:stock.move,skip:"
+msgid "Skip this on delivery notes"
+msgstr "Diese Zeile auf dem Lieferschein nicht anzeigen"
+
+msgctxt "field:stock.shipment.out,sale_refs:"
+msgid "Sale references"
+msgstr "Kundenreferenz"
+
+msgctxt "field:account.invoice,performance_period:"
+msgid "Performance period"
+msgstr "Leistungszeitraum"
+
+msgctxt "field:account.invoice,line0:"
+msgid "Invoice line 0"
+msgstr "Rechnungsposition Zeile 0"
+
+msgctxt "field:account.invoice,line1:"
+msgid "Invoice line 1"
+msgstr "Rechnungsposition Zeile 1"
+
+msgctxt "field:account.invoice,line2:"
+msgid "Invoice line 2"
+msgstr "Rechnungsposition Zeile 2"
+
+msgctxt "field:account.invoice,skip:"
+msgid "Skip this line on invoices"
+msgstr "Diese Zeile auf der Rechnung nicht anzeigen"
+
+msgctxt "field:account.invoice,hide_unit_price:"
+msgid "Hide unit price on invoice"
+msgstr "Einzelpreis auf der Rechnung nicht anzeigen"
+
+msgctxt "help:party.party,accept_exact_amounts:"
+msgid "Customer only accept exact quantities"
+msgstr "Kunde akzteptiert nur genaue Stückzahl."
+
+msgctxt "help:party.party,charge_setup_costs:"
+msgid "Customer gets charged setup costs seperately"
+msgstr "Kunde bekommt Programm/Rüstkosten verrechnet bzw separat aufgeführt."
+
+msgctxt "help:party.party,inv_name_line1:"
+msgid "Invoice customer name line 1"
+msgstr "Erste Zeile des Names auf Rechnung und Lieferschein"
+
+msgctxt "help:party.party,inv_name_line2:"
+msgid "Invoice customer name line 2"
+msgstr "Erste Zeile des Names auf Rechnung und Lieferschein"
 
 msgctxt "help:party.party,legal_name:"
 msgid "Legally correct name"
@@ -246,22 +377,14 @@ msgid "Material name (auto-filled from product)"
 msgstr ""
 
 msgctxt "help:product.product,material_extra:"
-msgid "extra text to be appended to material"
-msgstr ""
-
-msgctxt "help:product.product,material_extra:"
 msgid ""
 "extra text to be appended to material (usually only needed on sale line)"
 msgstr ""
 
 msgctxt "help:product.product,material_surface:"
-msgid "surface treatment for material (paint,..) "
-msgstr "Oberflächenbehandlung"
-
-msgctxt "help:product.product,material_surface:"
 msgid ""
 "surface treatment for material (paint,..) (usually only needed on sale line)"
-msgstr "Oberflächenbehandlung (normalerweise nur für Verkauf benötigt)"
+msgstr ""
 
 msgctxt "help:product.product,proj_line0:"
 msgid "above first line on the project sheets generated for this sale line"
@@ -283,9 +406,9 @@ msgctxt "help:product.product,sheet_thickness:"
 msgid "material thickness"
 msgstr ""
 
-msgctxt "help:sale.line,due_date:"
-msgid "Due date for this sale line"
-msgstr "Fertistellungsdatum für diese Position"
+msgctxt "help:product.product,proj_impnote:"
+msgid "important production notes"
+msgstr "Wichtige Hinweise für die Produktion auf Projektzettel."
 
 msgctxt "help:sale.line,due_date:"
 msgid "Due date for this sale line (replaces due date from project sheet)"
@@ -355,18 +478,43 @@ msgctxt "help:sale.line,sheet_thickness:"
 msgid "material thickness"
 msgstr "Materialstärke (automatisch vom Artikel übernommen)"
 
-msgctxt "help:sale.line,sheet_thickness:"
-msgid "sheet metal thickness"
-msgstr "Blechstärke in mm"
+msgctxt "help:sale.line,proj_impnote:"
+msgid "important production notes"
+msgstr "Wichtige Notizen für Projektzettel"
 
 msgctxt "help:sale.sale,dolibarr_pid:"
 msgid "project id from dolibarr (for import purposes only)"
 msgstr "Interne Dolibarr Projektnummer"
 
+msgctxt "help:sale.sale,due_date:"
+msgid "Due date for this sale"
+msgstr "(gewünschtes) Fertigstellungsdatum"
+
 msgctxt "help:sale.sale,folder_total:"
 msgid "total number of folders (not counting subfolders)"
 msgstr "Gesamtanzahl der Mappen (Untermappen [A,B,..] nicht berüchsichtigt)"
 
+msgctxt "help:sale.sale,offer_date:"
+msgid "Offer date"
+msgstr "Angebotsdatum"
+
+msgctxt "help:sale.sale,offer_number:"
+msgid "Offer number"
+msgstr "Angebotsnummer"
+
+msgctxt "help:sale.sale,sale_date_extra:"
+msgid "sale date extra text"
+msgstr "Bestelldatum Zusatz"
+
 msgctxt "help:sale.sale,sale_folder_postfix:"
 msgid "this will be appended to the folder name"
 msgstr "wird am Projektzettel hinten beim Bestellordner hinzugefügt "
+
+msgctxt "help:sale.sale,shipping_date_extra:"
+msgid "shipping date extra text"
+msgstr "Fertigstellungsdatum Zusatz"
+
+msgctxt "help:stock.shipment.out,sale_refs:"
+msgid "Skip this on delivery notes"
+msgstr "Diese Zeile nicht auf Lieferschein anzeigen"
+
