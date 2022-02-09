@@ -16,6 +16,7 @@
       <field name="supplier_no" />
       <label name="pn_name" />
       <field name="pn_name" />
+      <!-- usually not shown -->
       <label name="dolibarr_pid" />
       <field name="dolibarr_pid" />
       <label name="dolibarr_cid" />
@@ -23,5 +24,13 @@
       <!--      <label name="place_of_jurisdiction" />
 	   <field name="place_of_jurisdiction" />-->
     </page>
+  </xpath>
+  <xpath expr="/form/notebook/page[@id='sale']" position="inside">
+    <separator string="RM Extra" colspan="4" id="rm_extra" />
+    <label name="accept_exact_amounts" />
+    <field name="accept_exact_amounts" />
+    <label name="charge_setup_costs" />
+    <field name="charge_setup_costs" />
+
   </xpath>
 </data>

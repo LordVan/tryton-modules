@@ -35,10 +35,22 @@ class Party(metaclass=PoolMeta):
                                   states = { 'invisible': True, },
                                   readonly = True,
                                   help = 'contact id from dolibarr (for import purposes only)')
+    # standard for invoice/LS:
+    accept_exact_amounts = fields.Boolean('Exact quantities',
+                                          help = 'Customer only accept exact quantities')
+    charge_setup_costs = fields.Boolean('Setup costs',
+                                        help = 'Customer gets charged setup costs seperately')
     # general stuff
     #place_of_jurisdiction = fields.Char('Place of jurisdiction', size=100)
     
+    @classmethod
+    def default_accept_exact_amounts(cls):
+        return False
 
+    @classmethod
+    def default_charge_setup_costs(cls):
+        return True
+    
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
