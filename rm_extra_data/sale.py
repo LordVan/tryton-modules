@@ -82,6 +82,8 @@ class Sale(metaclass=PoolMeta):
                 raise UserError('Liefermethode ungültig')
             if sale.invoice_method != 'shipment':
                 raise UserError('Rechnungmethode ungültig')
+            if not sale.payment_term:
+                raise UserError('Keine Zahlungsbedingungen angegeben!')
         # first check if we have a line without product and issue a warning
         warning_name = 'saleline_noproduct,%s' % cls
         need_fixing = []
@@ -138,6 +140,9 @@ class SaleReport(metaclass=PoolMeta):
     @classmethod
     def get_context(cls, records, header, data):
         context = super(SaleReport, cls).get_context(records, header, data)
+        for rec in records:
+            if not rec.sale_date:
+                raise UserError(f'Bestelldatum fehlt (Verkauf {rec.number})')
         def get_project_lines(sale):
             sorted_lines = list(filter(lambda x: x.folder_skip == False, sale.lines)) # copy the list but filter skipped ones here
             if not sorted_lines:
