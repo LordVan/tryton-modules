@@ -43,11 +43,43 @@ class InvoiceLine(metaclass=PoolMeta):
     def default_hide_unit_price(cls):
         return False
 
+    @fields.depends('product', 'unit', '_parent_invoice.type',
+                    '_parent_invoice.party', 'party', 'invoice', 'invoice_type',
+                    '_parent_invoice.invoice_date', '_parent_invoice.accounting_date',
+                    'company',
+                    methods=['_get_tax_rule_pattern'])
+    def on_change_product(self):
+        super().on_change_product()
+        if not self.product:
+            return
+        # purposely ignore the "do not show on delivery note / invoice flag here
+        # since we are obviously adding this on purpose and there is no reason
+        # to add anything to an invoice we do not want on it that I can think of
+        if not self.product.inv_line0_skip:
+            if self.product.inv_line0 and self.product.inv_line0.strip():
+                self.line0 = self.product.inv_line0
+            elif self.product.proj_line0 and self.product.proj_line0:
+                self.line0 = self. product.proj_line0
+        if self.product.inv_line1 and self.product.inv_line1.strip():
+            self.line1 = self.product.inv_line1
+        elif self.product.proj_line1 and self.product.proj_line1:
+            self.line1 = self. product.proj_line1
+        if not self.product.inv_line2_skip:
+            if self.product.inv_line2 and self.product.inv_line2.strip():
+                self.line2 = self.product.inv_line2
+            elif self.product.proj_line2 and self.product.proj_line2:
+                self.line2 = self. product.proj_line2
+
+
     @fields.depends('origin')
     def on_change_origin(self):
         # copy line0,1,2 from SaleLine or Moves
         if isinstance(self.origin, SaleLine):
-            moves = self.origin.moves
+            try:
+                moves = self.origin.moves
+            except:
+                # something went wrong getting the moves.. doing nothing here
+                return
             logger.info('%s ### moves found: %s', self, moves)
             if not moves:
                 logger.info('%s ### no moves found .. copy from sale line', self)
