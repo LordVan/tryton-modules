@@ -231,7 +231,7 @@ msgstr "Materialstärke"
 
 msgctxt "field:sale.line,proj_impnote:"
 msgid "Project important notes"
-msgstr "Wichtige Prduktionshinweise"
+msgstr "Wichtige Produktionshinweise"
 
 msgctxt "field:sale.sale,dolibarr_pid:"
 msgid "Dolibarr project id"
