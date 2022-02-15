@@ -50,11 +50,20 @@
     <label name="shipping_date" />
     <field name="shipping_date" />
   </xpath>
-  <xpath expr="/form/notebook/page/label[@name='sale_date']"
-	 position="before">
+  <xpath expr="/form/field[@name='invoice_address']"
+	 position="after">
     <label name="offer_number" />
     <field name="offer_number" />
+  </xpath>
+  <xpath expr="/form/field[@name='shipment_address']"
+	 position="after">
     <label name="offer_date" />
     <field name="offer_date" />
+  </xpath>
+  <xpath expr="/form/notebook/page/label[@name='currency']" position="replace" />
+  <xpath expr="/form/notebook/page/field[@name='currency']" position="replace" />
+  <xpath expr="/form/notebook/page/separator[@name='comment']" position="before">
+    <label name="currency"/>
+    <field name="currency"/>
   </xpath>
 </data>
