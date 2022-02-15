@@ -16,13 +16,13 @@
     <label name="folder_submax" />
     <field name="folder_submax" />
     <label name="proj_line0" />
-    <field name="proj_line0" />
+    <field name="proj_line0" colspan="3" />
     <label name="proj_line1" />
-    <field name="proj_line1" />
+    <field name="proj_line1" colspan="3" />
     <label name="proj_line2" />
-    <field name="proj_line2" />
+    <field name="proj_line2" colspan="3" />
     <label name="proj_impnote" />
-    <field name="proj_impnote" />
+    <field name="proj_impnote" colspan="3" />
     <newline />
     <label name="material" />
     <field name="material" />
@@ -41,7 +41,7 @@
     <label name="inv_line0_skip" />
     <field name="inv_line0_skip" />
     <label name="inv_line1" />
-    <field name="inv_line1" />
+    <field name="inv_line1" colspan="3" />
     <newline />
     <label name="inv_line2" />
     <field name="inv_line2" />
