@@ -1,4 +1,20 @@
 <?xml version="1.0"?>
 <data>
+  <!-- no need for warehouse so remove it -->
   <xpath expr="/tree/field[@name='warehouse']" position="replace" />
+  <!-- rearranging those so removing then re-adding -->
+  <xpath expr="/tree/field[@name='party']" position="replace" />
+  <xpath expr="/tree/field[@name='sale_date']" position="replace" />
+  <xpath expr="/tree/field[@name='reference']" position="replace" />
+  <xpath expr="/tree/field[@name='description']" position="replace" />
+
+  <xpath expr="/tree/field[@name='number']" position="replace">
+    <field name="number" />
+    <field name="sale_date" />
+    <field name="sale_folder_postfix" />
+    <field name="party" expand="2" />
+    <field name="reference" expand="1" />
+    <field name="description" expand="1" />
+  </xpath>
+  
 </data>
