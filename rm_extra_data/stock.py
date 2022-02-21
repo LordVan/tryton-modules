@@ -107,7 +107,10 @@ class ShipmentOut(metaclass=PoolMeta):
 
     def _get_inventory_move(self, incoming_move):
         move = super()._get_inventory_move(incoming_move)
-        move.on_change_origin()
+        if move:
+            # do not throw an exception if for some reason there is no move associated
+            logger.warning(f'Could not get inventory move for {incoming_move} (shipment: {self})')
+            move.on_change_origin()
         return move
 
     def _sync_move_key(self, move):
