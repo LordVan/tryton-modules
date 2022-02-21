@@ -143,6 +143,8 @@ class SaleReport(metaclass=PoolMeta):
         for rec in records:
             if not rec.sale_date:
                 raise UserError(f'Bestelldatum fehlt (Verkauf {rec.number})')
+            if not rec.number:
+                raise UserError('Projektzettel kann nicht ohne Verkaufsnummer (Projektnummer) erstellt werden.')
         def get_project_lines(sale):
             sorted_lines = list(filter(lambda x: x.folder_skip == False, sale.lines)) # copy the list but filter skipped ones here
             if not sorted_lines:
