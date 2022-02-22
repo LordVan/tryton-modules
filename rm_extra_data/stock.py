@@ -139,4 +139,4 @@ class ShipmentOut(metaclass=PoolMeta):
         for shipment in shipments:
             if not shipment.effective_date:
                 raise UserError('Effektives Datum nicht ausgewählt!')
-        super().pick(shipments)
+        super().pack(shipments)
