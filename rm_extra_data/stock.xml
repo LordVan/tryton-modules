@@ -11,5 +11,10 @@
       <field name="inherit" ref="stock.shipment_out_view_form" />
       <field name="name">shipment_out_form</field>
     </record>
+    <record model="ir.ui.view" id="move_view_list_shipment">
+      <field name="model">stock.move</field>
+      <field name="inherit" ref="stock.move_view_list_shipment" />
+      <field name="name">move_list_shipment</field>
+    </record>
   </data>
 </tryton>

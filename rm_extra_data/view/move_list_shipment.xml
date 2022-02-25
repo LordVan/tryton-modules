@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<data>
+  <xpath expr="/tree/field[@name='quantity']" position="replace" />
+  <xpath expr="/tree/field[@name='from_location']" position="replace">
+    <field name="line0" expand="1" />
+    <field name="quantity" symbol="uom" />
+    <field name="line1" expand="1" />
+    <field name="line2" expand="1" />
+    <field name="skip" />
+  </xpath>
+</data>
