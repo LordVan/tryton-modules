@@ -11,10 +11,10 @@
       <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
       <field name="name">invoice_line_form</field>
     </record>
-    <record model="ir.ui.view" id="invoice_line_view_tree">
+    <record model="ir.ui.view" id="invoice_line_view_tree_sequence">
       <field name="model">account.invoice.line</field>
-      <field name="inherit" ref="account_invoice.invoice_line_view_tree"/>
-      <field name="name">invoice_line_tree</field>
+      <field name="inherit" ref="account_invoice.invoice_line_view_tree_sequence"/>
+      <field name="name">invoice_line_tree_sequence</field>
     </record>
   </data>
 </tryton>

@@ -3,11 +3,14 @@
   <xpath expr="/tree/field[@name='type']" position="replace" />
   <xpath expr="/tree/field[@name='summary']" position="replace" />
   <xpath expr="/tree/field[@name='account']" position="replace" />
-  <xpath expr="/tree/field[@name='quantity']" position="before">
+  <xpath expr="/tree/field[@name='product']" position="replace">
     <field name="line0" expand="1" />
-    <field name="line1" expand="2" />
-    <field name="line2" expand="2" />
+  </xpath>
+  <xpath expr="/tree/field[@name='quantity']" position="after">
+    <field name="line1" expand="3" />
+    <field name="line2" expand="3" />
     <field name="skip" />
     <field name="hide_unit_price" />
+    <field name="product" />
   </xpath>
 </data>
