@@ -31,7 +31,7 @@ class InvoiceLine(metaclass=PoolMeta):
 
     line0 = fields.Char('Invoice line 0')
     line1 = fields.Char('Invoice line 1')
-    line2 = fields.Char('invoice line 2')
+    line2 = fields.Char('Invoice line 2')
     skip = fields.Boolean('Skip this line on invoices')
     hide_unit_price = fields.Boolean('Hide unit price on invoice')
 
