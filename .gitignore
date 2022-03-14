@@ -5,3 +5,5 @@ dolibarr_import/dolibarr_import.log
 *.py#
 *.xml~
 *.tar.bz2
+*~
+*.csv
