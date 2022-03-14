@@ -178,6 +178,10 @@ class InvoiceReport(metaclass=PoolMeta):
                     my_il['line2'] = il.line2.strip()
                 else:
                     my_il['line2'] = ''
+                #logger.info(f'invoice line {il.line1} taxes: {il.taxes}')
+                if not il.taxes:
+                    # we don't *EVER* want any invoice lines without tax rates assigned
+                    raise UserError(f'Rechnungszeile {my_il["line1"]} hat keine Steuer zugewiesen!!')
                 my_invoice_lines.append(my_il)
             # sort out deliver note text here cuz it is so much easier:
             shipment_numbers.sort() # sort it in order
