@@ -43,6 +43,14 @@ class InvoiceLine(metaclass=PoolMeta):
     def default_hide_unit_price(cls):
         return False
 
+    def get_sale(self):
+        if isinstance(self.origin, SaleLine):
+            return self.origin.sale
+        if isinstance(self.origin, InvoiceLine):
+            # NOTE: there should be no way to generate infinite loops here without messing with the DB directly
+            # (or through proteus)
+            return self.origin.get_sale()
+
     @fields.depends('product', 'unit', '_parent_invoice.type',
                     '_parent_invoice.party', 'party', 'invoice', 'invoice_type',
                     '_parent_invoice.invoice_date', '_parent_invoice.accounting_date',
@@ -121,26 +129,42 @@ class InvoiceReport(metaclass=PoolMeta):
         
         # get and sort invoice lines by sale and origin sequence
         # first filter out lines that have no origins
-        filtered_lines = list(filter(lambda x: (x.origin), records[0].lines))
+        filtered_lines = [x for x in records[0].lines if x.origin]
         # get the invoice lines that do not have an origin and are to be shown on the report
         no_origin_lines = list(filter(lambda x: (not x.origin and not x.skip), records[0].lines))
-        # Then] sort
-        filtered_lines.sort(key=lambda x: (x.origin.sale, x.origin.sequence))
+        # Then sort
+        try:
+            filtered_lines.sort(key=lambda x: (x.origin.sale, x.origin.sequence))
+        except Exception as e:
+            logger.warning(f'error while sorting invoice lines: {e} (this happens for refunds and can be ignored)')
         # logger.info('inv. lines sorted: ' + str(filtered_lines))
 
         #get a list of the different sales included in this invoice
         sales = []
+        refund_text = ''
         for fl in filtered_lines:
-            if fl.origin.sale not in sales:
-                sales.append(fl.origin.sale)
+            if isinstance(fl.origin, InvoiceLine):
+                try:
+                    # attempt to append the origins origins sale (anything else seems not possible for us atm)
+                    if fl.origin.origin.sale not in sales:
+                        sales.append(fl.origin.origin.sale)
+                        refund_text += f'{fl.origin.origin.sale.number}'
+                except:
+                    logger.warning(f'WARNING: [InvoiceLine {fl.id}]: Cannot append sale of origins origin [when origin of an InvoiceLine is another InvoiceLine]')
+            elif isinstance(fl.origin, SaleLine):
+                # for now assume origin is a sale if it is not invoice line since there are only 2 options
+                # (and None, but we already filtered those out so ..)
+                if fl.origin.sale not in sales:
+                    sales.append(fl.origin.sale)
+            else:
+                logger.error(f'unknown origin type found ({type(fl.origin)}) !!')
 
         sorted_lines = [] # this will hold our final invoice lines for the report
         for sale in sales:
             # WARNING: make sure skipped items never have a price so subtotal and total match!!
             # get all invoice lines for the first sale and filter out skipped ones
-            invoice_lines = list(filter(lambda x: ((x.skip == False) &
-                                                (x.origin.sale == sale)),
-                                     filtered_lines))
+            invoice_lines = [x for x in filtered_lines if not x.skip and x.get_sale() == sale]
+
             # logger.info('inv. lines for sale: ' + str(invoice_lines))
             my_invoice_lines = []
             delnotes = []
@@ -148,9 +172,13 @@ class InvoiceReport(metaclass=PoolMeta):
             delnotes_text = ''
             for il in invoice_lines:
                 # first get delivery notes if we have some and append to sale
-                if il.origin and il.origin.moves:
-                    logger.info(delnotes)
-                    delnotes = delnotes + list(il.origin.moves)
+                if il.origin:
+                    if isinstance(il.origin, SaleLine) and il.origin.moves:
+                        # logger.info(delnotes)
+                        delnotes = delnotes + list(il.origin.moves)
+                    elif isinstance(il.origin, InvoiceLine) and isinstance(il.origin.origin, SaleLine) and il.origin.origin.moves:
+                        # logger.info(delnotes)
+                        delnotes += list(il.origin.origin.moves)
                 for move in delnotes:
                     if move.shipment.number not in shipment_numbers:
                         shipment_numbers.append(move.shipment.number)
@@ -169,15 +197,9 @@ class InvoiceReport(metaclass=PoolMeta):
                 my_il['currency'] = il.currency
                 my_il['taxes_deductible_rate'] = il.taxes_deductible_rate
                 my_il['unit'] = il.unit
-                if il.line0:
-                    my_il['line0'] = il.line0.strip()
-                else:
-                    my_il['line0'] = ''
-                my_il['line1'] = il.line1.strip()
-                if il.line2:
-                    my_il['line2'] = il.line2.strip()
-                else:
-                    my_il['line2'] = ''
+                my_il['line0'] = il.line0.strip() if il.line0 else ''
+                my_il['line1'] = il.line1.strip() if il.line1 else ''
+                my_il['line2'] = il.line2.strip() if il.line2 else ''
                 #logger.info(f'invoice line {il.line1} taxes: {il.taxes}')
                 if not il.taxes:
                     # we don't *EVER* want any invoice lines without tax rates assigned
@@ -214,28 +236,15 @@ class InvoiceReport(metaclass=PoolMeta):
             my_il['currency'] = il.currency
             my_il['taxes_deductible_rate'] = il.taxes_deductible_rate
             my_il['unit'] = il.unit
-            if il.line0:
-                my_il['line0'] = il.line0.strip()
-            else:
-                my_il['line0'] = ''
-            my_il['line1'] = il.line1.strip()
-            if il.line2:
-                my_il['line2'] = il.line2.strip()
-            else:
-                my_il['line2'] = ''
+            my_il['line0'] = il.line0.strip() if il.line0 else ''
+            my_il['line1'] = il.line1.strip() if il.line1 else '' # this shouldn't be empty but be on the save side
+            my_il['line2'] = il.line2.strip() if il.line2 else ''
 
             # append it to the last line of the last sale
             sorted_lines[-1]['inv_lines'].append(my_il)
-        
-
-#         for sl in sorted_lines:
-#             logger.info(f'''Sale number: {sl['sale_number']}
-# Sale date: {sl['sale_date']}
-# Commission: {sl['commission']}
-# Reference: {sl['reference']}
-# Offer number: {sl['offer_nr']}
-# Offer date: {sl['offer_date']}
-# lines: {sl['inv_lines']}''')
 
         context['sorted_lines'] = sorted_lines
+        context['refund_text'] = refund_text if refund_text else None
+        if records[0].untaxed_amount == 0.0:
+            raise UserError('Rechnungsbetrag darf nicht 0.00 sein')
         return context
