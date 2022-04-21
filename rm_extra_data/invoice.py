@@ -148,7 +148,7 @@ class InvoiceReport(metaclass=PoolMeta):
                     # attempt to append the origins origins sale (anything else seems not possible for us atm)
                     if fl.origin.origin.sale not in sales:
                         sales.append(fl.origin.origin.sale)
-                        refund_text += f'{fl.origin.origin.sale.number}'
+                        refund_text += f'{fl.origin.invoice.number}'
                 except:
                     logger.warning(f'WARNING: [InvoiceLine {fl.id}]: Cannot append sale of origins origin [when origin of an InvoiceLine is another InvoiceLine]')
             elif isinstance(fl.origin, SaleLine):
