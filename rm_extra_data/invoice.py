@@ -32,8 +32,9 @@ class InvoiceLine(metaclass=PoolMeta):
     line0 = fields.Char('Invoice line 0')
     line1 = fields.Char('Invoice line 1')
     line2 = fields.Char('Invoice line 2')
-    skip = fields.Boolean('Skip this line on invoices')
-    hide_unit_price = fields.Boolean('Hide unit price on invoice')
+    skip = fields.Boolean('Skip this line on invoice report')
+    hide_unit_price = fields.Boolean('Hide unit price on invoice report')
+    hide_quantity = fields.Boolean('Hide quantity on invoice report')
 
     @classmethod
     def default_skip(cls):
@@ -41,6 +42,10 @@ class InvoiceLine(metaclass=PoolMeta):
 
     @classmethod
     def default_hide_unit_price(cls):
+        return False
+
+    @classmethod
+    def default_hide_quantity(cls):
         return False
 
     def get_sale(self):
@@ -192,6 +197,7 @@ class InvoiceReport(metaclass=PoolMeta):
                 my_il['quantity'] = il.quantity
                 my_il['unit_price'] = il.unit_price
                 my_il['hide_unit_price'] = il.hide_unit_price
+                my_il['hide_quantity'] = il.hide_quantity
                 # TODO: fix amount for merged lines
                 my_il['line_amount'] = il.amount #il.unit_price * il.quantity # just calculate here for simplicity
                 my_il['currency'] = il.currency
@@ -231,6 +237,7 @@ class InvoiceReport(metaclass=PoolMeta):
             my_il['quantity'] = il.quantity
             my_il['unit_price'] = il.unit_price
             my_il['hide_unit_price'] = il.hide_unit_price
+            my_il['hide_quantity'] = il.hide_quantity
             # TODO: fix amount for merged lines
             my_il['line_amount'] = il.amount #il.unit_price * il.quantity # just calculate here for simplicity
             my_il['currency'] = il.currency

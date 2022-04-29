@@ -18,7 +18,7 @@ msgstr ""
 #~ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:account.invoice.line,hide_unit_price:"
-msgid "Hide unit price on invoice"
+msgid "Hide unit price on invoice report"
 msgstr "Einzelpreis nicht auf Rechnung anzeigen."
 
 msgctxt "field:account.invoice.line,line0:"
@@ -34,8 +34,12 @@ msgid "Invoice line 2"
 msgstr "Zeile 2 dieser Position auf der Rechnung"
 
 msgctxt "field:account.invoice.line,skip:"
-msgid "Skip this line on invoices"
+msgid "Skip this line on invoice report"
 msgstr "Zeile nicht auf der Rechnung anzeigen."
+
+msgctxt "field:account.invoice.line,hide_quantity:"
+msgid "Hide quantity on invoice report"
+msgstr "Menge auf der Rechnung nicht anzeigen"
 
 msgctxt "field:party.party,accept_exact_amounts:"
 msgid "Exact quantities"
@@ -292,26 +296,6 @@ msgstr "Kundenreferenz"
 msgctxt "field:account.invoice,performance_period:"
 msgid "Performance period"
 msgstr "Leistungszeitraum"
-
-msgctxt "field:account.invoice,line0:"
-msgid "Invoice line 0"
-msgstr "Rechnungsposition Zeile 0"
-
-msgctxt "field:account.invoice,line1:"
-msgid "Invoice line 1"
-msgstr "Rechnungsposition Zeile 1"
-
-msgctxt "field:account.invoice,line2:"
-msgid "Invoice line 2"
-msgstr "Rechnungsposition Zeile 2"
-
-msgctxt "field:account.invoice,skip:"
-msgid "Skip this line on invoices"
-msgstr "Diese Zeile auf der Rechnung nicht anzeigen"
-
-msgctxt "field:account.invoice,hide_unit_price:"
-msgid "Hide unit price on invoice"
-msgstr "Einzelpreis auf der Rechnung nicht anzeigen"
 
 msgctxt "help:party.party,accept_exact_amounts:"
 msgid "Customer only accept exact quantities"

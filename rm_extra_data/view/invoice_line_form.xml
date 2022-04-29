@@ -7,6 +7,8 @@
     <field name="skip" />
     <label name="hide_unit_price" />
     <field name="hide_unit_price" />
+    <label name="hide_quantity" />
+    <field name="hide_quantity" />
     <newline />
     <label name="line0" />
     <field name="line0" colspan="3" />
