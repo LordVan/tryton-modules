@@ -21,13 +21,25 @@ class DeliveryNote(metaclass=PoolMeta):
         context = super(DeliveryNote, cls).get_context(records, header, data)
         # first filter, then sort the move lines (we only want delivery notes for
         # individual sales, so no need to sort by sale, but just in case adding it
-        sorted_lines = list(filter(lambda x:x.skip == False, records[0].outgoing_moves))
+
+        # get all the lines we want to display
+        filtered_lines = [x for x in records[0].outgoing_moves if not x.skip]
+        # get lines with an origin
+        sorted_lines = [x for x in filtered_lines if x.origin]
+        # we need one sale associated at least so this never be empty but
+        if not sorted_lines:
+            raise UserError('Kein Verkauf gefunden! Es muss mindestens eine Zeile mit Verkaufs-Herkunft geben')
+
+        context['sale'] = sorted_lines[0].origin.sale
+        no_origin_lines = [x for x in filtered_lines if not x.origin] # manually added lines without origin
         try:
             sorted_lines.sort(key=lambda x: (x.origin.sale, x.origin.sequence))
         except:
             # if this fails (due to missing origin,..) ignore sorting
+            # this should not happen anymore but keeping just in case
             pass
-        
+        # add lines without origin again
+        sorted_lines += no_origin_lines
         context['sorted_lines'] = sorted_lines
 
         if not records[0].effective_date:
