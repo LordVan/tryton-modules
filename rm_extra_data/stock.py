@@ -23,7 +23,7 @@ class DeliveryNote(metaclass=PoolMeta):
         # individual sales, so no need to sort by sale, but just in case adding it
 
         # get all the lines we want to display
-        filtered_lines = [x for x in records[0].outgoing_moves if not x.skip]
+        filtered_lines = [x for x in records[0].inventory_moves if not x.skip]
         # get lines with an origin
         sorted_lines = [x for x in filtered_lines if x.origin]
         # we need one sale associated at least so this never be empty but
