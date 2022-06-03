@@ -22,15 +22,31 @@ class DeliveryNote(metaclass=PoolMeta):
         # first filter, then sort the move lines (we only want delivery notes for
         # individual sales, so no need to sort by sale, but just in case adding it
 
+        mySale = None
         # get all the lines we want to display
-        filtered_lines = [x for x in records[0].inventory_moves if not x.skip]
-        # get lines with an origin
-        sorted_lines = [x for x in filtered_lines if x.origin]
+        if records[0].state in ('picked', 'packed', 'done'):
+            filtered_lines = [x for x in records[0].outgoing_moves if not x.skip]
+            # get lines with an origin
+            sorted_lines = [x for x in filtered_lines if x.origin]
+            mySale = sorted_lines[0].origin.sale
+        else:
+            # if we are not in picked, packed or done states use inventory moves for report to preview
+            filtered_lines = [x for x in records[0].inventory_moves if not x.skip]
+            # get lines with an origin
+            sorted_lines = [x for x in filtered_lines if x.origin]
+            mySale = sorted_lines[0].origin.sale
+            if not mySale:
+                # no origin sale found on inventory moves (for whatever reason)
+                # try outgoing moves to see if we find an origin sale
+                out_mov = [x for x in records[0].outgoing_moves if not x.skip]
+                out_mov_sorted =  [x for x in out_mov  if x.origin]
+                mySale = out_mov_sorted[0].origin.sale
+
         # we need one sale associated at least so this never be empty but
-        if not sorted_lines:
+        if not mySale:
             raise UserError('Kein Verkauf gefunden! Es muss mindestens eine Zeile mit Verkaufs-Herkunft geben')
 
-        context['sale'] = sorted_lines[0].origin.sale
+        context['sale'] = mySale
         no_origin_lines = [x for x in filtered_lines if not x.origin] # manually added lines without origin
         try:
             sorted_lines.sort(key=lambda x: (x.origin.sale, x.origin.sequence))
