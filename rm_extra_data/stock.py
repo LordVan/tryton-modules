@@ -77,6 +77,18 @@ class Move(metaclass=PoolMeta):
     line2 = fields.Char('Delivery note line 2')
     skip = fields.Boolean('Skip this on delivery notes')
 
+    def default_line0(cls):
+        return ''
+
+    def default_line1(cls):
+        return ''
+
+    def default_line2(cls):
+        return ''
+
+    def default_skip(cls):
+        return False
+    
     # FIXME: should i add the line fields here too?..
     @fields.depends('origin')
     def on_change_origin(self):
