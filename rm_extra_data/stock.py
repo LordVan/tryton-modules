@@ -77,15 +77,19 @@ class Move(metaclass=PoolMeta):
     line2 = fields.Char('Delivery note line 2')
     skip = fields.Boolean('Skip this on delivery notes')
 
+    @classmethod
     def default_line0(cls):
         return ''
 
+    @classmethod
     def default_line1(cls):
         return ''
 
+    @classmethod
     def default_line2(cls):
         return ''
 
+    @classmethod
     def default_skip(cls):
         return False
     
