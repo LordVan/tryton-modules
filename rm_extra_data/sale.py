@@ -55,6 +55,15 @@ class Sale(metaclass=PoolMeta):
     def default_folder_total(cls):    
         return 1
 
+    @fields.depends('party', 'invoice_party', 'shipment_party', 'payment_term')
+    def on_change_party(self):
+        if self.party and (not self.party.pn_name and not self.party.pn_name.strip()):
+            self.party = None
+            raise UserError('Partei muss PN Namen vergeben haben für Verkauf!')
+        else:
+            super(Sale, self).on_change_party()
+
+
     @classmethod
     @ModelView.button
     @Workflow.transition('quotation')
@@ -145,6 +154,8 @@ class SaleReport(metaclass=PoolMeta):
                 raise UserError(f'Bestelldatum fehlt (Verkauf {rec.number})')
             if not rec.number:
                 raise UserError('Projektzettel kann nicht ohne Verkaufsnummer (Projektnummer) erstellt werden.')
+            if not rec.party and (not rec.party.pn_name and not self.party.pn_name.strip()):
+                raise UserError('Partei muss PN Namen vergeben haben für Verkauf!')
         def get_project_lines(sale):
             sorted_lines = list(filter(lambda x: x.folder_skip == False, sale.lines)) # copy the list but filter skipped ones here
             if not sorted_lines:
