@@ -2,7 +2,7 @@ from trytond.model import fields, Unique
 from trytond.pyson import Eval, Bool, Id
 from trytond.pool import PoolMeta, Pool
 
-__all__ = ['Party']
+__all__ = ['Party', 'Replace']
 
 
 class Party(metaclass=PoolMeta):
@@ -73,3 +73,13 @@ class Party(metaclass=PoolMeta):
         default.setdefault('dolibarr_pid', None)
         default.setdefault('dolibarr_cid', None)
         return super().copy(parties, default=default)
+
+
+class Replace(metaclass=PoolMeta):
+    __name__ = 'party.replace'
+
+    @classmethod
+    def fields_to_replace(cls):
+        return super().fields_to_replace() + [
+            ('party.party-sale.sale', 'party'),
+        ]

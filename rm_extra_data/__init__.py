@@ -29,6 +29,9 @@ def register():
         invoice.InvoiceReport,
         module='rm_extra_data', type_='report')
     
+    Pool.register(
+        party.Replace,
+        module='rm_extra_data', type_='wizard')
     
     
     
