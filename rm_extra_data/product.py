@@ -19,9 +19,9 @@ class Template(metaclass=PoolMeta):
     def default_salable(cls):
         return True
 
-    @classmethod
-    def default_list_price(cls):
-        return decimal.Decimal(0.0)
+#    @classmethod
+#    def default_list_price(cls):
+#        return decimal.Decimal(0.0)
 
     @classmethod
     def default_account_category(cls):
