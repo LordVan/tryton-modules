@@ -228,6 +228,18 @@ class InvoiceReport(metaclass=PoolMeta):
                                  'delivery_notes': delnotes,
                                  'delivery_notes_text': delnotes_text,
                                  'inv_lines': my_invoice_lines})
+        if not sorted_lines:
+            # if we have no lines associated with a sale create a "dummy"
+            sorted_lines.append({'sale': None,
+                                 'sale_date': None,
+                                 'sale_number': None,
+                                 'commission': None,
+                                 'reference': None,
+                                 'offer_nr': None,
+                                 'offer_date': None,
+                                 'delivery_notes': None,
+                                 'delivery_notes_text': None,
+                                 'inv_lines': []})
         for il in no_origin_lines:
             # deal with lines without origin so we can add things if needed that were not expected at sale time
             # setup costs, delivery, extra work time ...           
