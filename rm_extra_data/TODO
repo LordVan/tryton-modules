@@ -1,0 +1,3 @@
+# simple list of things to look into / bugs to fix
+
+- delivery note text gets re-loaded from sale when going to state "waiting" overwriting changes made by the user?
