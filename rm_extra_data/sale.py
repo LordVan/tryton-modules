@@ -588,7 +588,12 @@ class AmendmentLine(metaclass=PoolMeta):
     @fields.depends('material', 'material_extra', 'sheet_thickness', 'material_surface', 'real_product', 'folder_skip')
     def on_change_product(self):
         # TODO: set material and sheet_thickness as readonly normally and only allow overwriting if no product is set?
-        super(SaleLine, self).on_change_product()
+        try:
+            super().on_change_product()
+        except AttributeError:
+            pass
+        if not hasattr(self, 'product'):
+            return
         if not self.product:
             #reset real_product to false as the product was removed
             self.real_product = False
