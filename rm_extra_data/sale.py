@@ -54,9 +54,10 @@ class Sale(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super().__setup__()
-        cls.description.states.update({
-            'readonly': ~Eval('state').in_(['done', 'cancelled'])
-            })
+        if 'readonly' in cls.description.states.keys():
+            cls.description.states.update({
+                'readonly': ~Eval('state').in_(['done', 'cancelled'])
+                })
 
     @classmethod
     def default_folder_total(cls):    
