@@ -52,6 +52,13 @@ class Sale(metaclass=PoolMeta):
                              states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                              help = 'Offer date')
     @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls.description.states.update({
+            'readonly': ~Eval('state').in_(['done', 'cancelled'])
+            })
+
+    @classmethod
     def default_folder_total(cls):    
         return 1
 
