@@ -56,7 +56,7 @@ class Sale(metaclass=PoolMeta):
         super().__setup__()
         if 'readonly' in cls.description.states.keys():
             cls.description.states.update({
-                'readonly': ~Eval('state').in_(['done', 'cancelled'])
+                'readonly': Eval('state').in_(['done', 'cancelled'])
                 })
 
     @classmethod
