@@ -16,6 +16,8 @@
       <field name="supplier_no" />
       <label name="pn_name" />
       <field name="pn_name" />
+      <label name="sale_note" />
+      <field name="sale_note" />
       <!-- usually not shown -->
       <label name="dolibarr_pid" />
       <field name="dolibarr_pid" />

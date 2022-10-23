@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2022-10-23 17:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,18 @@ msgstr ""
 
 #~ #
 #~ msgid ""
-#~ msgstr "Content-Type: text/plain; charset=utf-8\n"
+#~ msgstr ""
+#~ "Content-Type: text/plain; charset=utf-8\n"
+#~ "Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "field:account.invoice,performance_period:"
+msgid "Performance period"
+msgstr "Leistungszeitraum"
+
+#, fuzzy
+msgctxt "field:account.invoice.line,hide_quantity:"
+msgid "Hide quantity of unit on invoice report"
+msgstr "Menge auf der Rechnung nicht anzeigen"
 
 msgctxt "field:account.invoice.line,hide_unit_price:"
 msgid "Hide unit price on invoice report"
@@ -29,17 +40,14 @@ msgctxt "field:account.invoice.line,line1:"
 msgid "Invoice line 1"
 msgstr "Zeile 1 dieser Position auf der Rechnung"
 
+#, fuzzy
 msgctxt "field:account.invoice.line,line2:"
-msgid "Invoice line 2"
+msgid "invoice line 2"
 msgstr "Zeile 2 dieser Position auf der Rechnung"
 
 msgctxt "field:account.invoice.line,skip:"
 msgid "Skip this line on invoice report"
 msgstr "Zeile nicht auf der Rechnung anzeigen."
-
-msgctxt "field:account.invoice.line,hide_quantity:"
-msgid "Hide quantity on invoice report"
-msgstr "Menge auf der Rechnung nicht anzeigen"
 
 msgctxt "field:party.party,accept_exact_amounts:"
 msgid "Exact quantities"
@@ -52,6 +60,14 @@ msgstr "Programm/Rüstkosten"
 msgctxt "field:party.party,customer_no:"
 msgid "Customer number"
 msgstr "Kundennummer"
+
+msgctxt "field:party.party,dolibarr_cid:"
+msgid "Dolibarr contact id"
+msgstr ""
+
+msgctxt "field:party.party,dolibarr_pid:"
+msgid "Dolibarr party id"
+msgstr ""
 
 msgctxt "field:party.party,inv_name_line1:"
 msgid "Invoice name line 1"
@@ -69,6 +85,10 @@ msgctxt "field:party.party,pn_name:"
 msgid "PN name"
 msgstr "PN Name"
 
+msgctxt "field:party.party,sale_note:"
+msgid "Sale notes"
+msgstr "Verkaufsnotizen"
+
 msgctxt "field:party.party,salutation:"
 msgid "Salutation"
 msgstr "Anrede"
@@ -76,6 +96,16 @@ msgstr "Anrede"
 msgctxt "field:party.party,supplier_no:"
 msgid "Supplier number"
 msgstr "Lieferantennummer"
+
+#, fuzzy
+msgctxt "field:party.party-sale.sale,party:"
+msgid "Contact"
+msgstr "Kontakt"
+
+#, fuzzy
+msgctxt "field:party.party-sale.sale,sale:"
+msgid "Sale"
+msgstr "Verkauf"
 
 msgctxt "field:product.product,folder_skip:"
 msgid "Skip this on project sheets"
@@ -125,6 +155,10 @@ msgctxt "field:product.product,material_surface:"
 msgid "Material surface"
 msgstr "Material Oberfläche"
 
+msgctxt "field:product.product,proj_impnote:"
+msgid "Project important notes"
+msgstr "Wichtige Notizen Projektzettel"
+
 msgctxt "field:product.product,proj_line0:"
 msgid "Project sheet line 0"
 msgstr "Projektzettel Zeile 0"
@@ -137,6 +171,27 @@ msgctxt "field:product.product,proj_line2:"
 msgid "Project sheet line 2"
 msgstr "Projektzettel Zeile 2"
 
+msgctxt "field:product.product,proj_note_bend:"
+msgid "Project notes - bending"
+msgstr "Produktionshinweise - Biegen"
+
+msgctxt "field:product.product,proj_note_cadnc:"
+msgid "Project notes - CAD/NC"
+msgstr "Produktionshinweise - CAD/NC"
+
+msgctxt "field:product.product,proj_note_laser:"
+msgid "Project notes - laser cutting"
+msgstr "Produktionshinweise - Laserschneiden"
+
+msgctxt "field:product.product,proj_note_misc:"
+msgid ""
+"Project notes - Misc (welding, drilling, countersink, thread cutting, ..)"
+msgstr "Produktionshinweise - Schweissen, Bohren, Senken, Gewinde, .."
+
+msgctxt "field:product.product,proj_note_surface:"
+msgid "Project notes - surface treatments"
+msgstr "Produktionshinweise - Oberflächenbehandlung"
+
 msgctxt "field:product.product,real_product:"
 msgid "Real product"
 msgstr "Echter Artikel"
@@ -145,9 +200,131 @@ msgctxt "field:product.product,sheet_thickness:"
 msgid "Material thickness"
 msgstr "Materialstärke"
 
-msgctxt "field:product.product,proj_impnote:"
+#, fuzzy
+msgctxt "field:sale.amendment.line,due_date:"
+msgid "Due date"
+msgstr "Fertigstellungsdatum"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,due_date_postfix:"
+msgid "Due date extra"
+msgstr "Fertigstellungsdatum Zusatz"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,folder_no:"
+msgid "Folder number"
+msgstr "Mappen Nummer"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,folder_skip:"
+msgid "Skip this on project sheets"
+msgstr "Kein Projektzettel für diese Position"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,folder_submax:"
+msgid "Subfolder maximum"
+msgstr "Untermappe Gesamt"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,folder_subno:"
+msgid "Subfolder"
+msgstr "Untermappe"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,inv_line0:"
+msgid "Invoice / delivery note line 0"
+msgstr "LS / AR Zeile 0"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,inv_line0_skip:"
+msgid "Skip invoice / delivery note line 0"
+msgstr "LS / AR Zeile 0 weglassen"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,inv_line1:"
+msgid "Invoice / delivery note line 1"
+msgstr "LS / AR Hauptzeile"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,inv_line2:"
+msgid "Invoice / delivery note line 2"
+msgstr "LS / AR Zeile 2"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,inv_line2_skip:"
+msgid "Skip invoice / delivery note line 2"
+msgstr "LS / AR Zeile 2 weglassen"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,inv_skip:"
+msgid "Skip this whole sale line for invoice / delivery note"
+msgstr "Position nicht auf LS / AR anzeigen"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,material:"
+msgid "Material"
+msgstr "Material"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,material_extra:"
+msgid "Material extra text"
+msgstr "Material Zusatztext"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,material_surface:"
+msgid "Material surface"
+msgstr "Material Oberfläche"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,proj_impnote:"
 msgid "Project important notes"
-msgstr "Wichtige Notizen Projektzettel"
+msgstr "Wichtige Produktionshinweise"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,proj_line0:"
+msgid "Project sheet line 0"
+msgstr "Projektzettel Zeile 0"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,proj_line1:"
+msgid "Project sheet line 1"
+msgstr "Projektzettel Zeile 1"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,proj_line2:"
+msgid "Project sheet line 2"
+msgstr "Projektzettel Zeile 2"
+
+msgctxt "field:sale.amendment.line,proj_note_bend:"
+msgid "Project notes - bending"
+msgstr "Produktionshinweise - Biegen"
+
+msgctxt "field:sale.amendment.line,proj_note_cadnc:"
+msgid "Project notes - CAD/NC"
+msgstr "Produktionshinweise - CAD/NC"
+
+msgctxt "field:sale.amendment.line,proj_note_laser:"
+msgid "Project notes - laser cutting"
+msgstr "Produktionshinweise - Laserschneiden"
+
+msgctxt "field:sale.amendment.line,proj_note_misc:"
+msgid ""
+"Project notes - Misc (welding, drilling, countersink, thread cutting, ..)"
+msgstr "Produktionshinweise - Schweissen, Bohren, Senken, Gewinde, .."
+
+msgctxt "field:sale.amendment.line,proj_note_surface:"
+msgid "Project notes - surface treatments"
+msgstr "Produktionshinweise - Oberflächenbehandlung"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,real_product:"
+msgid "Real product"
+msgstr "Echter Artikel"
+
+#, fuzzy
+msgctxt "field:sale.amendment.line,sheet_thickness:"
+msgid "Material thickness"
+msgstr "Materialstärke"
 
 msgctxt "field:sale.line,due_date:"
 msgid "Due date"
@@ -217,6 +394,10 @@ msgctxt "field:sale.line,material_surface:"
 msgid "Material surface"
 msgstr "Material Oberfläche"
 
+msgctxt "field:sale.line,proj_impnote:"
+msgid "Project important notes"
+msgstr "Wichtige Produktionshinweise"
+
 msgctxt "field:sale.line,proj_line0:"
 msgid "Project sheet line 0"
 msgstr "Projektzettel Zeile 0"
@@ -229,13 +410,35 @@ msgctxt "field:sale.line,proj_line2:"
 msgid "Project sheet line 2"
 msgstr "Projektzettel Zeile 2"
 
+msgctxt "field:sale.line,proj_note_bend:"
+msgid "Project notes - bending"
+msgstr "Produktionshinweise - Biegen"
+
+msgctxt "field:sale.line,proj_note_cadnc:"
+msgid "Project notes - CAD/NC"
+msgstr "Produktionshinweise - CAD/NC"
+
+msgctxt "field:sale.line,proj_note_laser:"
+msgid "Project notes - laser cutting"
+msgstr "Produktionshinweise - Laserschneiden"
+
+msgctxt "field:sale.line,proj_note_misc:"
+msgid ""
+"Project notes - Misc (welding, drilling, countersink, thread cutting, ..)"
+msgstr "Produktionshinweise - Schweissen, Bohren, Senken, Gewinde, .."
+
+msgctxt "field:sale.line,proj_note_surface:"
+msgid "Project notes - surface treatments"
+msgstr "Produktionshinweise - Oberflächenbehandlung"
+
+#, fuzzy
+msgctxt "field:sale.line,real_product:"
+msgid "Real product"
+msgstr "Echter Artikel"
+
 msgctxt "field:sale.line,sheet_thickness:"
 msgid "Material thickness"
 msgstr "Materialstärke"
-
-msgctxt "field:sale.line,proj_impnote:"
-msgid "Project important notes"
-msgstr "Wichtige Produktionshinweise"
 
 msgctxt "field:sale.sale,dolibarr_pid:"
 msgid "Dolibarr project id"
@@ -244,10 +447,6 @@ msgstr "Dolibarr Projektnummer"
 msgctxt "field:sale.sale,due_date:"
 msgid "Due date"
 msgstr "Fertigstellungsdatum"
-
-msgctxt "field:sale.sale,shipping_date_extra:"
-msgid "Shipping date extra"
-msgstr "Fertigstellung Zusatz"
 
 msgctxt "field:sale.sale,extra_contacts:"
 msgid "Extra Contacts"
@@ -273,6 +472,10 @@ msgctxt "field:sale.sale,sale_folder_postfix:"
 msgid "Sale folder postfix"
 msgstr "Bestellordner Zusatz"
 
+msgctxt "field:sale.sale,shipping_date_extra:"
+msgid "Shipping date extra"
+msgstr "Fertigstellung Zusatz"
+
 msgctxt "field:stock.move,line0:"
 msgid "Delivery note line 0"
 msgstr "Lieferscheinposition Zeile 0"
@@ -285,17 +488,14 @@ msgctxt "field:stock.move,line2:"
 msgid "Delivery note line 2"
 msgstr "Lieferscheinposition Zeile 2"
 
+#, fuzzy
 msgctxt "field:stock.move,skip:"
-msgid "Skip this on delivery notes"
+msgid "Skip this on delivery notes and invoices"
 msgstr "Diese Zeile auf dem Lieferschein nicht anzeigen"
 
 msgctxt "field:stock.shipment.out,sale_refs:"
 msgid "Sale references"
 msgstr "Kundenreferenz"
-
-msgctxt "field:account.invoice,performance_period:"
-msgid "Performance period"
-msgstr "Leistungszeitraum"
 
 msgctxt "help:party.party,accept_exact_amounts:"
 msgid "Customer only accept exact quantities"
@@ -304,6 +504,14 @@ msgstr "Kunde akzteptiert nur genaue Stückzahl."
 msgctxt "help:party.party,charge_setup_costs:"
 msgid "Customer gets charged setup costs seperately"
 msgstr "Kunde bekommt Programm/Rüstkosten verrechnet bzw separat aufgeführt."
+
+msgctxt "help:party.party,dolibarr_cid:"
+msgid "contact id from dolibarr (for import purposes only)"
+msgstr ""
+
+msgctxt "help:party.party,dolibarr_pid:"
+msgid "party id from dolibarr (for import purposes only)"
+msgstr ""
 
 msgctxt "help:party.party,inv_name_line1:"
 msgid "Invoice customer name line 1"
@@ -317,44 +525,50 @@ msgctxt "help:party.party,legal_name:"
 msgid "Legally correct name"
 msgstr "Rechtsgültiger Name (Vollständiger Name bzw Firmenwortlaut)"
 
+msgctxt "help:party.party,sale_note:"
+msgid ""
+"Notes for sale (will be displayed as warning every time when selecting the "
+"party as customer)"
+msgstr "Hinweise für Verkauf (Wird angezeigt wenn diese Partei als Kunde ausgewählt wurde)"
+
 msgctxt "help:product.product,folder_skip:"
 msgid "if selected this sale line will not show on project sheets"
-msgstr ""
+msgstr "Falls ausgewählt wird für diese Position kein Projektzettel erzeugt"
 
 msgctxt "help:product.product,folder_submax:"
 msgid "Subfolder maximum"
-msgstr ""
+msgstr "Unterordner Maximum"
 
 msgctxt "help:product.product,folder_subno:"
 msgid "Subfolder number (letter)"
-msgstr ""
+msgstr "Unterordner nummer (Buchstabe)"
 
 msgctxt "help:product.product,inv_line0:"
 msgid ""
 "above first line on the invoice / delivery note generated for this sale "
 "line."
-msgstr ""
+msgstr "Zeile vor der Hauptzeile auf Lieferschein/Rechnung für diese Position"
 
 msgctxt "help:product.product,inv_line0_skip:"
 msgid "if selected invoice line 0 will be ignored"
-msgstr ""
+msgstr "wenn ausgewählt, dann wird Zeile 0 auf Lieferschein/Rechnung nicht angezeigt"
 
 msgctxt "help:product.product,inv_line1:"
 msgid "first line on the invoice / delivery note generated for this sale line"
-msgstr ""
+msgstr "Hauptzeile für Lieferschein/Rechnung"
 
 msgctxt "help:product.product,inv_line2:"
 msgid ""
 "second line on the invoice / delivery note generated for this sale line"
-msgstr ""
+msgstr "Letzte Zeile für Lieferschein/Rechnung"
 
 msgctxt "help:product.product,inv_line2_skip:"
 msgid "if selected invoice line 2 will be ignored"
-msgstr ""
+msgstr "wenn ausgewählt, dann wird Zeile 2 auf Lieferschein/Rechnung nicht angezeigt"
 
 msgctxt "help:product.product,inv_skip:"
 msgid "if selected this sale line will not show on invoices or delivery notes"
-msgstr ""
+msgstr "wenn ausgewählt, dann wird diese Position nicht auf Lieferschein/Rechnung angezeigt"
 
 msgctxt "help:product.product,material:"
 msgid "Material name (auto-filled from product)"
@@ -370,6 +584,10 @@ msgid ""
 "surface treatment for material (paint,..) (usually only needed on sale line)"
 msgstr ""
 
+msgctxt "help:product.product,proj_impnote:"
+msgid "important production notes"
+msgstr "Wichtige Hinweise für die Produktion auf Projektzettel."
+
 msgctxt "help:product.product,proj_line0:"
 msgid "above first line on the project sheets generated for this sale line"
 msgstr ""
@@ -382,6 +600,27 @@ msgctxt "help:product.product,proj_line2:"
 msgid "second line on the project sheets generated for this sale line"
 msgstr ""
 
+msgctxt "help:product.product,proj_note_bend:"
+msgid "production notes for bending"
+msgstr ""
+
+msgctxt "help:product.product,proj_note_cadnc:"
+msgid "production notes for CAD/NC"
+msgstr ""
+
+msgctxt "help:product.product,proj_note_laser:"
+msgid "production notes for laser cutting"
+msgstr ""
+
+msgctxt "help:product.product,proj_note_misc:"
+msgid ""
+"production notes for welding, drilling, countersink, thread cutting, .."
+msgstr ""
+
+msgctxt "help:product.product,proj_note_surface:"
+msgid "production notes for surface treatments"
+msgstr ""
+
 msgctxt "help:product.product,real_product:"
 msgid "if selected this is a real, final product, not a placeholder"
 msgstr ""
@@ -390,9 +629,134 @@ msgctxt "help:product.product,sheet_thickness:"
 msgid "material thickness"
 msgstr ""
 
-msgctxt "help:product.product,proj_impnote:"
+#, fuzzy
+msgctxt "help:sale.amendment.line,due_date:"
+msgid "Due date for this sale line (replaces due date from project sheet)"
+msgstr ""
+"Fertigstellungsdatum für diese Position (ersetzt selbiges vom zugeordneten "
+"Verkauf)"
+
+msgctxt "help:sale.amendment.line,due_date_postfix:"
+msgid ""
+"Extra text for due date for this sale line (replaces due date extra from "
+"project sheet "
+msgstr ""
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,folder_no:"
+msgid "Folder number"
+msgstr "Mappen Nummer"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,folder_skip:"
+msgid "if selected this sale line will not show on project sheets"
+msgstr "Wenn ausgewählt wird kein Projektzetel für diese Position erstellt"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,folder_submax:"
+msgid "Subfolder maximum"
+msgstr "Untermappe Gesamt"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,folder_subno:"
+msgid "Subfolder number (letter)"
+msgstr "Untermappe (Buchstabe)"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,inv_line0:"
+msgid ""
+"above first line on the invoice / delivery note generated for this sale "
+"line."
+msgstr "LS / AR Zeile über Hauptzeile"
+
+msgctxt "help:sale.amendment.line,inv_line0_skip:"
+msgid "if selected invoice line 0 will be ignored"
+msgstr ""
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,inv_line1:"
+msgid "first line on the invoice / delivery note generated for this sale line"
+msgstr "LS / AR Hauptzeile"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,inv_line2:"
+msgid ""
+"second line on the invoice / delivery note generated for this sale line"
+msgstr "LS / AR Zeile unter Hauptzeile"
+
+msgctxt "help:sale.amendment.line,inv_line2_skip:"
+msgid "if selected invoice line 2 will be ignored"
+msgstr ""
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,inv_skip:"
+msgid "if selected this sale line will not show on invoices or delivery notes"
+msgstr "Wenn ausgewählt wird diese Position nicht auf LS /AR anzeigen"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,material:"
+msgid "Material name (auto-filled from product)"
+msgstr "Materialname (automatisch vom Artikel übernommen)"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,material_extra:"
+msgid "extra text to be appended to material"
+msgstr "Zusatz für Material text"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,material_surface:"
+msgid "surface treatment for material (paint,..) "
+msgstr "Oberflächenbehandlung (Lackiert, ..)"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,proj_impnote:"
 msgid "important production notes"
-msgstr "Wichtige Hinweise für die Produktion auf Projektzettel."
+msgstr "Wichtige Notizen für Projektzettel"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,proj_line0:"
+msgid "above first line on the project sheets generated for this sale line"
+msgstr "Zeile am Projektzettel über der ersten Zeile"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,proj_line1:"
+msgid "second line on the project sheets generated for this sale line"
+msgstr "Zweite Zeile für diese Potition am Projektzettel"
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,proj_line2:"
+msgid "second line on the project sheets generated for this sale line"
+msgstr "Zweite Zeile für diese Potition am Projektzettel"
+
+msgctxt "help:sale.amendment.line,proj_note_bend:"
+msgid "production notes for bending"
+msgstr ""
+
+msgctxt "help:sale.amendment.line,proj_note_cadnc:"
+msgid "production notes for CAD/NC"
+msgstr ""
+
+msgctxt "help:sale.amendment.line,proj_note_laser:"
+msgid "production notes for laser cutting"
+msgstr ""
+
+msgctxt "help:sale.amendment.line,proj_note_misc:"
+msgid ""
+"production notes for welding, drilling, countersink, thread cutting, .."
+msgstr ""
+
+msgctxt "help:sale.amendment.line,proj_note_surface:"
+msgid "production notes for surface treatments"
+msgstr ""
+
+msgctxt "help:sale.amendment.line,real_product:"
+msgid "this gets set if data is filled in from an actual product"
+msgstr ""
+
+#, fuzzy
+msgctxt "help:sale.amendment.line,sheet_thickness:"
+msgid "material thickness"
+msgstr "Materialstärke (automatisch vom Artikel übernommen)"
 
 msgctxt "help:sale.line,due_date:"
 msgid "Due date for this sale line (replaces due date from project sheet)"
@@ -404,6 +768,17 @@ msgctxt "help:sale.line,due_date_extra:"
 msgid "Extra text for due date for this sale line"
 msgstr "Zusatztext zum Fertigstellungsdatum"
 
+msgctxt "help:sale.line,due_date_postfix:"
+msgid ""
+"Extra text for due date for this sale line (replaces due date extra from "
+"project sheet "
+msgstr ""
+
+#, fuzzy
+msgctxt "help:sale.line,folder_no:"
+msgid "Folder number"
+msgstr "Mappen Nummer"
+
 msgctxt "help:sale.line,folder_skip:"
 msgid "if selected this sale line will not show on project sheets"
 msgstr "Wenn ausgewählt wird kein Projektzetel für diese Position erstellt"
@@ -412,14 +787,25 @@ msgctxt "help:sale.line,folder_subcount:"
 msgid "subfolder count"
 msgstr "Anzahl Untermappen (A, B, ..)"
 
+#, fuzzy
+msgctxt "help:sale.line,folder_submax:"
+msgid "Subfolder maximum"
+msgstr "Untermappe Gesamt"
+
 msgctxt "help:sale.line,folder_subno:"
 msgid "Subfolder number (letter)"
 msgstr "Untermappe (Buchstabe)"
 
+#, fuzzy
 msgctxt "help:sale.line,inv_line0:"
 msgid ""
-"above first line on the invoice / delivery note generated for this sale line"
+"above first line on the invoice / delivery note generated for this sale "
+"line."
 msgstr "LS / AR Zeile über Hauptzeile"
+
+msgctxt "help:sale.line,inv_line0_skip:"
+msgid "if selected invoice line 0 will be ignored"
+msgstr ""
 
 msgctxt "help:sale.line,inv_line1:"
 msgid "first line on the invoice / delivery note generated for this sale line"
@@ -429,6 +815,10 @@ msgctxt "help:sale.line,inv_line2:"
 msgid ""
 "second line on the invoice / delivery note generated for this sale line"
 msgstr "LS / AR Zeile unter Hauptzeile"
+
+msgctxt "help:sale.line,inv_line2_skip:"
+msgid "if selected invoice line 2 will be ignored"
+msgstr ""
 
 msgctxt "help:sale.line,inv_skip:"
 msgid "if selected this sale line will not show on invoices or delivery notes"
@@ -446,6 +836,10 @@ msgctxt "help:sale.line,material_surface:"
 msgid "surface treatment for material (paint,..) "
 msgstr "Oberflächenbehandlung (Lackiert, ..)"
 
+msgctxt "help:sale.line,proj_impnote:"
+msgid "important production notes"
+msgstr "Wichtige Notizen für Projektzettel"
+
 msgctxt "help:sale.line,proj_line0:"
 msgid "above first line on the project sheets generated for this sale line"
 msgstr "Zeile am Projektzettel über der ersten Zeile"
@@ -458,20 +852,42 @@ msgctxt "help:sale.line,proj_line2:"
 msgid "second line on the project sheets generated for this sale line"
 msgstr "Zweite Zeile für diese Potition am Projektzettel"
 
+msgctxt "help:sale.line,proj_note_bend:"
+msgid "production notes for bending"
+msgstr ""
+
+msgctxt "help:sale.line,proj_note_cadnc:"
+msgid "production notes for CAD/NC"
+msgstr ""
+
+msgctxt "help:sale.line,proj_note_laser:"
+msgid "production notes for laser cutting"
+msgstr ""
+
+msgctxt "help:sale.line,proj_note_misc:"
+msgid ""
+"production notes for welding, drilling, countersink, thread cutting, .."
+msgstr ""
+
+msgctxt "help:sale.line,proj_note_surface:"
+msgid "production notes for surface treatments"
+msgstr ""
+
+msgctxt "help:sale.line,real_product:"
+msgid "this gets set if data is filled in from an actual product"
+msgstr ""
+
 msgctxt "help:sale.line,sheet_thickness:"
 msgid "material thickness"
 msgstr "Materialstärke (automatisch vom Artikel übernommen)"
-
-msgctxt "help:sale.line,proj_impnote:"
-msgid "important production notes"
-msgstr "Wichtige Notizen für Projektzettel"
 
 msgctxt "help:sale.sale,dolibarr_pid:"
 msgid "project id from dolibarr (for import purposes only)"
 msgstr "Interne Dolibarr Projektnummer"
 
+#, fuzzy
 msgctxt "help:sale.sale,due_date:"
-msgid "Due date for this sale"
+msgid "Due date for this sale line (replaces due date from project sheet)"
 msgstr "(gewünschtes) Fertigstellungsdatum"
 
 msgctxt "help:sale.sale,folder_total:"
@@ -498,7 +914,35 @@ msgctxt "help:sale.sale,shipping_date_extra:"
 msgid "shipping date extra text"
 msgstr "Fertigstellungsdatum Zusatz"
 
+#, fuzzy
 msgctxt "help:stock.shipment.out,sale_refs:"
-msgid "Skip this on delivery notes"
+msgid "Sale references copied from sale"
 msgstr "Diese Zeile nicht auf Lieferschein anzeigen"
 
+msgctxt "model:party.party-sale.sale,name:"
+msgid "Sale - Contact"
+msgstr ""
+
+msgctxt "view:party.party:"
+msgid "Extra"
+msgstr ""
+
+msgctxt "view:party.party:"
+msgid "RM Extra"
+msgstr ""
+
+msgctxt "view:product.product:"
+msgid "Production notes"
+msgstr "Produktionshinweise"
+
+msgctxt "view:product.product:"
+msgid "Project / Invoice"
+msgstr "Projekt / Rechnung"
+
+msgctxt "view:sale.line:"
+msgid "Extra"
+msgstr ""
+
+msgctxt "view:sale.sale:"
+msgid "Contacts"
+msgstr "Kontakte"

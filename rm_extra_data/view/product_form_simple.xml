@@ -24,8 +24,6 @@
     <field name="proj_line1" colspan="3" />
     <label name="proj_line2" />
     <field name="proj_line2" colspan="3" />
-    <label name="proj_impnote" />
-    <field name="proj_impnote" colspan="3" />
     <separator name="invoice_lines" colspan="4"/>
     <label name="inv_skip" />
     <field name="inv_skip" />
@@ -41,5 +39,18 @@
     <field name="inv_line2" />
     <label name="inv_line2_skip" />
     <field name="inv_line2_skip" />
+    <separator name="proj_notes" colspan="4" />
+    <label name="proj_impnote" />
+    <field name="proj_impnote" colspan="3" />
+    <label name="proj_note_cadnc" />
+    <field name="proj_note_cadnc" colspan="3" />
+    <label name="proj_note_laser" />
+    <field name="proj_note_laser" colspan="3"  />
+    <label name="proj_note_bend" />
+    <field name="proj_note_bend" colspan="3"  />
+    <label name="proj_note_misc" />
+    <field name="proj_note_misc" colspan="3"  />
+    <label name="proj_note_surface" />
+    <field name="proj_note_surface" colspan="3"  />
   </xpath>
 </data>

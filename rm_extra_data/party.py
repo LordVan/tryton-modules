@@ -27,6 +27,10 @@ class Party(metaclass=PoolMeta):
     inv_name_line2 = fields.Char('Invoice name line 2',
                                  help = 'Invoice customer name line 2'
                                  )
+    sale_note = fields.Char('Sale notes',
+                            size = 250,
+                            help = 'Notes for sale (will be displayed as warning every time when selecting the party as customer)'
+                            )
     dolibarr_pid = fields.Integer('Dolibarr party id',
                                   states = { 'invisible': True, },
                                   readonly = True,

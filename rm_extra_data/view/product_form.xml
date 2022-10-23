@@ -55,5 +55,17 @@
       <label name="inv_line2_skip" />
       <field name="inv_line2_skip" />
     </page>
+    <page string="Production notes" col="2" id="proj_notes">
+      <label name="proj_note_cadnc" />
+      <field name="proj_note_cadnc" />
+      <label name="proj_note_laser" />
+      <field name="proj_note_laser" />
+      <label name="proj_note_bend" />
+      <field name="proj_note_bend" />
+      <label name="proj_note_misc" />
+      <field name="proj_note_misc" />
+      <label name="proj_note_surface" />
+      <field name="proj_note_surface" />
+    </page>
   </xpath>
 </data>

@@ -59,6 +59,17 @@
     <page string="Extra" col="2" id="extra">
       <label name="shipping_date"/>
       <field name="shipping_date"/>
+      <newline />
+      <label name="proj_note_cadnc" />
+      <field name="proj_note_cadnc" />
+      <label name="proj_note_laser" />
+      <field name="proj_note_laser" />
+      <label name="proj_note_bend" />
+      <field name="proj_note_bend" />
+      <label name="proj_note_misc" />
+      <field name="proj_note_misc" />
+      <label name="proj_note_surface" />
+      <field name="proj_note_surface" />
     </page>
   </xpath>
 </data>

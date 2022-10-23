@@ -63,23 +63,26 @@ class Sale(metaclass=PoolMeta):
     def default_folder_total(cls):    
         return 1
 
-    @fields.depends('party', 'invoice_party', 'shipment_party', 'payment_term')
-    def on_change_party(self):
-        if self.party and (not self.party.pn_name and not self.party.pn_name.strip()):
-            self.party = None
-            raise UserError('Partei muss PN Namen vergeben haben für Verkauf!')
-        else:
-            super(Sale, self).on_change_party()
-
-
     @classmethod
     @ModelView.button
     @Workflow.transition('quotation')
     @set_employee('quoted_by')
     def quote(cls, sales):
         super(Sale, cls).quote(sales)
-        # we need to apply folder_no to components of kits
+        # we need to apply folder_no to components of kits and do some checks
         for sale in sales:
+            # we definitely need to have a party at this point already as one cannot proceed without
+            if not sale.party.pn_name or not sale.party.pn_name.strip():
+                raise UserError('Partei muss PN Namen vergeben haben für Verkauf!')
+            else:
+                if sale.party and sale.party.sale_note and sale.party.sale_note.strip():
+                    # we got a sale note so display it using UserWarning
+                    Warning = Pool().get('res.user.warning')
+                    sale_note_warning = Warning.format('sale_note_warning', [cls])
+                    Warning.always = True
+                    if Warning.check(sale_note_warning):
+                        raise UserWarning(sale_note_warning, sale.party.sale_note.strip())
+            # make sure folder numbers are on the component project sheets
             for line in sale.lines:
                 for lc in line.component_children:
                     lc.folder_no = line.folder_no
@@ -164,7 +167,11 @@ class SaleReport(metaclass=PoolMeta):
                 raise UserError('Projektzettel kann nicht ohne Verkaufsnummer (Projektnummer) erstellt werden.')
             if not rec.party and (not rec.party.pn_name and not self.party.pn_name.strip()):
                 raise UserError('Partei muss PN Namen vergeben haben für Verkauf!')
-        def get_project_lines(sale):
+            
+        def get_project_sheets(sale):
+            # Helper to get project lines, sort them and merge if needed
+            # Returns a list of lists in the following format:
+            # (line, merged line 0 text, lines (all lines), merged line 2 text, merged important notes)
             sorted_lines = list(filter(lambda x: x.folder_skip == False, sale.lines)) # copy the list but filter skipped ones here
             if not sorted_lines:
                 # we got nothing
@@ -175,56 +182,182 @@ class SaleReport(metaclass=PoolMeta):
             sorted_lines.sort(key=lambda x: (x.folder_no, x.folder_subno))
             merged_lines = []
             # the next line to be added (after potential merging)
-            next_line = sorted_lines[0]
+            next_sheet= sorted_lines[0]
             try:
-                next_line0_text = next_line.proj_line0.strip()
+                next_line0_text = next_sheet.proj_line0.strip()
             except:
                 next_line0_text = ''
-            next_line1 = [next_line,]
+            next_lines = [next_sheet,]
             try:
-                next_line2_text = next_line.proj_line2.strip()
+                next_line2_text = next_sheet.proj_line2.strip()
             except:
                 next_line2_text = ''
+                
+            def merge_lines(lines):
+                # helper to merge line texts
+                # returns following format (list):
+                # (merged line0 text, merged line2 text, merged important notes, merged cad/nc notes , ... )
+                line0_text = ''
+                line2_text = ''
+                impnotes = []
+                impnotes_text = ''
+                notes_cadnc = []
+                note_cadnc_text = ''
+                notes_laser = []
+                note_laser_text = ''
+                notes_bend = []
+                note_bend_text = ''
+                notes_misc = []
+                note_misc_text = ''
+                notes_surface = []
+                note_surface_text = ''
+                for line in lines:
+                    #logger.info(f'merge_lines: {line.proj_line1}')
+                    # first sort out line0 and line2 merged texts
+                    try:
+                        if line.proj_line0 and line.proj_line0.strip():
+                            if line0_text:
+                                line0_text += ' ' # add a whitespace
+                            line0_text += line.proj_line0.strip()
+                    except:
+                        raise UserError('Error merging line0')
+                    try:
+                        if line.proj_line2 and line.proj_line2.strip():
+                            if line2_text:
+                                line2_text += ' ' # add whitespace
+                            line2_text += line.proj_line2.strip()
+                    except:
+                        raise UserError('Error merging line2')
+                    # now find the various note fields that may need merging
+                    try:
+                        if line.proj_impnote.strip():
+                            impnotes.append(line)
+                    except:
+                        pass
+                    try:
+                        if line.proj_note_cadnc.strip():
+                            notes_cadnc.append(line)
+                    except:
+                        pass
+                    try:
+                        if line.proj_note_laser.strip():
+                            notes_laser.append(line)
+                    except:
+                        pass
+                    try:
+                        if line.proj_note_bend.strip():
+                            notes_bend.append(line)
+                    except:
+                        pass
+                    try:
+                        if line.proj_note_misc.strip():
+                            notes_misc.append(line)
+                    except:
+                        pass
+                    try:
+                        if line.proj_note_surface.strip():
+                            notes_surface.append(line)
+                    except:
+                        pass
+                    
+                if len(impnotes) == 1:
+                    impnotes_text = impnotes[0].proj_impnote.strip()
+                elif len(impnotes) > 1:
+                    for l in impnotes:
+                        if impnotes_text:
+                            impnotes_text += '||' # add our custom line break symbols at the beginning if not empty
+                        try:
+                            impnotes_text += f'{l.proj_line1.strip()}: {l.proj_impnote.strip()}'
+                        except:
+                            pass
+                if len(notes_cadnc) == 1:
+                    note_cadnc_text = notes_cadnc[0].proj_note_cadnc.strip()
+                elif len(notes_cadnc) > 1:
+                    for l in notes_cadnc:
+                        if note_cadnc_text:
+                            note_cadnc_text += '||' # add our custom line break symbols at the beginning if not empty
+                        try:
+                            note_cadnc_text += f'{l.proj_line1.strip()}: {l.proj_note_cadnc.strip()}'
+                        except:
+                            pass
+                if len(notes_laser) == 1:
+                    note_laser_text = notes_laser[0].proj_note_laser.strip()
+                elif len(notes_laser) > 1:
+                    for l in notes_laser:
+                        if note_laser_text:
+                            note_laser_text += '||' # add our custom line break symbols at the beginning if not empty
+                        try:
+                            note_laser_text += f'{l.proj_line1.strip()}: {l.proj_note_laser.strip()}'
+                        except:
+                            pass
+                if len(notes_bend) == 1:
+                    note_bend_text = notes_bend[0].proj_note_bend.strip()
+                elif len(notes_bend) > 1:
+                    for l in notes_bend:
+                        if note_bend_text:
+                            note_bend_text += '||' # add our custom line break symbols at the beginning if not empty
+                        try:
+                            note_bend_text += f'{l.proj_line1.strip()}: {l.proj_note_bend.strip()}'
+                        except:
+                            pass
+                if len(notes_misc) == 1:
+                    note_misc_text = notes_misc[0].proj_note_misc.strip()
+                elif len(notes_misc) > 1:
+                    for l in notes_misc:
+                        if note_misc_text:
+                            note_misc_text += '||' # add our custom line break symbols at the beginning if not empty
+                        try:
+                            note_misc_text += f'{l.proj_line1.strip()}: {l.proj_note_misc.strip()}'
+                        except:
+                            pass
+                if len(notes_surface) == 1:
+                    note_surface_text = notes_surface[0].proj_note_surface.strip()
+                elif len(notes_surface) > 1:
+                    for l in notes_surface:
+                        if note_surface_text:
+                            note_surface_text += '||' # add our custom line break symbols at the beginning if not empty
+                        try:
+                            note_surface_text += f'{l.proj_line1.strip()}: {l.proj_note_surface.strip()}'
+                        except:
+                            pass
+                return (line0_text,
+                        line2_text,
+                        impnotes_text,
+                        note_cadnc_text,
+                        note_laser_text,
+                        note_bend_text,
+                        note_misc_text,
+                        note_surface_text,
+                        )
+            
+            # decide wether lines need merging or not for project sheets
             for line in sorted_lines[1:]:
-                if (line.folder_no == next_line.folder_no and
-                    line.folder_subno == next_line.folder_subno and
-                    line.material == next_line.material and
-                    line.material_extra == next_line.material_extra and
-                    line.material_surface == next_line.material_surface and
-                    line.sheet_thickness == next_line.sheet_thickness and
-                    line.due_date == next_line.due_date and
-                    line.due_date_postfix == next_line.due_date_postfix):
+                if (line.folder_no == next_sheet.folder_no and
+                    line.folder_subno == next_sheet.folder_subno and
+                    line.material == next_sheet.material and
+                    line.material_extra == next_sheet.material_extra and
+                    line.material_surface == next_sheet.material_surface and
+                    line.sheet_thickness == next_sheet.sheet_thickness and
+                    line.due_date == next_sheet.due_date and
+                    line.due_date_postfix == next_sheet.due_date_postfix):
                     # this line matches the next line to be added so append data
-                    try:
-                        if line.proj_line0.strip():
-                            next_line0_text += ' ' + line.proj_line0.strip()
-                    except:
-                        pass # ignore NoneType error
-                    next_line1.append(line)
-                    try:
-                        if line.proj_line2.strip():
-                            next_line2_text += ' ' + line.proj_line2.strip()
-                    except:
-                        pass # ignore NoneType error
-                    # do not merge anything else at this point
+                    next_lines.append(line)
                 else:
-                    # we need a new sheet ..
-                    merged_lines.append((next_line, next_line0_text, next_line1, next_line2_text)) # append the last line
-                    next_line = line # the current line is now the next one
-                    # assign initial values
-                    try:
-                        next_line0_text = next_line.proj_line0.strip()
-                    except:
-                        next_line0_text = ''
-                    next_line1 = [next_line,]
-                    try:
-                        next_line2_text = next_line.proj_line2.strip()
-                    except:
-                        next_line2_text = ''
+                    # we need a new sheet, so append the current one after finishing merges
+                    (line0_text, line2_text, proj_impnotes, proj_note_cadnc, proj_note_laser, proj_note_bend, proj_note_misc, proj_note_surface) = merge_lines(next_lines)
+                    merged_lines.append((next_sheet, line0_text, next_lines, line2_text,
+                                         proj_impnotes,
+                                         proj_note_cadnc, proj_note_laser, proj_note_bend, proj_note_misc, proj_note_surface)) # append the last line
+                    next_sheet= line # the current line is now the next one
+                    next_lines = [next_sheet, ]
             # Important: append the last line
-            merged_lines.append((next_line, next_line0_text, next_line1, next_line2_text)) # append the last line
+            (line0_text, line2_text, proj_impnotes, proj_note_cadnc, proj_note_laser, proj_note_bend, proj_note_misc, proj_note_surface) = merge_lines(next_lines)
+            merged_lines.append((next_sheet, line0_text, next_lines, line2_text,
+                                 proj_impnotes,
+                                 proj_note_cadnc, proj_note_laser, proj_note_bend, proj_note_misc, proj_note_surface)) # append the last line
             return merged_lines
-        context['get_project_lines'] = get_project_lines
+        
+        context['get_project_sheets'] = get_project_sheets
         return context
             
 class SaleContact(ModelSQL):
@@ -292,6 +425,31 @@ class SaleLine(metaclass=PoolMeta):
                                                       Eval('real_product')),
                                },
                                help = 'important production notes')
+    proj_note_cadnc = fields.Text('Project notes - CAD/NC',
+                               states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                      Eval('real_product')),
+                               },
+                               help = 'production notes for CAD/NC')
+    proj_note_laser = fields.Text('Project notes - laser cutting',
+                                  states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                         Eval('real_product')),
+                                            },
+                                  help = 'production notes for laser cutting')
+    proj_note_bend = fields.Text('Project notes - bending',
+                                 states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                        Eval('real_product')),
+                                           },
+                                 help = 'production notes for bending')
+    proj_note_misc = fields.Text('Project notes - Misc (welding, drilling, countersink, thread cutting, ..)',
+                                 states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                        Eval('real_product')),
+                                           },
+                                 help = 'production notes for welding, drilling, countersink, thread cutting, ..')
+    proj_note_surface = fields.Text('Project notes - surface treatments',
+                                    states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                           Eval('real_product')),
+                                              },
+                                    help = 'production notes for surface treatments')
     material = fields.Char('Material',
                            states = {'readonly': ((Eval('sale_state') != 'draft') |
                                                   Eval('product') |
@@ -413,6 +571,11 @@ class SaleLine(metaclass=PoolMeta):
                 raise UserError(f'Produkte ohne Projektzeile 1 können nicht hinzugefügt werden: Pos {self.sequence}:\n{self.product}')
             self.proj_line1 = self.product.proj_line1
             self.proj_line2 = self.product.proj_line2
+            self.proj_note_cadnc = self.product.proj_note_cadnc
+            self.proj_note_laser = self.product.proj_note_laser
+            self.proj_note_bend = self.product.proj_note_bend
+            self.proj_note_misc = self.product.proj_note_misc
+            self.proj_note_surface = self.product.proj_note_surface
             self.proj_impnote = self.product.proj_impnote
             self.material_extra = self.product.material_extra
             self.material_surface = self.product.material_surface
@@ -500,6 +663,36 @@ class AmendmentLine(metaclass=PoolMeta):
                                          'invisible': Eval('action') != 'line',
                                },
                                help = 'important production notes')
+    proj_note_cadnc = fields.Text('Project notes - CAD/NC',
+                               states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                      Eval('real_product')),
+                                         'invisible': Eval('action') != 'line',
+                               },
+                               help = 'production notes for CAD/NC')
+    proj_note_laser = fields.Text('Project notes - laser cutting',
+                                  states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                         Eval('real_product')),
+                                            'invisible': Eval('action') != 'line',
+                                            },
+                                  help = 'production notes for laser cutting')
+    proj_note_bend = fields.Text('Project notes - bending',
+                                 states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                        Eval('real_product')),
+                                           'invisible': Eval('action') != 'line',
+                                           },
+                                 help = 'production notes for bending')
+    proj_note_misc = fields.Text('Project notes - Misc (welding, drilling, countersink, thread cutting, ..)',
+                                 states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                        Eval('real_product')),
+                                           'invisible': Eval('action') != 'line',
+                                           },
+                                 help = 'production notes for welding, drilling, countersink, thread cutting, ..')
+    proj_note_surface = fields.Text('Project notes - surface treatments',
+                                    states = {'readonly': ((Eval('sale_state') != 'draft') |
+                                                           Eval('real_product')),
+                                              'invisible': Eval('action') != 'line',
+                                              },
+                                    help = 'production notes for surface treatments')
     material = fields.Char('Material',
                            states = {'readonly': (Eval('product') |
                                                   Eval('real_product')),
@@ -631,6 +824,11 @@ class AmendmentLine(metaclass=PoolMeta):
                 raise UserError('Produkte ohne Projektzeile 1 können nicht hinzugefügt werden.')
             self.proj_line1 = self.product.proj_line1
             self.proj_line2 = self.product.proj_line2
+            self.proj_note_cadnc = self.product.proj_note_cadnc
+            self.proj_note_laser = self.product.proj_note_laser
+            self.proj_note_bend = self.product.proj_note_bend
+            self.proj_note_misc = self.product.proj_note_misc
+            self.proj_note_surface = self.product.proj_note_surface
             self.proj_impnote = self.product.proj_impnote
             self.material_extra = self.product.material_extra
             self.material_surface = self.product.material_surface
