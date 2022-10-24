@@ -32,7 +32,7 @@ class Sale(metaclass=PoolMeta):
     due_date = fields.Date('Due date',
                            states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                            help = 'Due date for this sale')
-    # TODO: renomae to due_date_extra 
+    # TODO: rename to due_date_extra 
     shipping_date_extra = fields.Char('Shipping date extra',
                                       states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                       help ='shipping date extra text')
