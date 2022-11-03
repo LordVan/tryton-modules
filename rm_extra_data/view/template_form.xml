@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<data>
+  <!-- we want a wider view of the products because of our custom fields -->
+  <xpath expr="/form/notebook/page/field[@name='products']" position="replace">
+    <field name="products" mode="form,tree" colspan="4"
+	   view_ids="product.product_view_form_simple"/>
+  </xpath>
+  <!-- move stuff not needed (often) to a new page -->
+  <xpath expr="/form/notebook/page[@id='general']/field[@name='categories']" position="replace" />
+  <xpath expr="/form/notebook/page[@id='general']/label[@name='classification']" position="replace" />
+  <xpath expr="/form/notebook/page[@id='general']/field[@name='classification']" position="replace" />
+  <xpath expr="/form/notebook/page[@id='measurements']" position="after">
+    <page string="Extra" id="rm_extra" col="2">
+      <label name="classification"/>
+      <field name="classification"/>
+      <separator name="categories" colspan="2" />
+      <field name="categories" colspan="2"
+	     view_ids="product.category_view_list"/>
+      <separator name="identifiers" colspan="2" />
+    </page>
+  </xpath>
+</data>
+
