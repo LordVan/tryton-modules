@@ -232,13 +232,13 @@ class InvoiceReport(metaclass=PoolMeta):
             # if we have no lines associated with a sale create a "dummy"
             sorted_lines.append({'sale': None,
                                  'sale_date': None,
-                                 'sale_number': None,
-                                 'commission': None,
-                                 'reference': None,
-                                 'offer_nr': None,
+                                 'sale_number': '',
+                                 'commission': '',
+                                 'reference': '',
+                                 'offer_nr': '',
                                  'offer_date': None,
                                  'delivery_notes': None,
-                                 'delivery_notes_text': None,
+                                 'delivery_notes_text': '',
                                  'inv_lines': []})
         for il in no_origin_lines:
             # deal with lines without origin so we can add things if needed that were not expected at sale time
