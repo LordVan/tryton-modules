@@ -128,6 +128,12 @@ class InvoiceReport(metaclass=PoolMeta):
 
     @classmethod
     def get_context(cls, records, header, data):
+        # First do some check to see if we have required data for our templates
+        if not records[0].performance_period:
+            raise UserError('Leistungszeitraum nicht angegeben!')
+        if not records[0].payment_term:
+            raise UserError('Zahlungsbedingungen nicht angegeben!')
+
         context = super(InvoiceReport, cls).get_context(records, header, data)
 
         # Warning = Pool().get('res.user.warning')
@@ -216,8 +222,6 @@ class InvoiceReport(metaclass=PoolMeta):
             sn_l = list(set(shipment_numbers)) # use conversion to set to make sure it is a unique list
             sn_l.sort()
             delnotes_text = ', '.join(sn_l) 
-            if not records[0].performance_period:
-                raise UserError('Leistungszeitraum nicht angegeben!')
             sorted_lines.append({'sale': sale,
                                  'sale_date': sale.sale_date,
                                  'sale_number': sale.number,
