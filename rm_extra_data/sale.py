@@ -363,7 +363,8 @@ class SaleReport(metaclass=PoolMeta):
 class SaleContact(ModelSQL):
     "Sale - Contact"
     __name__ = 'party.party-sale.sale'
-    sale = fields.Many2One('sale.sale', "Sale", ondelete='CASCADE', select=True, required=True)
+    # 6.6 changes from slect to selectors means removing  select='True" 
+    sale = fields.Many2One('sale.sale', "Sale", ondelete='CASCADE', required=True)
     party = fields.Many2One('party.party', "Contact", ondelete='CASCADE', required=True)
                     
             
