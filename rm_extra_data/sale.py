@@ -613,7 +613,7 @@ class AmendmentLine(metaclass=PoolMeta):
                                   states = { 'invisible': True, },
                                   help = 'this gets set if data is filled in from an actual product')
     folder_no = fields.Integer('Folder number',
-                               required = True,
+                               #required = True,
                                states = { 'readonly': Eval('folder_skip') & True,
                                           'invisible': Eval('action') != 'line',
                                },
@@ -649,7 +649,7 @@ class AmendmentLine(metaclass=PoolMeta):
                              },
                              help = 'above first line on the project sheets generated for this sale line')
     proj_line1 = fields.Char('Project sheet line 1',
-                             required = True,
+                             #required = True,
                              states = { 'readonly': Eval('real_product') & True,
                                         'invisible': Eval('action') != 'line',
                              },
