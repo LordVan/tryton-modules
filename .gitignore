@@ -7,3 +7,4 @@ dolibarr_import/dolibarr_import.log
 *.tar.bz2
 *~
 *.csv
+old
