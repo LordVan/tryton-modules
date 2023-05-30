@@ -23,6 +23,10 @@ msgctxt "field:account.invoice,performance_period:"
 msgid "Performance period"
 msgstr "Leistungszeitraum"
 
+msgctxt "field:account.invoice,sale_group_name:"
+msgid "Sale group name"
+msgstr "Verkaufsgruppe"
+
 #, fuzzy
 msgctxt "field:account.invoice.line,hide_quantity:"
 msgid "Hide quantity of unit on invoice report"
@@ -463,6 +467,10 @@ msgstr "Angebotsdatum"
 msgctxt "field:sale.sale,offer_number:"
 msgid "Offer number"
 msgstr "Angebotsnummer"
+
+msgctxt "field:sale.sale,sale_group_name:"
+msgid "Sale group name"
+msgstr "Verkaufsgruppe"
 
 msgctxt "field:sale.sale,sale_date_extra:"
 msgid "Sale date extra"

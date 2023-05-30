@@ -4,6 +4,8 @@
     <newline />
     <label name="performance_period" />
     <field name="performance_period" />
+    <label name="sale_group_name" />
+    <field name="sale_group_name" />
   </xpath>
 </data>
 

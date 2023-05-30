@@ -16,6 +16,7 @@
     <field name="due_date" />
     <field name="shipping_date_extra" />
     <field name="party" expand="2" />
+    <field name="sale_group_name" />
     <field name="reference" expand="1" />
     <field name="description" expand="1" />
   </xpath>

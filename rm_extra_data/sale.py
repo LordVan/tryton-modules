@@ -51,6 +51,9 @@ class Sale(metaclass=PoolMeta):
     offer_date = fields.Date('Offer date',
                              states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                              help = 'Offer date')
+    sale_group_name = fields.Char('Sale group name',
+                                  help = 'Name for the sale/invoice group used by custom invoice grouping')
+    
     @classmethod
     def __setup__(cls):
         super().__setup__()
@@ -59,6 +62,15 @@ class Sale(metaclass=PoolMeta):
                 'readonly': Eval('state').in_(['done', 'cancelled'])
                 })
 
+    def _get_invoice_grouping_fields(self, invoice):
+        return ['state', 'company', 'type', 'journal', 'party',
+                'invoice_address', 'currency', 'account', 'payment_term', 'sale_group_name']
+
+    def create_invoice(self):
+        inv = super().create_invoice()
+        inv.sale_group_name = self.sale_group_name
+        return inv
+    
     @classmethod
     def default_folder_total(cls):    
         return 1

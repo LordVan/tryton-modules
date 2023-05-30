@@ -22,6 +22,9 @@ class Invoice(metaclass=PoolMeta):
                                      # required = True,
                                      states = { 'readonly': ~Eval('state').in_(['draft', 'validated']) })
 
+    sale_group_name = fields.Char('Sale group name',
+                                  help = 'Name for the sale/invoice group used by custom invoice grouping')
+    
     @classmethod
     def default_performance_period(cls):
         return ''
