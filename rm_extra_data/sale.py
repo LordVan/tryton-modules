@@ -71,7 +71,8 @@ class Sale(metaclass=PoolMeta):
 
     def create_invoice(self):
         inv = super().create_invoice()
-        inv.sale_group_name = self.sale_group_name
+        if inv:
+            inv.sale_group_name = self.sale_group_name
         return inv
     
     @classmethod
