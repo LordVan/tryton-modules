@@ -27,9 +27,8 @@ msgctxt "field:account.invoice,sale_group_name:"
 msgid "Sale group name"
 msgstr "Verkaufsgruppe"
 
-#, fuzzy
 msgctxt "field:account.invoice.line,hide_quantity:"
-msgid "Hide quantity of unit on invoice report"
+msgid "Hide quantity oon invoice report"
 msgstr "Menge auf der Rechnung nicht anzeigen"
 
 msgctxt "field:account.invoice.line,hide_unit_price:"
@@ -44,9 +43,8 @@ msgctxt "field:account.invoice.line,line1:"
 msgid "Invoice line 1"
 msgstr "Zeile 1 dieser Position auf der Rechnung"
 
-#, fuzzy
 msgctxt "field:account.invoice.line,line2:"
-msgid "invoice line 2"
+msgid "Invoice line 2"
 msgstr "Zeile 2 dieser Position auf der Rechnung"
 
 msgctxt "field:account.invoice.line,skip:"
@@ -93,6 +91,10 @@ msgctxt "field:party.party,sale_note:"
 msgid "Sale notes"
 msgstr "Verkaufsnotizen"
 
+msgctxt "field:sale.sale,sale_note:"
+msgid "Sale notes"
+msgstr "Verkaufsnotizen"
+
 msgctxt "field:party.party,salutation:"
 msgid "Salutation"
 msgstr "Anrede"
@@ -101,12 +103,10 @@ msgctxt "field:party.party,supplier_no:"
 msgid "Supplier number"
 msgstr "Lieferantennummer"
 
-#, fuzzy
 msgctxt "field:party.party-sale.sale,party:"
 msgid "Contact"
 msgstr "Kontakt"
 
-#, fuzzy
 msgctxt "field:party.party-sale.sale,sale:"
 msgid "Sale"
 msgstr "Verkauf"
@@ -204,97 +204,78 @@ msgctxt "field:product.product,sheet_thickness:"
 msgid "Material thickness"
 msgstr "Materialstärke"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,due_date:"
 msgid "Due date"
 msgstr "Fertigstellungsdatum"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,due_date_postfix:"
 msgid "Due date extra"
 msgstr "Fertigstellungsdatum Zusatz"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,folder_no:"
 msgid "Folder number"
 msgstr "Mappen Nummer"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,folder_skip:"
 msgid "Skip this on project sheets"
 msgstr "Kein Projektzettel für diese Position"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,folder_submax:"
 msgid "Subfolder maximum"
 msgstr "Untermappe Gesamt"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,folder_subno:"
 msgid "Subfolder"
 msgstr "Untermappe"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,inv_line0:"
 msgid "Invoice / delivery note line 0"
 msgstr "LS / AR Zeile 0"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,inv_line0_skip:"
 msgid "Skip invoice / delivery note line 0"
 msgstr "LS / AR Zeile 0 weglassen"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,inv_line1:"
 msgid "Invoice / delivery note line 1"
 msgstr "LS / AR Hauptzeile"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,inv_line2:"
 msgid "Invoice / delivery note line 2"
 msgstr "LS / AR Zeile 2"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,inv_line2_skip:"
 msgid "Skip invoice / delivery note line 2"
 msgstr "LS / AR Zeile 2 weglassen"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,inv_skip:"
 msgid "Skip this whole sale line for invoice / delivery note"
 msgstr "Position nicht auf LS / AR anzeigen"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,material:"
 msgid "Material"
 msgstr "Material"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,material_extra:"
 msgid "Material extra text"
 msgstr "Material Zusatztext"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,material_surface:"
 msgid "Material surface"
 msgstr "Material Oberfläche"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,proj_impnote:"
 msgid "Project important notes"
 msgstr "Wichtige Produktionshinweise"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,proj_line0:"
 msgid "Project sheet line 0"
 msgstr "Projektzettel Zeile 0"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,proj_line1:"
 msgid "Project sheet line 1"
 msgstr "Projektzettel Zeile 1"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,proj_line2:"
 msgid "Project sheet line 2"
 msgstr "Projektzettel Zeile 2"
@@ -320,12 +301,10 @@ msgctxt "field:sale.amendment.line,proj_note_surface:"
 msgid "Project notes - surface treatments"
 msgstr "Produktionshinweise - Oberflächenbehandlung"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,real_product:"
 msgid "Real product"
 msgstr "Echter Artikel"
 
-#, fuzzy
 msgctxt "field:sale.amendment.line,sheet_thickness:"
 msgid "Material thickness"
 msgstr "Materialstärke"
@@ -496,9 +475,8 @@ msgctxt "field:stock.move,line2:"
 msgid "Delivery note line 2"
 msgstr "Lieferscheinposition Zeile 2"
 
-#, fuzzy
 msgctxt "field:stock.move,skip:"
-msgid "Skip this on delivery notes and invoices"
+msgid "Skip this on delivery notes"
 msgstr "Diese Zeile auf dem Lieferschein nicht anzeigen"
 
 msgctxt "field:stock.shipment.out,sale_refs:"
@@ -535,9 +513,13 @@ msgstr "Rechtsgültiger Name (Vollständiger Name bzw Firmenwortlaut)"
 
 msgctxt "help:party.party,sale_note:"
 msgid ""
-"Notes for sale (will be displayed as warning every time when selecting the "
-"party as customer)"
-msgstr "Hinweise für Verkauf (Wird angezeigt wenn diese Partei als Kunde ausgewählt wurde)"
+"Notes for sale (will copied to new sales upon selection)"
+msgstr "Hinweise für Verkauf (Werden zum Verkauf kopiert, wenn diese Partei ausgewählt wird)"
+
+msgctxt "help:sale.sale,sale_note:"
+msgid ""
+"Notes for sale (will copied from party upon selection of customer)"
+msgstr "Hinweise für Verkauf (Werden von den Parteien kopiert, wenn diese ausgewählt werden)"
 
 msgctxt "help:product.product,folder_skip:"
 msgid "if selected this sale line will not show on project sheets"
