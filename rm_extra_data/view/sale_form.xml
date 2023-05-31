@@ -56,8 +56,11 @@
     <field name="offer_number" />
     <label name="offer_date" />
     <field name="offer_date" />
+    <newline />
     <label name="sale_group_name" />
     <field name="sale_group_name" />
+    <label name="sale_note" />
+    <field name="sale_note" />
   </xpath>
   <xpath expr="/form/notebook/page/label[@name='currency']" position="replace" />
   <xpath expr="/form/notebook/page/field[@name='currency']" position="replace" />

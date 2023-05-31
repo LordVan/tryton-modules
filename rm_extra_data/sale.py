@@ -53,7 +53,10 @@ class Sale(metaclass=PoolMeta):
                              help = 'Offer date')
     sale_group_name = fields.Char('Sale group name',
                                   help = 'Name for the sale/invoice group used by custom invoice grouping')
-    
+    sale_note = fields.Char('Sale notes',
+                            help = 'Notes for sale (will copied from party upon selection of customer)'
+                            )
+
     @classmethod
     def __setup__(cls):
         super().__setup__()
@@ -75,6 +78,46 @@ class Sale(metaclass=PoolMeta):
     def default_folder_total(cls):    
         return 1
 
+    @fields.depends(
+        'company', 'party', 'invoice_party', 'shipment_party', 'warehouse',
+        'payment_term', 'lines', methods=['update_sale_note'])
+    def on_change_party(self):
+        super().on_change_party()
+        self.update_sale_note()
+
+    @fields.depends('party', 'invoice_party', methods=['update_sale_note'])
+    def on_change_invoice_party(self):
+        super().on_change_invoice_party()
+        self.update_sale_note()
+
+    @fields.depends('party', 'shipment_party', 'warehouse', methods=['update_sale_note'])
+    def on_change_shipment_party(self):
+        super().on_change_shipment_party()
+        self.update_sale_note()
+
+    @fields.depends('party', 'shipment_party', 'invoice_party', 'sale_note')
+    def update_sale_note(self):
+        '''
+        Update sale_note from all involved parties
+        (needs to be called from all on_change*party methods as we combine all sale notes into one string)
+        '''
+        sale_note_text = ''
+        if self.party:
+            if self.party.sale_note and self.party.sale_note.strip():
+                if self.invoice_party or self.shipment_party:
+                    # we got more than one parties involved so add prefix
+                    sale_note_text = 'B: '
+                sale_note_text += self.party.sale_note.strip()
+            if self.shipment_party and self.shipment_party.sale_note and self.shipment_party.sale_note.strip():
+                if sale_note_text:
+                    sale_note_text += ' /'
+                sale_note_text += ' L: ' + self.shipment_party.sale_note.strip()
+            if self.invoice_party and self.invoice_party.sale_note and self.invoice_party.sale_note.strip():
+                if sale_note_text:
+                    sale_note_text += ' /'
+                sale_note_text += ' R: ' + self.invoice_party.sale_note.strip()
+        self.sale_note = sale_note_text # we do always overwrite even if empty
+
     @classmethod
     @ModelView.button
     @Workflow.transition('quotation')
@@ -86,14 +129,6 @@ class Sale(metaclass=PoolMeta):
             # we definitely need to have a party at this point already as one cannot proceed without
             if not sale.party.pn_name or not sale.party.pn_name.strip():
                 raise UserError('Partei muss PN Namen vergeben haben für Verkauf!')
-            else:
-                if sale.party and sale.party.sale_note and sale.party.sale_note.strip():
-                    # we got a sale note so display it using UserWarning
-                    Warning = Pool().get('res.user.warning')
-                    sale_note_warning = Warning.format('sale_note_warning', [cls])
-                    Warning.always = True
-                    if Warning.check(sale_note_warning):
-                        raise UserWarning(sale_note_warning, sale.party.sale_note.strip())
             # make sure folder numbers are on the component project sheets
             for line in sale.lines:
                 for lc in line.component_children:
