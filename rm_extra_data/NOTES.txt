@@ -1,0 +1,7 @@
+### TODO:
+
+### DONE:
+<LordVan> quick question about outgoing shipments .. if i want my custom fields to be also copied from the internal stock move to the outgoing shipment do i need to do that in _get_inventory_move or beter _sync_inventory_to_outgoing ?
+<LordVan> I suspect the later, but wanted to check first if I am right
+<pokoli> LordVan: it depends, if the field are needed for splinting move you can add them as _sync_key
+<pokoli> _sync_move_key*
