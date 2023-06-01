@@ -77,6 +77,42 @@ class Party(metaclass=PoolMeta):
         default.setdefault('dolibarr_cid', None)
         return super().copy(parties, default=default)
 
+    def to_vcard(self):
+        vclines = ['BEGIN:VCARD', 'VERSION:4.0']
+        if self.legal_name and self.legal_name.strip():
+             # our internal names sometimes are shortened for convenience so use legal_name
+            vclines.append(f'FN:{self.legal_name.strip()}')
+        else:
+            vclines.append(f'FN:{self.name.strip()}')
+        for ad in self.addresses:
+            # TODO: do we want to add subdivision ?
+            street = ad.street.strip().replace("\n", "\\n") # fstring expression part cannot include backslash
+            vclines.append(f'ADR:;;{street};{ad.city.strip() if ad.city else ""};{ad.postal_code.strip() if ad.postal_code else ""};{ad.subdivision.name.strip() if ad.subdivision and ad.subdivision.name.strip() else ""};{ad.country.name.strip() if ad.country and ad.country.name else ""}')
+        for cm in self.contact_mechanisms:
+            # phone number types according to RFC6350:
+            # https://www.rfc-editor.org/rfc/rfc6350.html#section-6.4.1
+            if cm.type == 'phone':
+                vclines.append(f'TEL;TYPE=voice:{cm.value}')
+            elif cm.type == 'mobile':
+                vclines.append(f'TEL;TYPE=cell:{cm.value}')
+            elif cm.type == 'fax':
+                vclines.append(f'TEL;TYPE=fax:{cm.value}')
+            elif cm.type == 'email':
+                # types WORK and HOME
+                # https://www.rfc-editor.org/rfc/rfc6350.html#section-6.4.2
+                # setting no type since there is no standard way to differenciate between home and work
+                vclines.append(f'EMAIL:{cm.value}')
+            elif cm.type == 'website':
+                pass
+            elif cm.type in ('skype', 'sip', 'irc', 'jabber'):
+                vclines.append(f'IMPP;{cm.type}:{cm.value}')
+            elif cm.type == 'other':
+                pass
+            else:
+                pass
+        vclines.append('END:VCARD')
+        return '\n'.join(vclines)
+
 
 class Replace(metaclass=PoolMeta):
     __name__ = 'party.replace'

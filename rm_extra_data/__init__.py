@@ -4,6 +4,9 @@ from . import sale
 from . import stock
 from . import product
 from . import invoice
+from . import routes
+
+__all__ = ['register', 'routes']
 
 def register():
     Pool.register(
