@@ -186,13 +186,9 @@ class InvoiceReport(metaclass=PoolMeta):
             delnotes_text = ''
             for il in invoice_lines:
                 # first get delivery notes if we have some and append to sale
-                if il.origin:
-                    if isinstance(il.origin, SaleLine) and il.origin.moves:
-                        # logger.info(delnotes)
-                        delnotes = delnotes + list(il.origin.moves)
-                    elif isinstance(il.origin, InvoiceLine) and isinstance(il.origin.origin, SaleLine) and il.origin.origin.moves:
-                        # logger.info(delnotes)
-                        delnotes += list(il.origin.origin.moves)
+                if not il.skip:
+                    for m in il.stock_moves:
+                        delnotes.append(m)
                 for move in delnotes:
                     if move.shipment.number not in shipment_numbers:
                         shipment_numbers.append(move.shipment.number)
@@ -271,6 +267,6 @@ class InvoiceReport(metaclass=PoolMeta):
 
         context['sorted_lines'] = sorted_lines
         context['refund_text'] = refund_text if refund_text else None
-        if records[0].untaxed_amount == 0.0:
-            raise UserError('Rechnungsbetrag darf nicht 0.00 sein')
+#        if records[0].untaxed_amount == 0.0:
+#            raise UserError('Rechnungsbetrag darf nicht 0.00 sein')
         return context
