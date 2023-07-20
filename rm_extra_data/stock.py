@@ -34,14 +34,23 @@ class DeliveryNote(metaclass=PoolMeta):
             filtered_lines = [x for x in records[0].inventory_moves if not x.skip]
             # get lines with an origin
             sorted_lines = [x for x in filtered_lines if x.origin]
-            mySale = sorted_lines[0].origin.sale
-            if not mySale:
+            if sorted_lines:
+                mySale = sorted_lines[0].origin.sale
+            else:
                 # no origin sale found on inventory moves (for whatever reason)
                 # try outgoing moves to see if we find an origin sale
                 out_mov = [x for x in records[0].outgoing_moves if not x.skip]
                 out_mov_sorted =  [x for x in out_mov  if x.origin]
-                mySale = out_mov_sorted[0].origin.sale
+                if out_mov_sorted:
+                    mySale = out_mov_sorted[0].origin.sale
 
+        if not mySale:
+            # if we still do not have a sale try again to check all inventory_moves (no matter if skipped or not) for sales
+            for move in records[0].inventory_moves:
+                if move.origin and move.origin.sale:
+                    mySale = move.origin.sale
+                    # for our usecase we should never have more than one sale per shipment so move on once we found something
+                    break
         # we need one sale associated at least so this never be empty but
         if not mySale:
             raise UserError('Kein Verkauf gefunden! Es muss mindestens eine Zeile mit Verkaufs-Herkunft geben')
@@ -101,26 +110,30 @@ class Move(metaclass=PoolMeta):
         # TODO: decide if we should or should not strip the lines first
         if isinstance(self.origin, SaleLine) :
             #logger.debug('copying lines from sale line')
-            if not self.origin.inv_line0_skip:
-                if self.origin.inv_line0:
-                    self.line0 = self.origin.inv_line0
-                elif self.origin.proj_line0:
-                    self.line0 = self.origin.proj_line0
-            if self.origin.inv_line1.strip():
-                self.line1 = self.origin.inv_line1
-            else:
-                # no need to check here cuz proj_line1 is required on sale lines for us
-                self.line1 = self.origin.proj_line1
-            if not self.origin.inv_line2_skip:
-                if self.origin.inv_line2:
-                    self.line2 = self.origin.inv_line2
-                elif self.origin.proj_line2:
-                    self.line2 = self.origin.proj_line2
-            if self.origin.inv_skip:
-                # do it this way as some older entries could have NULL set in the DB!
-                self.skip = True
-            else:
-                self.skip = False
+            try:
+                if not self.origin.inv_line0_skip:
+                    if self.origin.inv_line0:
+                        self.line0 = self.origin.inv_line0
+                    elif self.origin.proj_line0:
+                        self.line0 = self.origin.proj_line0
+                if self.origin.inv_line1.strip():
+                    self.line1 = self.origin.inv_line1
+                else:
+                    # no need to check here cuz proj_line1 is required on sale lines for us
+                    self.line1 = self.origin.proj_line1
+                if not self.origin.inv_line2_skip:
+                    if self.origin.inv_line2:
+                        self.line2 = self.origin.inv_line2
+                    elif self.origin.proj_line2:
+                        self.line2 = self.origin.proj_line2
+                if self.origin.inv_skip:
+                    # do it this way as some older entries could have NULL set in the DB!
+                    self.skip = True
+                else:
+                    self.skip = False
+            except Exception as ex:
+                # ignore these errors for now as they are likely only from trying to add a sale origin manually
+                logger.warning(f'Error while trying to automatically fill info from origin sale line: {ex=}')
         elif isinstance(self.origin, Move):
             # this is based on another move
             #logger.debug('copying from another move')
