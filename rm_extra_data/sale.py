@@ -134,6 +134,16 @@ class Sale(metaclass=PoolMeta):
                 raise UserError('Partei Feld "Name Zeile 1 Rechnung/Lieferschein darf nicht leer sein.')
             if not sale.party.inv_name_line2 or not sale.party.inv_name_line2.strip():
                 raise UserError('Partei Feld "Name Zeile 2 Rechnung/Lieferschein darf nicht leer sein.')
+            if sale.invoice_party:
+                if not sale.invoice_party.inv_name_line1 or not sale.invoice_party.inv_name_line1.strip():
+                    raise UserError('Rechnungspartei Feld "Name Zeile 1 Rechnung/Lieferschein darf nicht leer sein.')
+                if not sale.invoice_party.inv_name_line2 or not sale.invoice_party.inv_name_line2.strip():
+                    raise UserError('Rechnungspartei Feld "Name Zeile 2 Rechnung/Lieferschein darf nicht leer sein.')
+            if sale.shipment_party:
+                if not sale.shipment_party.inv_name_line1 or not sale.shipment_party.inv_name_line1.strip():
+                    raise UserError('Lieferpartei Feld "Name Zeile 1 Rechnung/Lieferschein darf nicht leer sein.')
+                if not sale.shipment_party.inv_name_line2 or not sale.shipment_party.inv_name_line2.strip():
+                    raise UserError('Lieferpartei Feld "Name Zeile 2 Rechnung/Lieferschein darf nicht leer sein.')
             if not sale.payment_term:
                 raise UserError('Das Feld Zahlungsbedingungen darf nicht leer sein.')
             # Make sure folder numbers are on the component project sheets
