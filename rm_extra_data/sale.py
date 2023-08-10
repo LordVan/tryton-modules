@@ -129,8 +129,14 @@ class Sale(metaclass=PoolMeta):
         for sale in sales:
             # we definitely need to have a party at this point already as one cannot proceed without
             if not sale.party.pn_name or not sale.party.pn_name.strip():
-                raise UserError('Partei muss PN Namen vergeben haben für Verkauf!')
-            # make sure folder numbers are on the component project sheets
+                raise UserError('Partei Feld PN Name darf nicht leer sein.')
+            if not sale.party.inv_name_line1 or not sale.party.inv_name_line1.strip():
+                raise UserError('Partei Feld "Name Zeile 1 Rechnung/Lieferschein darf nicht leer sein.')
+            if not sale.party.inv_name_line2 or not sale.party.inv_name_line2.strip():
+                raise UserError('Partei Feld "Name Zeile 2 Rechnung/Lieferschein darf nicht leer sein.')
+            if not sale.payment_term:
+                raise UserError('Das Feld Zahlungsbedingungen darf nicht leer sein.')
+            # Make sure folder numbers are on the component project sheets
             for line in sale.lines:
                 for lc in line.component_children:
                     lc.folder_no = line.folder_no
