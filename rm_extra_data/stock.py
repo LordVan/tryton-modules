@@ -61,8 +61,13 @@ class DeliveryNote(metaclass=PoolMeta):
             sorted_lines.sort(key=lambda x: (x.origin.sale, x.origin.sequence))
         except:
             # if this fails (due to missing origin,..) ignore sorting
-            # this should not happen anymore but keeping just in case
-            pass
+            # this happens when we are not in picked/packed/done states (see above)
+            try:
+                # if we are in draft/waiting/reserved we use inventory_moves not outgoing_moves
+                # here the origin is the outgoing move - so try to sort by origin'S origins data
+                sorted_lines.sort(key=lambda x: (x.origin.origin.sale, x.origin.origin.sequence))
+            except:
+                pass
         # add lines without origin again
         sorted_lines += no_origin_lines
         context['sorted_lines'] = sorted_lines
