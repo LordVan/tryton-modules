@@ -3,6 +3,7 @@
 - delivery note text gets re-loaded from sale when going to state "waiting" overwriting changes made by the user?
 - Error when adding article without proj line1
 - get list of sales which contain a certain article and/or a way to search sale lines for a string in proj line0,1,2 and list sales
+- sale amendment should include sale group for invoice grouping too
 
 #done
 - commission editable (sale.description)

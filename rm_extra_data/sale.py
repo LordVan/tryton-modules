@@ -66,8 +66,7 @@ class Sale(metaclass=PoolMeta):
                 })
 
     def _get_invoice_grouping_fields(self, invoice):
-        return ['state', 'company', 'type', 'journal', 'party',
-                'invoice_address', 'currency', 'account', 'payment_term', 'sale_group_name']
+        return super()._get_invoice_grouping_fields(invoice) + ['sale_group_name']
 
     def create_invoice(self):
         inv = super().create_invoice()
