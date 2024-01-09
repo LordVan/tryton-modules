@@ -123,8 +123,7 @@ class Sale(metaclass=PoolMeta):
     @Workflow.transition('quotation')
     @set_employee('quoted_by')
     def quote(cls, sales):
-        super(Sale, cls).quote(sales)
-        # we need to apply folder_no to components of kits and do some checks
+        # do the extra checks *before* calling super() !
         for sale in sales:
             # we definitely need to have a party at this point already as one cannot proceed without
             if not sale.party.pn_name or not sale.party.pn_name.strip():
@@ -145,6 +144,11 @@ class Sale(metaclass=PoolMeta):
                     raise UserError('Lieferpartei Feld "Name Zeile 2 Rechnung/Lieferschein darf nicht leer sein.')
             if not sale.payment_term:
                 raise UserError('Das Feld Zahlungsbedingungen darf nicht leer sein.')
+        super(Sale, cls).quote(sales)
+        # we need to apply folder_no to components of kits and do some checks
+        # doing this after the call to super() as there should be no problems anymore here that could
+        # cause number sequence skips
+        for sale in sales:
             # Make sure folder numbers are on the component project sheets
             for line in sale.lines:
                 for lc in line.component_children:
