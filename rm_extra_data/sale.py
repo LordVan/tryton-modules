@@ -65,8 +65,8 @@ class Sale(metaclass=PoolMeta):
                 'readonly': Eval('state').in_(['done', 'cancelled'])
                 })
 
-    def _get_invoice_grouping_fields(self, invoice):
-        return super()._get_invoice_grouping_fields(invoice) + ['sale_group_name']
+#    def _get_invoice_grouping_fields(self, invoice):
+#        return super()._get_invoice_grouping_fields(invoice) + ['sale_group_name']
 
     def create_invoice(self):
         inv = super().create_invoice()
