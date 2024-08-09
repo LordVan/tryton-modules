@@ -267,6 +267,16 @@ class InvoiceReport(metaclass=PoolMeta):
 
         context['sorted_lines'] = sorted_lines
         context['refund_text'] = refund_text if refund_text else None
+        sorted_taxnotes = []
+        for tax in context['invoice'].taxes:
+            if tax.legal_notice not in sorted_taxnotes:
+                sorted_taxnotes.append(tax.legal_notice)
+        context['sorted_taxnotes'] = sorted_taxnotes
+        sorted_taxdesc = []
+        for tax in context['invoice'].taxes:
+            if tax.description not in sorted_taxdesc:
+                sorted_taxdesc.append(tax.description)
+        context['sorted_taxdesc'] = sorted_taxdesc
 #        if records[0].untaxed_amount == 0.0:
 #            raise UserError('Rechnungsbetrag darf nicht 0.00 sein')
         return context
