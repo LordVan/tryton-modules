@@ -461,7 +461,7 @@ class SaleLine(metaclass=PoolMeta):
                                 },
                                 help = 'Subfolder maximum')
     folder_skip = fields.Boolean('Skip this on project sheets',
-                                 states = { 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])),
+                                 states = { 'readonly': (~Eval('sale_state').in_(['draft', 'quotation'])),
                                  },
                                  help = 'if selected this sale line will not show on project sheets')
     due_date = fields.Date('Due date',
@@ -550,7 +550,7 @@ class SaleLine(metaclass=PoolMeta):
     # line(s)
 
     inv_skip = fields.Boolean('Skip this whole sale line for invoice / delivery note',
-                              states = { 'readonly': ((~Eval('sale_state').in_(['draft', 'quotation'])),
+                              states = { 'readonly': (~Eval('sale_state').in_(['draft', 'quotation'])),
                               },
                               help = 'if selected this sale line will not show on invoices or delivery notes')
     
