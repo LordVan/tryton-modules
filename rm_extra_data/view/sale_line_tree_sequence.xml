@@ -4,6 +4,8 @@
   <xpath expr="/tree/field[@name='product']" position="replace" />
   <xpath expr="/tree/field[@name='summary']" position="replace" />
   <xpath expr="/tree/field[@name='quantity']" position="after">
+    <field name="due_date" optional="1" />
+    <field name="due_date_postfix" optional="1" />
     <field name="proj_line0" expand="1" />
     <field name="proj_line1" expand="1" />
     <field name="proj_line2" expand="1" />
