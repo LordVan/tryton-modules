@@ -11,6 +11,7 @@
 
   <xpath expr="/tree/field[@name='number']" position="replace">
     <field name="number" />
+    <field name="folder_total" optional="1" />
     <field name="sale_date" />
     <field name="sale_folder_postfix" />
     <field name="due_date" />
