@@ -154,6 +154,7 @@ class Sale(metaclass=PoolMeta):
                 for lc in line.component_children:
                     lc.folder_no = line.folder_no
                     lc.due_date = line.due_date
+                    lc.due_date_postfix = line.due_date_postfix
                     lc.save()
         cls.save(sales)
     
