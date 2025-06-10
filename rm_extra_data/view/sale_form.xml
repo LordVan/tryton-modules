@@ -47,20 +47,23 @@
     <field name="due_date" />
     <label name="shipping_date_extra" />
     <field name="shipping_date_extra" />
-    <label name="shipping_date" />
-    <field name="shipping_date" />
+    <label name="sale_group_name" />
+    <field name="sale_group_name" />
+    <label name="sale_note" />
+    <field name="sale_note" />
   </xpath>
+  <xpath expr="/form/notebook/page/label[@name='payment_term']"
+	 position="replace" />
+  <xpath expr="/form/notebook/page/field[@name='payment_term']"
+	 position="replace" />
   <xpath expr="/form/field[@name='shipment_address']"
 	 position="after">
     <label name="offer_number" />
     <field name="offer_number" />
     <label name="offer_date" />
     <field name="offer_date" />
-    <newline />
-    <label name="sale_group_name" />
-    <field name="sale_group_name" />
-    <label name="sale_note" />
-    <field name="sale_note" />
+    <label name="payment_term" />
+    <field name="payment_term" />
     <newline />
   </xpath>
   <xpath expr="/form/notebook/page/label[@name='currency']" position="replace" />
@@ -68,5 +71,7 @@
   <xpath expr="/form/notebook/page/separator[@name='comment']" position="before">
     <label name="currency"/>
     <field name="currency"/>
+    <label name="shipping_date" />
+    <field name="shipping_date" />
   </xpath>
 </data>
