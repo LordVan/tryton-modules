@@ -137,6 +137,12 @@ class InvoiceReport(metaclass=PoolMeta):
         if not records[0].payment_term:
             raise UserError('Zahlungsbedingungen nicht angegeben!')
 
+        # check we do not hide any lines on the invoice that have a price to them thus causing the invoice report
+        # to not check out
+        for line in records[0].lines:
+            if line.unit_price != 0.00 and line.skip:
+                raise UserError(f'Positionen mit Preis nicht 0,00 duerfen nicht ausgeblendet sein: {line.line1}')
+            
         context = super(InvoiceReport, cls).get_context(records, header, data)
 
         # Warning = Pool().get('res.user.warning')
