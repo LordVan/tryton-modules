@@ -120,6 +120,16 @@ class Sale(metaclass=PoolMeta):
 
     @classmethod
     @ModelView.button
+    @Workflow.transition('cancelled')
+    def cancel(cls, sales):
+        Warning = Pool().get('res.user.warning')
+        cancel_warning = 'sale_cancel,%s' % cls
+        if Warning.check(cancel_warning):
+            raise UserWarning(cancel_warning, 'Wollen sie den Verkauf wirklich stornieren?')
+        super().cancel(sales)
+
+    @classmethod
+    @ModelView.button
     @Workflow.transition('quotation')
     @set_employee('quoted_by')
     def quote(cls, sales):
@@ -144,7 +154,7 @@ class Sale(metaclass=PoolMeta):
                     raise UserError('Lieferpartei Feld "Name Zeile 2 Rechnung/Lieferschein darf nicht leer sein.')
             if not sale.payment_term:
                 raise UserError('Das Feld Zahlungsbedingungen darf nicht leer sein.')
-        super(Sale, cls).quote(sales)
+        super().quote(sales)
         # we need to apply folder_no to components of kits and do some checks
         # doing this after the call to super() as there should be no problems anymore here that could
         # cause number sequence skips
@@ -205,7 +215,7 @@ class Sale(metaclass=PoolMeta):
         confirm_warning = 'sale_confirm,%s' % cls
         if Warning.check(confirm_warning):
             raise UserWarning(confirm_warning, 'Bestätigen des Verkaufs erzeugt einen Lieferschein - fortfahren?')
-        super(Sale, cls).confirm(sales)
+        super().confirm(sales)
 
     def _get_shipment_sale(self, Shipment, key):
         # Add sale reference / description[commission] to shipment
@@ -227,7 +237,7 @@ class SaleReport(metaclass=PoolMeta):
 
     @classmethod
     def get_context(cls, records, header, data):
-        context = super(SaleReport, cls).get_context(records, header, data)
+        context = super().get_context(records, header, data)
         for rec in records:
             if not rec.sale_date:
                 raise UserError(f'Bestelldatum fehlt (Verkauf {rec.number})')
@@ -608,7 +618,7 @@ class SaleLine(metaclass=PoolMeta):
     @fields.depends('material', 'material_extra', 'sheet_thickness', 'material_surface', 'real_product', 'folder_skip')
     def on_change_product(self):
         # TODO: set material and sheet_thickness as readonly normally and only allow overwriting if no product is set?
-        super(SaleLine, self).on_change_product()
+        super().on_change_product()
         if not self.product:
             #reset real_product to false as the product was removed
             self.real_product = False
