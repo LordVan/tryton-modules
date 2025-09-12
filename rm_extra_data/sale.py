@@ -196,21 +196,6 @@ class Sale(metaclass=PoolMeta):
                 msg = 'Position ohne Produkt gefunden!!'
                 #msg += '\n'.join(need_fixing)
                 raise UserWarning(warning_name, msg)
-        # check if we already have an order fromt his customer for this date with the same sale_date_extra
-        warning_sale_date_extra = 'sale_date_extra,%s' % cls
-        warn_sale_date = []
-        for sale in sales:
-            others = Pool().get('sale.sale').search([('sale_folder_postfix', '=', sale.sale_folder_postfix),
-                                                     ('party', '=', sale.party),
-                                                     ('sale_date', '=', sale.sale_date),
-                                                     ('number', '!=', sale.number), ])
-            for s in others:
-                warn_sale_date.append(s.number)
-        if Warning.check(warning_sale_date_extra):
-            if warn_sale_date:
-                msg = 'Verkauf für diesen Kunden mit gleichem Bestelldatum und Bestellordner Zusatz existiert bereits:'
-                msg += '\n'.join(warn_sale_date)
-                raise UserWarning(warning_sale_date_extra, msg)
         # give the users a warning before actually confirming an order and creating shipments,..
         confirm_warning = 'sale_confirm,%s' % cls
         if Warning.check(confirm_warning):
@@ -238,6 +223,7 @@ class SaleReport(metaclass=PoolMeta):
     @classmethod
     def get_context(cls, records, header, data):
         context = super().get_context(records, header, data)
+        Warning = Pool().get('res.user.warning')
         for rec in records:
             if not rec.sale_date:
                 raise UserError(f'Bestelldatum fehlt (Verkauf {rec.number})')
@@ -246,6 +232,22 @@ class SaleReport(metaclass=PoolMeta):
             if not rec.party and (not rec.party.pn_name and not self.party.pn_name.strip()):
                 raise UserError('Partei muss PN Namen vergeben haben für Verkauf!')
             
+            # check if we already have an order fromt his customer for this date with the same sale_date_extra
+            warning_sale_date_extra = 'sale_date_extra,%s-%s' % (cls, rec)
+            warn_sale_date = []
+            others = Pool().get('sale.sale').search([('sale_folder_postfix', '=', rec.sale_folder_postfix),
+                                                     ('party', '=', rec.party),
+                                                     ('sale_date', '=', rec.sale_date),
+                                                     ('number', '!=', rec.number), ])
+            for s in others:
+                warn_sale_date.append(s.number)
+            if Warning.check(warning_sale_date_extra):
+                if warn_sale_date:
+                    msg = 'Verkauf für diesen Kunden mit gleichem Bestelldatum und Bestellordner Zusatz existiert bereits:'
+                    msg += '\n'.join(warn_sale_date)
+                    raise UserWarning(warning_sale_date_extra, msg)
+
+
         def get_project_sheets(sale):
             # Helper to get project lines, sort them and merge if needed
             # Returns a list of lists in the following format:
