@@ -114,7 +114,10 @@ class InvoiceLine(metaclass=PoolMeta):
                         self.line2 = self.origin.inv_line2
                     elif self.origin.proj_line2:
                         self.line2 = self.origin.proj_line2
+                # get the bools
                 self.skip = self.origin.inv_skip
+                self.hide_unit_price = self.origin.hide_unit_price
+                self.hide_quantity = self.origin.hide_quantity
             else:
                 if len(moves) != 1:
                     logger.info('%s ### More than one move per invoice line. Taking the lines from the last one', self)
@@ -123,7 +126,11 @@ class InvoiceLine(metaclass=PoolMeta):
                 self.line0 = moves[-1].line0
                 self.line1 = moves[-1].line1
                 self.line2 = moves[-1].line2
+                # assign the booleans
                 self.skip = moves[-1].skip
+                self.hide_unit_price = moves[-1].hide_unit_price
+                self.hide_quantity = moves[-1].hide_quantity
+
 
 
 class InvoiceReport(metaclass=PoolMeta):

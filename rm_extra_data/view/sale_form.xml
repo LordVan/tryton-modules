@@ -69,6 +69,10 @@
   <xpath expr="/form/notebook/page/label[@name='currency']" position="replace" />
   <xpath expr="/form/notebook/page/field[@name='currency']" position="replace" />
   <xpath expr="/form/notebook/page/separator[@name='comment']" position="before">
+    <label name="orderconfirmation_date" />
+    <field name="orderconfirmation_date" />
+    <label name="orderconfirmation_delivery" />
+    <field name="orderconfirmation_delivery" />
     <label name="currency"/>
     <field name="currency"/>
     <label name="shipping_date" />

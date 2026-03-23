@@ -36,6 +36,11 @@
     <label name="inv_skip" />
     <field name="inv_skip" />
     <newline />
+    <label name="hide_unit_price" />
+    <field name="hide_unit_price" />
+    <label name="hide_quantity" />
+    <field name="hide_quantity" />
+    <newline />
     <label name="inv_line0" />
     <field name="inv_line0" />
     <label name="inv_line0_skip" />

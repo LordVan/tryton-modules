@@ -51,6 +51,13 @@ class Sale(metaclass=PoolMeta):
     offer_date = fields.Date('Offer date',
                              states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                              help = 'Offer date')
+    orderconfirmation_date = fields.Date('Order confirmation date',
+                                         states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
+                                         help = 'Order confirmation date')
+    orderconfirmation_delivery = fields.Char('Order confirmation delivery information',
+                                             states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
+                                             help = 'Enter expected delivery information here')
+
     sale_group_name = fields.Char('Sale group name',
                                   help = 'Name for the sale/invoice group used by custom invoice grouping')
     sale_note = fields.Char('Sale notes',
@@ -72,6 +79,7 @@ class Sale(metaclass=PoolMeta):
         inv = super().create_invoice()
         if inv:
             inv.sale_group_name = self.sale_group_name
+            # TODO: sale line hide* methods
         return inv
     
     @classmethod
@@ -477,6 +485,8 @@ class SaleLine(metaclass=PoolMeta):
                                  states = { 'readonly': (~Eval('sale_state').in_(['draft', 'quotation'])),
                                  },
                                  help = 'if selected this sale line will not show on project sheets')
+    hide_unit_price = fields.Boolean('Hide unit price on order confirmation and invoice')
+    hide_quantity = fields.Boolean('Hide quantity on order confirmation, delivery note and invoice')
     due_date = fields.Date('Due date',
                            states = { 'readonly': ~Eval('sale_state').in_(['draft', 'quotation']), },
                            help = 'Due date for this sale line (replaces due date from project sheet)')
@@ -610,6 +620,14 @@ class SaleLine(metaclass=PoolMeta):
     
     @classmethod
     def default_folder_skip(cls):
+        return False
+
+    @classmethod
+    def default_hide_unit_price(cls):
+        return False
+
+    @classmethod
+    def default_hide_quantity(cls):
         return False
     
     @classmethod

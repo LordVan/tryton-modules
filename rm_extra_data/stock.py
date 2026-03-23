@@ -90,6 +90,9 @@ class Move(metaclass=PoolMeta):
     line1 = fields.Char('Delivery note line 1')
     line2 = fields.Char('Delivery note line 2')
     skip = fields.Boolean('Skip this on delivery notes')
+    hide_unit_price = fields.Boolean('Hide unit price on invoice report')
+    hide_quantity = fields.Boolean('Hide quantity on invoice report')
+
 
     @classmethod
     def default_line0(cls):
@@ -107,6 +110,14 @@ class Move(metaclass=PoolMeta):
     def default_skip(cls):
         return False
     
+    @classmethod
+    def default_hide_unit_price(cls):
+        return False
+
+    @classmethod
+    def default_hide_quantity(cls):
+        return False
+
     # FIXME: should i add the line fields here too?..
     @fields.depends('origin')
     def on_change_origin(self):
@@ -131,11 +142,7 @@ class Move(metaclass=PoolMeta):
                         self.line2 = self.origin.inv_line2
                     elif self.origin.proj_line2:
                         self.line2 = self.origin.proj_line2
-                if self.origin.inv_skip:
-                    # do it this way as some older entries could have NULL set in the DB!
-                    self.skip = True
-                else:
-                    self.skip = False
+                self.skip = self.origin.inv_skip
             except Exception as ex:
                 # ignore these errors for now as they are likely only from trying to add a sale origin manually
                 logger.warning(f'Error while trying to automatically fill info from origin sale line: {ex=}')
@@ -147,6 +154,8 @@ class Move(metaclass=PoolMeta):
             self.line1 = self.origin.line1
             self.line2 = self.origin.line2
             self.skip = self.origin.skip
+            self.hide_unit_price = self.origin.hide_unit_price
+            self.hide_quantity = self.origin.hide_quantity
 
 class ShipmentOut(metaclass=PoolMeta):
     "ShipmentOut with custom fields"
@@ -192,6 +201,8 @@ class ShipmentOut(metaclass=PoolMeta):
                       ('line1', move.line1),
                       ('line2', move.line2),
                       ('skip', move.skip),
+                      ('hide_unit_price', move.hide_unit_price),
+                      ('hide_quantity', move.hide_quantity),
                       )
     @classmethod
     @ModelView.button
