@@ -5,6 +5,10 @@
 - get list of sales which contain a certain article and/or a way to search sale lines for a string in proj line0,1,2 and list sales
 - sale amendment should include sale group for invoice grouping too
 
+# misc:
+
+- error with DELTE in readonly transaction after duplicating (res_user_warning)
+
 #done
 - commission editable (sale.description)
 
