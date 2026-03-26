@@ -59,13 +59,13 @@ class Sale(metaclass=PoolMeta):
                                    help = 'Enter how long the offer is valid for')
     offer_delivery = fields.Char('Offer delivery information',
                                  states = { 'readonly': Eval('state') != 'draft', },
-                                 help = 'Enter offer delivery information')
+                                 help = 'Offer delivery information')
     orderconfirmation_date = fields.Date('Order confirmation date',
                                          states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                          help = 'Order confirmation date')
     orderconfirmation_delivery = fields.Char('Order confirmation delivery information',
                                              states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
-                                             help = 'Enter expected delivery information here')
+                                             help = 'Expected delivery information here')
 
     sale_group_name = fields.Char('Sale group name',
                                   help = 'Name for the sale/invoice group used by custom invoice grouping')
