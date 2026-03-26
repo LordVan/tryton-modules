@@ -51,6 +51,9 @@ class Sale(metaclass=PoolMeta):
     offer_date = fields.Date('Offer date',
                              states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                              help = 'Offer date')
+    offer_validuntil = fields.Char('Offer valid until',
+                                   states = { 'readonly': Eval('state') != 'draft', },
+                                   help = 'Enter how long the offer is valid for.')
     orderconfirmation_date = fields.Date('Order confirmation date',
                                          states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                          help = 'Order confirmation date')

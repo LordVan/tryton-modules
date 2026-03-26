@@ -73,6 +73,9 @@
     <field name="orderconfirmation_date" />
     <label name="orderconfirmation_delivery" />
     <field name="orderconfirmation_delivery" />
+    <label name="offer_validuntil" />
+    <field name="offer_validuntil" />
+    <newline />
     <label name="currency"/>
     <field name="currency"/>
     <label name="shipping_date" />
