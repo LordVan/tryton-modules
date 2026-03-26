@@ -5,9 +5,9 @@
     <separator name="rm_custom" colspan="4" />
     <label name="skip" />
     <field name="skip" />
-    <newline />
+<!--    <newline />
     <label name="hide_unit_price" />
-    <field name="hide_unit_price" />
+    <field name="hide_unit_price" />-->
     <label name="hide_quantity" />
     <field name="hide_quantity" />
     <newline />
