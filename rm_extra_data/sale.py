@@ -45,6 +45,9 @@ class Sale(metaclass=PoolMeta):
                                   required = True,
                                   states = { 'readonly': Eval('state') != 'draft', },
                                   help = 'total number of folders (not counting subfolders)')
+    offer_inquirydate = fields.Date('Offer inquiry date',
+                                    states = { 'readonly': Eval('state') != 'draft', },
+                                    help = 'Date of inqury for offer')
     offer_number = fields.Char('Offer number',
                                states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                help = 'Offer number')
@@ -53,7 +56,10 @@ class Sale(metaclass=PoolMeta):
                              help = 'Offer date')
     offer_validuntil = fields.Char('Offer valid until',
                                    states = { 'readonly': Eval('state') != 'draft', },
-                                   help = 'Enter how long the offer is valid for.')
+                                   help = 'Enter how long the offer is valid for')
+    offer_delivery = fields.Char('Offer delivery information',
+                                 states = { 'readonly': Eval('state') != 'draft', },
+                                 help = 'Enter offer delivery information')
     orderconfirmation_date = fields.Date('Order confirmation date',
                                          states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                          help = 'Order confirmation date')
