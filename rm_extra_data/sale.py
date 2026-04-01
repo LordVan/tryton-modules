@@ -9,7 +9,7 @@ from trytond.exceptions import UserWarning, UserError
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['Sale', 'SaleLine', 'SaleContact', 'SaleReport']
+__all__ = ['Sale', 'SaleLine', 'SaleContact', 'SaleReport', 'SaleReportOffer', 'SaleReportOrderConfirmation']
 
 
 class Sale(metaclass=PoolMeta):
@@ -233,6 +233,90 @@ class Sale(metaclass=PoolMeta):
             ref += self.description.strip()
         shipment.sale_refs = ref
         return shipment
+
+class SaleReportOffer(metaclass=PoolMeta):
+    __name__ = 'sale.sale.offer'
+
+    @classmethod
+    def get_context(cls, records, header, data):
+        context = super().get_context(records, header, data)
+        Warning = Pool().get('res.user.warning')
+        errors = []
+        for rec in records:
+            if not rec.party:
+                errors.append('Kunde (Partei) fehlt')
+            else:
+                if not rec.party.inv_name_line1 and not rec.party.inv_name_line1.strip():
+                    errors.append('Kunde (Parte) Rechnungszeile 1 fehlt bzw leer')
+                if not rec.party.inv_name_line2 and not rec.party.inv_name_line2.strip():
+                    errors.append('Kunde (Parte) Rechnungszeile 2 fehlt bzw leer')
+            if not rec.offer_inquirydate:
+                errors.append('Anfragedatum fehlt')
+            if not rec.offer_number or not rec.offer_number.strip():
+                errors.append('Angebotsnummer fehlt bzw leer')
+            if not rec.offer_date:
+                errors.append('Angebotsdatum fehlt')
+            if not rec.offer_validuntil or not rec.offer_validuntil.strip():
+                errors.append('Angebotsgueltigkeit fehlt bzw leer')
+            if not rec.offer_delivery or not rec.offer_delivery.strip():
+                errors.append('Lieferzeit (Angebot) fehlt bzw leer')
+            if not rec.quoted_by or not rec.quoted_by.party:
+                errors.append('Absender (Angeboten von) fehlt')
+            else:
+                if not rec.quoted_by.party.legal_name or not rec.quoted_by.party.legal_name.strip():
+                    errors.append('Absender (Angeboten von) Rechtlicher Name fehlt bzw leer')
+            if not rec.extra_contacts:
+                errors.append('(Extra) Kontakt fehlt')
+            else:
+                if not rec.extra_contacts[0].inv_name_line1 or not rec.extra_contacts[0].inv_name_line1.strip():
+                    errors.append('(Extra) Kontakt Rechnungszeile 1 fehlt bzw leer')
+                if not rec.extra_contacts[0].inv_name_line2 or not rec.extra_contacts[0].inv_name_line2.strip():
+                    errors.append('(Extra) Kontakt Rechnungszeile 2 fehlt bzw leer')
+        if errors:
+            raise UserError('\n'.join(errors))
+        else:
+            return context
+
+class SaleReportOrderConfirmation(metaclass=PoolMeta):
+    __name__ = 'sale.sale.orderconfirmation'
+
+    @classmethod
+    def get_context(cls, records, header, data):
+        context = super().get_context(records, header, data)
+        Warning = Pool().get('res.user.warning')
+        errors = []
+        for rec in records:
+            if not rec.party:
+                errors.append('Kunde (Partei) fehlt')
+            else:
+                if not rec.party.inv_name_line1 and not rec.party.inv_name_line1.strip():
+                    errors.append('Kunde (Parte) Rechnungszeile 1 fehlt bzw leer')
+                if not rec.party.inv_name_line2 and not rec.party.inv_name_line2.strip():
+                    errors.append('Kunde (Parte) Rechnungszeile 2 fehlt bzw leer')
+            if not rec.sale_date:
+                errors.append('Bestelldatum fehlt')
+            if not rec.number or not rec.number.strip():
+                errors.append('Auftragsnummer fehlt bzw leer')
+            if not rec.orderconfirmation_date:
+                errors.append('Auftragsbestaetigungsdatum fehlt')
+            if not rec.orderconfirmation_delivery or not rec.orderconfirmation_delivery.strip():
+                errors.append('Lieferzeit (Auftragsbestaetigung) fehlt bzw leer')
+            if not rec.quoted_by or not rec.quoted_by.party:
+                errors.append('Absender (Angeboten von) fehlt')
+            else:
+                if not rec.quoted_by.party.legal_name or not rec.quoted_by.party.legal_name.strip():
+                    errors.append('Absender (Angeboten von) Rechtlicher Name fehlt bzw leer')
+            if not rec.extra_contacts:
+                errors.append('(Extra) Kontakt fehlt')
+            else:
+                if not rec.extra_contacts[0].inv_name_line1 or not rec.extra_contacts[0].inv_name_line1.strip():
+                    errors.append('(Extra) Kontakt Rechnungszeile 1 fehlt bzw leer')
+                if not rec.extra_contacts[0].inv_name_line2 or not rec.extra_contacts[0].inv_name_line2.strip():
+                    errors.append('(Extra) Kontakt Rechnungszeile 2 fehlt bzw leer')
+        if errors:
+            raise UserError('\n'.join(errors))
+        else:
+            return context
 
 class SaleReport(metaclass=PoolMeta):
     __name__ = 'sale.sale.project'

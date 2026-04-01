@@ -28,6 +28,8 @@ def register():
 
     Pool.register(
         sale.SaleReport,
+        sale.SaleReportOffer,
+        sale.SaleReportOrderConfirmation,
         stock.DeliveryNote,
         invoice.InvoiceReport,
         module='rm_extra_data', type_='report')
