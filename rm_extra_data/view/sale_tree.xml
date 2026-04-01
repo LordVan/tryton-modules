@@ -10,6 +10,7 @@
   <xpath expr="/tree/field[@name='description']" position="replace" />
 
   <xpath expr="/tree/field[@name='number']" position="replace">
+    <field name="offer_number" optional="1" />
     <field name="number" />
     <field name="folder_total" optional="1" />
     <field name="sale_date" />
