@@ -75,6 +75,11 @@
     <field name="orderconfirmation_delivery" />
     <label name="offer_inquirydate" />
     <field name="offer_inquirydate" />
+    <label name="offer_hidetotal" />
+    <field name="offer_hidetotal" />
+    <newline />
+    <label name="offer_projectcalc_text" />
+    <field name="offer_projectcalc_text" col="3" />
     <newline />
     <label name="offer_validuntil" />
     <field name="offer_validuntil" />

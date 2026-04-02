@@ -30,6 +30,7 @@ def register():
         sale.SaleReport,
         sale.SaleReportOffer,
         sale.SaleReportOrderConfirmation,
+        sale.SaleReportProjectCalc,
         stock.DeliveryNote,
         invoice.InvoiceReport,
         module='rm_extra_data', type_='report')

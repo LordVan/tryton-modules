@@ -9,7 +9,7 @@ from trytond.exceptions import UserWarning, UserError
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['Sale', 'SaleLine', 'SaleContact', 'SaleReport', 'SaleReportOffer', 'SaleReportOrderConfirmation']
+__all__ = ['Sale', 'SaleLine', 'SaleContact', 'SaleReport', 'SaleReportOffer', 'SaleReportOrderConfirmation', 'SaleReportProjectCalc']
 
 
 class Sale(metaclass=PoolMeta):
@@ -48,6 +48,9 @@ class Sale(metaclass=PoolMeta):
     offer_inquirydate = fields.Date('Offer inquiry date',
                                     states = { 'readonly': Eval('state') != 'draft', },
                                     help = 'Date of inqury for offer')
+    offer_projectcalc_text = fields.Char('Project calculation text',
+                                         states = { 'readonly': Eval('state') != 'draft', },
+                                         help = 'Project calculation sheet text (enter || for newlines)')
     offer_number = fields.Char('Offer number',
                                states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                help = 'Offer number')
@@ -60,6 +63,9 @@ class Sale(metaclass=PoolMeta):
     offer_delivery = fields.Char('Offer delivery information',
                                  states = { 'readonly': Eval('state') != 'draft', },
                                  help = 'Offer delivery information')
+    offer_hidetotal = fields.Boolean('Hide total on offer',
+                                     states = { 'readonly': Eval('state') != 'draft', },
+                                     help = 'Hide total on offer (when alternatives are offered,..)')
     orderconfirmation_date = fields.Date('Order confirmation date',
                                          states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                          help = 'Order confirmation date')
@@ -94,6 +100,10 @@ class Sale(metaclass=PoolMeta):
     @classmethod
     def default_folder_total(cls):    
         return 1
+
+    @classmethod
+    def default_offer_hidetotal(cls):
+        return False
 
     @fields.depends(
         'company', 'party', 'invoice_party', 'shipment_party', 'warehouse',
@@ -246,9 +256,9 @@ class SaleReportOffer(metaclass=PoolMeta):
             if not rec.party:
                 errors.append('Kunde (Partei) fehlt')
             else:
-                if not rec.party.inv_name_line1 and not rec.party.inv_name_line1.strip():
+                if not rec.party.inv_name_line1 or not rec.party.inv_name_line1.strip():
                     errors.append('Kunde (Parte) Rechnungszeile 1 fehlt bzw leer')
-                if not rec.party.inv_name_line2 and not rec.party.inv_name_line2.strip():
+                if not rec.party.inv_name_line2 or not rec.party.inv_name_line2.strip():
                     errors.append('Kunde (Parte) Rechnungszeile 2 fehlt bzw leer')
             if not rec.offer_inquirydate:
                 errors.append('Anfragedatum fehlt')
@@ -289,9 +299,9 @@ class SaleReportOrderConfirmation(metaclass=PoolMeta):
             if not rec.party:
                 errors.append('Kunde (Partei) fehlt')
             else:
-                if not rec.party.inv_name_line1 and not rec.party.inv_name_line1.strip():
+                if not rec.party.inv_name_line1 or not rec.party.inv_name_line1.strip():
                     errors.append('Kunde (Parte) Rechnungszeile 1 fehlt bzw leer')
-                if not rec.party.inv_name_line2 and not rec.party.inv_name_line2.strip():
+                if not rec.party.inv_name_line2 or not rec.party.inv_name_line2.strip():
                     errors.append('Kunde (Parte) Rechnungszeile 2 fehlt bzw leer')
             if not rec.sale_date:
                 errors.append('Bestelldatum fehlt')
@@ -313,6 +323,36 @@ class SaleReportOrderConfirmation(metaclass=PoolMeta):
                     errors.append('(Extra) Kontakt Rechnungszeile 1 fehlt bzw leer')
                 if not rec.extra_contacts[0].inv_name_line2 or not rec.extra_contacts[0].inv_name_line2.strip():
                     errors.append('(Extra) Kontakt Rechnungszeile 2 fehlt bzw leer')
+        if errors:
+            raise UserError('\n'.join(errors))
+        else:
+            return context
+
+class SaleReportProjectCalc(metaclass=PoolMeta):
+    __name__ = 'sale.sale.projectcalc'
+
+    @classmethod
+    def get_context(cls, records, header, data):
+        context = super().get_context(records, header, data)
+        Warning = Pool().get('res.user.warning')
+        errors = []
+        for rec in records:
+            if not rec.party:
+                errors.append('Kunde (Partei) fehlt')
+            else:
+                if not rec.party.legal_name or not rec.party.legal_name.strip():
+                    errors.append('Kunde (Parte) Rechtlicher Name fehlt bzw leer')
+            if not rec.offer_inquirydate:
+                errors.append('Anfragedatum fehlt')
+            if not rec.offer_number or not rec.offer_number.strip():
+                errors.append('Angebotsnummer fehlt bzw leer')
+            if not rec.extra_contacts:
+                errors.append('(Extra) Kontakt fehlt')
+            else:
+                if not rec.extra_contacts[0].legal_name or not rec.extra_contacts[0].legal_name.strip():
+                    errors.append('(Extra) Kontakt Rechtlicher Name fehlt bzw leer')
+            if not rec.offer_projectcalc_text or not rec.offer_projectcalc_text.strip():
+                errors.append('Projektkalkulation Text fehlt')
         if errors:
             raise UserError('\n'.join(errors))
         else:
@@ -722,7 +762,7 @@ class SaleLine(metaclass=PoolMeta):
     @classmethod
     def default_hide_quantity(cls):
         return False
-    
+
     @classmethod
     def default_folder_no(cls):
         # TODO: maybe use highest existing as default ?
