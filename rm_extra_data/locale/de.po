@@ -431,6 +431,10 @@ msgctxt "field:sale.sale,offer_delivery:"
 msgid "Offer delivery information"
 msgstr "Lieferinformation Angebot"
 
+msgctxt "field:sale.sale,offer_hidetotal:"
+msgid "Hide total on offer"
+msgstr "Gesamtbetrag auf Angebot nicht anzeigen"
+
 msgctxt "field:sale.sale,offer_inquirydate:"
 msgid "Offer inquiry date"
 msgstr "Anfragedatum"
@@ -438,6 +442,10 @@ msgstr "Anfragedatum"
 msgctxt "field:sale.sale,offer_number:"
 msgid "Offer number"
 msgstr "Angebotsnummer"
+
+msgctxt "field:sale.sale,offer_projectcalc_text:"
+msgid "Project calculation text"
+msgstr "Projektkalkulation Text"
 
 msgctxt "field:sale.sale,offer_validuntil:"
 msgid "Offer valid until"
@@ -889,6 +897,10 @@ msgctxt "help:sale.sale,offer_delivery:"
 msgid "Offer delivery information"
 msgstr "Information bzgl. Lieferung für Angebot"
 
+msgctxt "help:sale.sale,offer_hidetotal:"
+msgid "Hide total on offer (when alternatives are offered,..)"
+msgstr "Gesamtbetrag auf Angebot nicht anzeigen (z.B. bei Alternativen)"
+
 msgctxt "help:sale.sale,offer_inquirydate:"
 msgid "Date of inqury for offer"
 msgstr "Datum der Anfrage"
@@ -896,6 +908,10 @@ msgstr "Datum der Anfrage"
 msgctxt "help:sale.sale,offer_number:"
 msgid "Offer number"
 msgstr "Angebotsnummer"
+
+msgctxt "help:sale.sale,offer_projectcalc_text:"
+msgid "Project calculation sheet text (enter || for newlines)"
+msgstr "Text für Projektkalkulation (|| für Zeilenumbruch)"
 
 msgctxt "help:sale.sale,offer_validuntil:"
 msgid "Enter how long the offer is valid for"
