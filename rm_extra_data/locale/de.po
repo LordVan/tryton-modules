@@ -324,7 +324,7 @@ msgstr "Menge auf Berichten ausblenden"
 
 msgctxt "field:sale.line,hide_unit_price:"
 msgid "Hide unit price on order confirmation and invoice"
-msgstr "Einzelpreis auf Bereichten ausblenden"
+msgstr "Einzelpreis auf Berichten ausblenden"
 
 msgctxt "field:sale.line,inv_line0:"
 msgid "Invoice / delivery note line 0"
