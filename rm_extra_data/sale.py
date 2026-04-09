@@ -282,6 +282,15 @@ class SaleReportOffer(metaclass=PoolMeta):
                     errors.append('(Extra) Kontakt Rechnungszeile 1 fehlt bzw leer')
                 if not rec.extra_contacts[0].inv_name_line2 or not rec.extra_contacts[0].inv_name_line2.strip():
                     errors.append('(Extra) Kontakt Rechnungszeile 2 fehlt bzw leer')
+        sorted_taxdesc = []
+        for t in rec.taxable_lines:
+            try:
+                td = t[0][0].description.strip()
+            except:
+                td = None
+            if td not in sorted_taxdesc:
+                sorted_taxdesc.append(td)
+        context['sorted_taxdesc'] = sorted_taxdesc
         if errors:
             raise UserError('\n'.join(errors))
         else:
