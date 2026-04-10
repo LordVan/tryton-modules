@@ -982,3 +982,7 @@ msgstr ""
 msgctxt "view:sale.sale:"
 msgid "Contacts"
 msgstr "Kontakte"
+
+msgctxt "view:sale.sale:"
+msgid "Reports"
+msgstr "Berichte"
