@@ -57,6 +57,11 @@
       <newline />
       <label name="orderconfirmation_date" />
       <field name="orderconfirmation_date" />
+      <label name="sale_date" />
+      <field name="sale_date" />
+      <newline />
+      <label name="quoted_by" />
+      <field name="quoted_by" />
       <newline />
       <label name="orderconfirmation_delivery" />
       <field name="orderconfirmation_delivery" colspan="3" />
