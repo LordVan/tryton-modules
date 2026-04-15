@@ -43,7 +43,7 @@ class Sale(metaclass=PoolMeta):
 
     folder_total = fields.Integer('Total folder number',
                                   required = True,
-                                  states = { 'readonly': Eval('state') != 'draft', },
+                                  states = { 'readonly': ~Eval('state').in_(['draft', 'quotation']), },
                                   help = 'total number of folders (not counting subfolders)')
     offer_inquirydate = fields.Date('Offer inquiry date',
                                     states = { 'readonly': Eval('state') != 'draft', },
