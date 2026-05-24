@@ -4,10 +4,14 @@
 - Error when adding article without proj line1
 - get list of sales which contain a certain article and/or a way to search sale lines for a string in proj line0,1,2 and list sales
 - sale amendment should include sale group for invoice grouping too
+- LS /AR hide line seperate
+- Offer field/proj calc seperate
 
 # misc:
 
 - error with DELTE in readonly transaction after duplicating (res_user_warning)
+- link similar articles for refrence purposes
+- report /wizard for all articles of an invoice /sale with old prices and invoice dates  + set price / increase price by percentage (with comment field to be stored in product description as plain text (also referencing invoice,..)
 
 #done
 - commission editable (sale.description)
