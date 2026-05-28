@@ -6,12 +6,17 @@
 - sale amendment should include sale group for invoice grouping too
 - LS /AR hide line seperate
 - Offer field/proj calc seperate
+- request/offer commission seperate
+- offer requesting/receiving party seperate
 
 # misc:
 
 - error with DELTE in readonly transaction after duplicating (res_user_warning)
 - link similar articles for refrence purposes
 - report /wizard for all articles of an invoice /sale with old prices and invoice dates  + set price / increase price by percentage (with comment field to be stored in product description as plain text (also referencing invoice,..)
+
+- Footers on Reports (bank details)
+- Merge the two delivery notes ones and add a checkbox for hiding palette/loading info
 
 #done
 - commission editable (sale.description)
