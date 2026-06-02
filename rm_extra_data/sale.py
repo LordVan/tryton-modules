@@ -5,6 +5,7 @@ from trytond.model import Workflow, Model, ModelView, ModelSQL, fields, sequence
 from trytond.modules.company.model import (
         employee_field, set_employee, reset_employee)
 from trytond.exceptions import UserWarning, UserError
+from trytond.transaction import Transaction
 
 import logging
 logger = logging.getLogger(__name__)
@@ -391,7 +392,9 @@ class SaleReport(metaclass=PoolMeta):
                                                      ('number', '!=', rec.number), ])
             for s in others:
                 warn_sale_date.append(s.number)
-            if Warning.check(warning_sale_date_extra):
+            with Transaction().new_transaction(readonly=False):
+                warning_checked = Warning.check(warning_sale_date_extra)
+            if warning_checked:
                 if warn_sale_date:
                     msg = 'Verkauf für diesen Kunden mit gleichem Bestelldatum und Bestellordner Zusatz existiert bereits:'
                     msg += '\n'.join(warn_sale_date)
